@@ -123,11 +123,6 @@ EventItem * Object::GetEvent(QStandardItem *item)
 	return nullptr;
 }
 
-void Object::closeEvent(QCloseEvent *ev)
-{
-	ev->setAccepted(false);
-}
-
 void Object::OkButton_clicked()
 {
 	QString name = m_ui.nameEdit->text();

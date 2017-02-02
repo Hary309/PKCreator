@@ -30,12 +30,10 @@ public:
 	Object(QWidget *parent, QStandardItem *item, const QString &itemName);
 	virtual ~Object();
 
-	void SetName(const QString &name);
-	
+	virtual void SetName(const QString &name) override;
+
 	EventItem *GetEvent(int eventType);
 	EventItem *GetEvent(QStandardItem *item);
-
-	void closeEvent(QCloseEvent *ev);
 
 private slots:
 	void OkButton_clicked();
