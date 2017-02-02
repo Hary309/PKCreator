@@ -16,11 +16,15 @@ CodeEditorWindow::CodeEditorWindow(QWidget *parent)
 
 	m_pHighlighter = new Highlighter(m_pCodeEditor->document());
 
+	m_codeChanged = false;
+
 	connect(m_ui.actionCut, &QAction::triggered, m_pCodeEditor, &QPlainTextEdit::cut);
 	connect(m_ui.actionCopy, &QAction::triggered, m_pCodeEditor, &QPlainTextEdit::copy);
 	connect(m_ui.actionPaste, &QAction::triggered, m_pCodeEditor, &QPlainTextEdit::paste);
 
+	connect(m_ui.actionSaveAs, &QAction::triggered, this, &CodeEditorWindow::ActionSaveAs_triggered);
 	connect(m_ui.actionOpen, &QAction::triggered, this, &CodeEditorWindow::ActionOpen_triggered);
+	connect(m_pCodeEditor, &QPlainTextEdit::textChanged, this, &CodeEditorWindow::CodeEditor_textChanged);
 }
 
 
@@ -33,12 +37,38 @@ CodeEditorWindow::~CodeEditorWindow()
 	}
 }
 
+void CodeEditorWindow::ActionSaveAs_triggered()
+{
+	 QString filePath = QFileDialog::getSaveFileName(this, "Save lua script", QDir::currentPath(), "Lua file (*.lua)");
+
+	 if (filePath.isEmpty())
+		 return;
+
+	QFile file(filePath);
+	file.open(QFile::WriteOnly);	
+	file.write(m_pCodeEditor->toPlainText().toStdString().c_str());
+	file.close();
+}
+
 void CodeEditorWindow::ActionOpen_triggered()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open lua script"), QDir::currentPath(), tr("Lua file (*.lua)"));
+	QString fileName = QFileDialog::getOpenFileName(this, "Open lua script", QDir::currentPath(), "Lua file (*.lua)");
+
+	if (fileName.isEmpty())
+		return;
 
 	QFile file(fileName);
 	file.open(QFile::ReadOnly);
-
 	m_pCodeEditor->setPlainText(file.readAll());
+	file.close();
+}
+
+void CodeEditorWindow::CodeEditor_textChanged()
+{
+	if (!m_codeChanged)
+	{
+		setWindowTitle(windowTitle() + "*");
+	}
+
+	m_codeChanged = true;
 }
