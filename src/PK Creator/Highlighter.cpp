@@ -42,8 +42,8 @@ Highlighter::Highlighter(QTextDocument *parent)
 
 	m_multiLineCommentFormat.setForeground(Qt::darkGreen);
 
-	m_commentStartExpression = QRegExp("--[[");
-	m_commentEndExpression = QRegExp("--]]");
+	m_commentStartExpression = QRegExp("--\\[\\[");
+	m_commentEndExpression = QRegExp("--\\]\\]");
 }
 
 void Highlighter::highlightBlock(const QString &text)
