@@ -15,6 +15,8 @@ protected:
 	CodeEditor		*m_pCodeEditor;
 	Highlighter		*m_pHighlighter;
 
+	bool			m_codeChanged;
+
 public:
 	CodeEditorWindow(QWidget *parent);
 	~CodeEditorWindow();
@@ -22,7 +24,9 @@ public:
 private slots:
 	virtual void ActionOk_triggered() = 0;
 	virtual void ActionSave_triggered() = 0;
-	
+
+	void ActionSaveAs_triggered();
 	void ActionOpen_triggered();
+	void CodeEditor_textChanged();
 };
 
