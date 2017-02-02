@@ -7,10 +7,6 @@
 class QStandardItem;
 class QCloseEvent;
 
-/*
-Live debugger: 2 sek po ostanim wciœniêtym klawiszu wykonaæ ten kod w wirtualnej maszynie LUA
-*/
-
 class EventItem : public CodeEditorWindow
 {
 	Q_OBJECT
@@ -32,6 +28,7 @@ private:
 
 private:
 	void closeEvent(QCloseEvent *closeEvent);
+	void keyPressEvent(QKeyEvent * e);
 
 public:
 	EventItem(QWidget *parent, Type type, QStandardItem *item);

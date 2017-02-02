@@ -18,7 +18,15 @@ EventItem::~EventItem()
 
 void EventItem::ActionSave_triggered()
 {
+	if (m_codeChanged)
+	{
+		QString title = windowTitle().split('*').first();
+
+		setWindowTitle(title);
+	}
+
 	m_code = m_pCodeEditor->toPlainText();
+	m_codeChanged = false;
 }
 
 void EventItem::ActionOk_triggered()
@@ -52,5 +60,13 @@ void EventItem::closeEvent(QCloseEvent *closeEvent)
 		{
 			closeEvent->ignore();
 		}
+	}
+}
+
+void EventItem::keyPressEvent(QKeyEvent *e)
+{
+	if ((e->key() == Qt::Key_S) && QApplication::keyboardModifiers() && Qt::ControlModifier)
+	{
+		ActionSave_triggered();
 	}
 }
