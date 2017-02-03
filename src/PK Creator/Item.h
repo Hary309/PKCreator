@@ -36,6 +36,8 @@ public:
 	const QString& GetName()		{ return m_itemName; }
 	const QStandardItem *GetItem()	{ return m_pItem; }
 
+	Type GetType()					{ return m_type; }
+
 	virtual void SetName(const QString &name) = 0;
 };
 

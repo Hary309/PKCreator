@@ -8,6 +8,7 @@
 #include <QCursor>
 
 #include <Texture.h>
+#include <Sprite.h>
 #include <Object.h>
 
 ResourceView *ResourceView::s_pInst;
@@ -21,6 +22,7 @@ ResourceView::ResourceView(QWidget * parent)
 	Setup();
 
 	m_lastTextureID = 0;
+	m_lastSpriteID = 0;
 	m_lastObjectID = 0;
 	s_pInst = this;
 }
@@ -150,7 +152,19 @@ void ResourceView::ActionAdd_triggered()
 		} break;
 		case Item::SPRITE:
 		{
+			while (true)
+			{
+				name.sprintf("sprite%d", m_lastSpriteID++);
 
+				if (!IsNameExists(name))
+					break;
+			}
+
+			treeItem = InsertRow(treeItem, name);
+
+			Item *item = new Sprite(this, treeItem, name);
+			item->show();
+			m_items.push_back(item);
 		} break;
 		case Item::BACKGROUND:
 		{
@@ -258,4 +272,22 @@ Item *ResourceView::GetItem(const QStandardItem *treeItem)
 	}
 
 	return nullptr;
+}
+
+QVector<Item*> ResourceView::GetItemsByType(int type)
+{
+	QVector<Item*> items;
+
+	for (int i = 0; i < m_items.size(); ++i)
+	{
+		if (m_items[i])
+		{
+			if (m_items[i]->GetType() == type)
+			{
+				items.push_back(m_items[i]);
+			}
+		}
+	}
+
+	return items;
 }

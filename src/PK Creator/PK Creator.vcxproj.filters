@@ -39,6 +39,12 @@
     <Filter Include="Source Files\CodeEditor">
       <UniqueIdentifier>{2a1ebc00-4379-4b2a-885f-3f358a7d419b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Items">
+      <UniqueIdentifier>{0e07cd43-0f5c-41f9-8364-cbcf569620eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Items">
+      <UniqueIdentifier>{e564c439-e7c3-459f-ba7d-e6844cd9e32d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -48,12 +54,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ResourceView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\Debug\moc_Texture.cpp">
@@ -83,9 +83,6 @@
     <ClCompile Include="..\..\QtFiles\qrc_MainWindow.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="EventItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\QtFiles\Debug\moc_CodeEditor.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -104,8 +101,26 @@
     <ClCompile Include="CodeEditorWindow.cpp">
       <Filter>Source Files\CodeEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="EventItem.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
     <ClCompile Include="Highlighter.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\CodeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_Sprite.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_Sprite.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,32 +139,35 @@
     <CustomBuild Include="ObjectWindow.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="Object.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="TextureWindow.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Texture.h">
-      <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="CodeWindow.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="EventItem.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="CodeEditor.h">
       <Filter>Header Files\CodeEditor</Filter>
     </CustomBuild>
+    <CustomBuild Include="Texture.h">
+      <Filter>Header Files\Items</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Object.h">
+      <Filter>Header Files\Items</Filter>
+    </CustomBuild>
+    <CustomBuild Include="EventItem.h">
+      <Filter>Header Files\Items</Filter>
+    </CustomBuild>
     <CustomBuild Include="Highlighter.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\CodeEditor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SpriteWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Sprite.h">
+      <Filter>Header Files\Items</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Item.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
@@ -167,6 +185,12 @@
     </ClInclude>
     <ClInclude Include="LineNumberArea.h">
       <Filter>Header Files\CodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_SpriteWindow.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

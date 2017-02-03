@@ -3,6 +3,7 @@
 #include <QTreeView>
 #include <QVector>
 
+
 class QStandardItemModel;
 class QStandardItem;
 class Item;
@@ -17,6 +18,7 @@ private:
 	QVector<Item*>		m_items;
 
 	int					m_lastTextureID;
+	int					m_lastSpriteID;
 	int					m_lastObjectID;
 
 	QStringList			m_defaultModel;
@@ -44,6 +46,8 @@ public:
 
 	Item *GetItem(const QStandardItem *treeItem);
 
+	// @type - Item::Type
+	QVector <Item*> GetItemsByType(int type);
 
 	static ResourceView *Get() { return s_pInst; }
 };
