@@ -36,17 +36,11 @@ void Texture::OkButton_clicked()
 
 	if (ResourceView::Get()->IsNameExists(name) && name != m_itemName)
 	{
-		QMessageBox::information(this, tr("PK Creator"), tr("This name already exists!"));
+		QMessageBox::information(this, "PK Creator", "This name already exists!");
 		return;
 	}
 
 	SetName(name);
-	hide();
-}
-
-void Texture::CancelButton_clicked()
-{
-	m_ui.nameEdit->setText(m_itemName);
 	hide();
 }
 

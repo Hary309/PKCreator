@@ -8,7 +8,7 @@ class Texture : public Item
 	Q_OBJECT
 
 private:
-	Ui::TextureWindow	m_ui;
+	Ui::TextureWindow m_ui;
 
 public:
 	Texture(QWidget *parent, QStandardItem *item, const QString &itemName);
@@ -18,7 +18,6 @@ public:
 
 private slots:
 	void OkButton_clicked();
-	void CancelButton_clicked();;
 	void LoadButton_clicked();
 };
 
