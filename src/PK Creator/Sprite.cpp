@@ -4,6 +4,7 @@
 #include <QStandardItemModel>
 
 #include <ResourceView.h>
+#include <Texture.h>
 
 Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 	: Item(parent, item, itemName)
@@ -14,9 +15,13 @@ Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 
 	m_type = Item::SPRITE;
 
-	RefreshSpriteBox();
+	RefreshTextureBox();
+
+	connect(m_ui.textureBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &Sprite::TextureBox_activated);
 
 	connect(m_ui.okButton, SIGNAL(clicked()), this, SLOT(OkButton_clicked()));
+	connect(m_ui.addButton, SIGNAL(clicked()), this, SLOT(AddButton_clicked()));
+	connect(m_ui.editButton, SIGNAL(clicked()), this, SLOT(EditButton_clicked()));
 }
 
 
@@ -32,7 +37,7 @@ Sprite::~Sprite()
 	}
 
 	m_textures.clear();
-	m_ui.spriteBox->clear();
+	m_ui.textureBox->clear();
 }
 
 void Sprite::SetName(const QString & name)
@@ -49,13 +54,13 @@ bool Sprite::event(QEvent *e)
 	
 	if (e->type() == QEvent::WindowActivate)
 	{
-		RefreshSpriteBox();
+		RefreshTextureBox();
 	}
 
 	return false;
 }
 
-void Sprite::RefreshSpriteBox()
+void Sprite::RefreshTextureBox()
 {
 	for (int i = 0; i < m_textures.size(); ++i)
 	{
@@ -68,17 +73,17 @@ void Sprite::RefreshSpriteBox()
 
 	m_textures.clear();
 
-	QString currentIndex = m_ui.spriteBox->currentText();
+	QString currentIndex = m_ui.textureBox->currentText();
 
-	m_ui.spriteBox->clear();
+	m_ui.textureBox->clear();
 
 	const QVector<Item*> textures = ResourceView::Get()->GetItemsByType(Item::TEXTURE);
 
 	for (int i = 0; i < textures.size(); ++i)
 	{
-		m_ui.spriteBox->insertItem(i, textures[i]->GetName());
+		m_ui.textureBox->insertItem(i, textures[i]->GetName());
 
-		TexItem *texItem = new TexItem();
+		ComboBoxItem *texItem = new ComboBoxItem();
 
 		texItem->index = i;
 		texItem->pTex = (Texture*)textures[i];
@@ -86,7 +91,7 @@ void Sprite::RefreshSpriteBox()
 		m_textures.push_back(texItem);
 	}
 
-	m_ui.spriteBox->setCurrentIndex(m_ui.spriteBox->findText(currentIndex));
+	m_ui.textureBox->setCurrentIndex(m_ui.textureBox->findText(currentIndex));
 }
 
 void Sprite::OkButton_clicked()
@@ -101,4 +106,64 @@ void Sprite::OkButton_clicked()
 
 	SetName(name);
 	hide();
+}
+
+void Sprite::AddButton_clicked()
+{
+	QString texName;
+	ResourceView *res = ResourceView::Get();
+	
+	int i = 0;
+	
+	while (true)
+	{
+		texName = m_itemName + QString("_tex") + QString::number(i);
+
+		if (!res->IsNameExists(texName))
+			break;
+	
+		i++;
+	}
+
+	// texture
+	QStandardItem *treeItem = reinterpret_cast<QStandardItemModel*>(res->model())->item(0);
+	
+	treeItem = res->InsertRow(treeItem, texName);
+
+	Texture *tex = new Texture(res, treeItem, texName);
+	tex->show();
+	res->InsertItem(tex);
+
+	m_pCurrTex = tex;
+
+	RefreshTextureBox();
+
+	int row = m_ui.textureBox->findText(treeItem->text());
+
+	m_ui.textureBox->setCurrentIndex(row);
+}
+
+void Sprite::EditButton_clicked()
+{
+	if (m_pCurrTex)
+		m_pCurrTex->show();
+}
+
+void Sprite::TextureBox_activated(int index)
+{
+	printf("Looking for %d...\n", index);
+
+	for (int i = 0; i < m_textures.size(); ++i)
+	{
+		if (m_textures[i])
+		{
+			if (m_textures[i]->index == index)
+			{
+				printf("New: %d\n", index);
+
+				m_pCurrTex = m_textures[i]->pTex;
+				break;
+			}
+		}
+	}
 }

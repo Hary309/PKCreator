@@ -11,28 +11,35 @@ class Sprite : public Item
 	Q_OBJECT
 
 private:
-	struct TexItem
+	struct ComboBoxItem
 	{
 		int			index;
 		Texture		*pTex;
 	};
 
 private:
-	Ui::SpriteWindow	m_ui;
+	Ui::SpriteWindow		m_ui;
 
-	QVector<TexItem*>	m_textures;
+	QVector<ComboBoxItem*>	m_textures;
+
+	Texture					*m_pCurrTex;
 
 private:
-	void RefreshSpriteBox();
+	void RefreshTextureBox();
+
+protected:
+	virtual bool event(QEvent *e) override;
 
 public:
 	Sprite(QWidget *parent, QStandardItem *item, const QString &itemName);
 	~Sprite();
 
 	virtual void SetName(const QString &name) override;
-	virtual bool event(QEvent *e) override;
 
 private slots:
 	void OkButton_clicked();
+	void AddButton_clicked();
+	void EditButton_clicked();
+	void TextureBox_activated(int index);
 };
 
