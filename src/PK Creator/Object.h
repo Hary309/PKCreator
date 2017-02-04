@@ -7,10 +7,18 @@
 
 class EventItem;
 class QCloseEvent;
+class Sprite;
 
 class Object : public Item
 {
 	Q_OBJECT
+
+private:
+	struct ComboBoxItem
+	{
+		int index;
+		Sprite *pSpr;
+	};
 
 private:
 	Ui::ObjectWindow		m_ui;
@@ -23,8 +31,16 @@ private:
 	QMenu					*m_pContextMenu;
 	QList<QAction*>			m_actionList;
 
+	QVector<ComboBoxItem*>	m_sprites;
+
+	Sprite					*m_pCurrentSprite;
+
 private:
 	void SetupContextMenu();
+	void RefreshSpriteBox();
+
+protected:
+	virtual bool event(QEvent *e) override;
 
 public:
 	Object(QWidget *parent, QStandardItem *item, const QString &itemName);

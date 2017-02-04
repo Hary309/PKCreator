@@ -23,6 +23,9 @@ Object::Object(QWidget *parent, QStandardItem *item, const QString &itemName)
 	m_eventName << "Create Event" << "Destroy Event" << "Pulse Event" << "Render Event";
 
 	SetupContextMenu();
+	RefreshSpriteBox();
+
+	m_ui.spriteBox->setCurrentIndex(0);
 
 	connect(m_ui.okButton, SIGNAL(clicked()), this, SLOT(OkButton_clicked()));
 	connect(m_ui.addButton, SIGNAL(clicked()), this, SLOT(AddEventButton_clicked()));
@@ -69,6 +72,17 @@ Object::~Object()
 		m_pContextMenu = nullptr;
 	}
 
+	for (int i = 0; i < m_sprites.size(); ++i)
+	{
+		if (m_sprites[i])
+		{
+			delete m_sprites[i];
+			m_sprites[i] = nullptr;
+		}
+	}
+
+	m_sprites.clear();
+	m_ui.spriteBox->clear();
 }
 
 void Object::SetupContextMenu()
@@ -93,12 +107,62 @@ void Object::SetupContextMenu()
 	}
 }
 
+void Object::RefreshSpriteBox()
+{
+	for (int i = 0; i < m_sprites.size(); ++i)
+	{
+		if (m_sprites[i])
+		{
+			delete m_sprites[i];
+			m_sprites[i] = nullptr;
+		}
+	}
+
+	m_sprites.clear();
+
+	QString currentIndex = m_ui.spriteBox->currentText();
+
+	m_ui.spriteBox->clear();
+
+	m_ui.spriteBox->insertItem(0, "None");
+
+	const QVector<Item*> sprites = ResourceView::Get()->GetItemsByType(Item::SPRITE);
+
+	for (int i = 0; i < sprites.size(); ++i)
+	{
+		m_ui.spriteBox->insertItem(i + 1, sprites[i]->GetName());
+
+		ComboBoxItem *texItem = new ComboBoxItem();
+
+		texItem->index = i;
+		texItem->pSpr = (Sprite*)sprites[i];
+
+		m_sprites.push_back(texItem);
+	}
+
+	m_ui.spriteBox->setCurrentIndex(m_ui.spriteBox->findText(currentIndex));
+}
+
 void Object::SetName(const QString &name)
 {
 	m_itemName = name;
 	setWindowTitle(name);
 	m_ui.nameEdit->setText(name);
 	m_pItem->setText(name);
+}
+
+bool Object::event(QEvent * e)
+{
+	Item::event(e);
+
+	if (e->type() == QEvent::WindowActivate)
+	{
+		RefreshSpriteBox();
+
+		printf("refresh\n");
+	}
+
+	return false;
 }
 
 EventItem *Object::GetEvent(int eventType)
