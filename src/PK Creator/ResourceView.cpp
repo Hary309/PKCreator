@@ -250,6 +250,14 @@ void ResourceView::RemoveRow(QStandardItem *item)
 	m_pTreeModel->removeRow(item->row(), item->parent()->index());
 }
 
+void ResourceView::InsertItem(Item *item)
+{
+	if (!item)
+		return;
+
+	m_items.push_back(item);
+}
+
 bool ResourceView::IsNameExists(const QString &name)
 {
 	for (int i = 0; i < m_items.size(); ++i)

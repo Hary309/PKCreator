@@ -42,6 +42,8 @@ public:
 	QStandardItem *InsertRow(QStandardItem *parent, const QString &name);
 	void RemoveRow(QStandardItem *item);
 
+	void InsertItem(Item *item);
+
 	bool IsNameExists(const QString &name);
 
 	Item *GetItem(const QStandardItem *treeItem);
