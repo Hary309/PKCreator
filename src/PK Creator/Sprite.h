@@ -24,6 +24,11 @@ private:
 
 	Texture					*m_pCurrTex;
 
+	// to save
+private:
+	int						m_xCenter;
+	int						m_yCenter;
+
 private:
 	void RefreshTextureBox();
 
@@ -41,5 +46,7 @@ private slots:
 	void AddButton_clicked();
 	void EditButton_clicked();
 	void TextureBox_activated(int index);
+	void CenterXEdit_editingFinished();
+	void CenterYEdit_editingFinished();
 };
 

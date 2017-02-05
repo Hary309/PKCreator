@@ -16,6 +16,8 @@ Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 	m_type = Item::SPRITE;
 
 	RefreshTextureBox();
+	
+	// TODO: default value for m_xCenter = texWidth / 2, m_yCenter = texHeight / 2
 
 	connect(m_ui.textureBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &Sprite::TextureBox_activated);
 
@@ -151,19 +153,25 @@ void Sprite::EditButton_clicked()
 
 void Sprite::TextureBox_activated(int index)
 {
-	printf("Looking for %d...\n", index);
-
 	for (int i = 0; i < m_textures.size(); ++i)
 	{
 		if (m_textures[i])
 		{
 			if (m_textures[i]->index == index)
 			{
-				printf("New: %d\n", index);
-
 				m_pCurrTex = m_textures[i]->pTex;
 				break;
 			}
 		}
 	}
+}
+
+void Sprite::CenterXEdit_editingFinished()
+{
+	 m_xCenter = m_ui.centerXEdit->text().toInt();
+}
+
+void Sprite::CenterYEdit_editingFinished()
+{
+	m_yCenter = m_ui.centerYEdit->text().toInt();
 }
