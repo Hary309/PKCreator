@@ -7,6 +7,7 @@
 
 #include <ResourceView.h>
 #include <EventItem.h>
+#include <Sprite.h>
 
 Object::Object(QWidget *parent, QStandardItem *item, const QString &itemName)
 	: Item(parent, item, itemName)
@@ -25,6 +26,8 @@ Object::Object(QWidget *parent, QStandardItem *item, const QString &itemName)
 	SetupContextMenu();
 	RefreshSpriteBox();
 
+	m_pCurrentSprite = nullptr;
+
 	m_ui.spriteBox->setCurrentIndex(0);
 
 	connect(m_ui.okButton, SIGNAL(clicked()), this, SLOT(OkButton_clicked()));
@@ -32,6 +35,9 @@ Object::Object(QWidget *parent, QStandardItem *item, const QString &itemName)
 	connect(m_ui.removeButton, SIGNAL(clicked()), this, SLOT(RemoveEventButton_clicked()));
 	connect(m_ui.editButton, SIGNAL(clicked()), this, SLOT(EditButton_clicked()));
 	connect(m_ui.eventList, &QListView::doubleClicked, this, &Object::EditButton_clicked);
+	connect(m_ui.addSprButton, SIGNAL(clicked()), this, SLOT(AddSprButton_clicked()));
+	connect(m_ui.editSprButton, SIGNAL(clicked()), this, SLOT(EditSprButton_clicked()));
+	connect(m_ui.spriteBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &Object::SpriteBox_activated);
 }
 
 Object::~Object()
@@ -260,4 +266,71 @@ void Object::AddEventAction_triggered(int eventType)
 	objEvent->show();
 
 	m_events.push_back(objEvent);
+}
+
+void Object::AddSprButton_clicked()
+{
+	QString texName;
+	ResourceView *res = ResourceView::Get();
+
+	int i = 0;
+
+	while (true)
+	{
+		texName = m_itemName + QString("_spr") + QString::number(i);
+
+		if (!res->IsNameExists(texName))
+			break;
+
+		i++;
+	}
+
+	// texture
+	QStandardItem *treeItem = reinterpret_cast<QStandardItemModel*>(res->model())->item(1);
+
+	treeItem = res->InsertRow(treeItem, texName);
+
+	Sprite *spr = new Sprite(res, treeItem, texName);
+	spr->show();
+	res->InsertItem(spr);
+
+	m_pCurrentSprite = spr;
+
+	RefreshSpriteBox();
+
+	int row = m_ui.spriteBox->findText(treeItem->text());
+
+	m_ui.spriteBox->setCurrentIndex(row);
+}
+
+void Object::EditSprButton_clicked()
+{
+	if (m_pCurrentSprite)
+		m_pCurrentSprite->show();
+}
+
+void Object::SpriteBox_activated(int index)
+{
+	index--;
+
+	for (int i = 0; i < m_sprites.size(); ++i)
+	{
+		if (m_sprites[i])
+		{
+			printf("%d ", i);
+
+			if (m_sprites[i]->index == index)
+			{
+				printf("Done");
+				m_pCurrentSprite = m_sprites[i]->pSpr;
+				return;
+			}
+
+			printf("\n");
+		}
+	}
+
+	printf("Brak na liscie!\n");
+
+	m_pCurrentSprite = nullptr;
 }

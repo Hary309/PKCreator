@@ -56,7 +56,9 @@ private slots:
 	void AddEventButton_clicked();
 	void RemoveEventButton_clicked();
 	void EditButton_clicked();
-
 	void AddEventAction_triggered(int type);
+	void AddSprButton_clicked();
+	void EditSprButton_clicked();
+	void SpriteBox_activated(int index);
 };
 
