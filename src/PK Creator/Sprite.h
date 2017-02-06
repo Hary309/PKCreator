@@ -24,13 +24,13 @@ private:
 
 	Texture					*m_pCurrTex;
 
-	// to save
-private:
+private: // to save
 	int						m_xCenter;
 	int						m_yCenter;
 
 private:
 	void RefreshTextureBox();
+	void RefreshSpriteCenter();
 
 protected:
 	virtual bool event(QEvent *e) override;

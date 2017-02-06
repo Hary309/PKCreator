@@ -11,13 +11,17 @@ Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 {
 	m_ui.setupUi(this);
 
+	m_ui.centerXEdit->setValidator(new QIntValidator);
+	m_ui.centerYEdit->setValidator(new QIntValidator);
+
 	SetName(itemName);
 
 	m_type = Item::SPRITE;
 
 	RefreshTextureBox();
 	
-	// TODO: default value for m_xCenter = texWidth / 2, m_yCenter = texHeight / 2
+	m_xCenter = 0;
+	m_yCenter = 0;
 
 	connect(m_ui.textureBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &Sprite::TextureBox_activated);
 
@@ -57,6 +61,7 @@ bool Sprite::event(QEvent *e)
 	if (e->type() == QEvent::WindowActivate)
 	{
 		RefreshTextureBox();
+		RefreshSpriteCenter();
 	}
 
 	return false;
@@ -127,7 +132,6 @@ void Sprite::AddButton_clicked()
 		i++;
 	}
 
-	// texture
 	QStandardItem *treeItem = reinterpret_cast<QStandardItemModel*>(res->model())->item(0);
 	
 	treeItem = res->InsertRow(treeItem, texName);
@@ -135,6 +139,8 @@ void Sprite::AddButton_clicked()
 	Texture *tex = new Texture(res, treeItem, texName);
 	tex->show();
 	res->InsertItem(tex);
+
+	connect(tex, &QDialog::accepted, this, [this] { RefreshSpriteCenter(); });
 
 	m_pCurrTex = tex;
 
@@ -160,6 +166,8 @@ void Sprite::TextureBox_activated(int index)
 			if (m_textures[i]->index == index)
 			{
 				m_pCurrTex = m_textures[i]->pTex;
+
+				RefreshSpriteCenter();
 				break;
 			}
 		}
@@ -174,4 +182,17 @@ void Sprite::CenterXEdit_editingFinished()
 void Sprite::CenterYEdit_editingFinished()
 {
 	m_yCenter = m_ui.centerYEdit->text().toInt();
+}
+
+void Sprite::RefreshSpriteCenter()
+{
+	if (!m_pCurrTex)
+		return;
+
+	m_xCenter = m_pCurrTex->GetWidth() / 2;
+	m_yCenter = m_pCurrTex->GetHeight() / 2;
+
+	m_ui.centerXEdit->setText(QString::number(m_xCenter));
+	m_ui.centerYEdit->setText(QString::number(m_yCenter));
+
 }
