@@ -122,6 +122,15 @@
     <ClCompile Include="..\..\QtFiles\Release\moc_Sprite.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="WelcomeWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_WelcomeWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_WelcomeWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -166,6 +175,12 @@
     <CustomBuild Include="Sprite.h">
       <Filter>Header Files\Items</Filter>
     </CustomBuild>
+    <CustomBuild Include="WelcomeWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="WelcomeWindow.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
@@ -190,6 +205,9 @@
       <Filter>Header Files\Items</Filter>
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_SpriteWindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_WelcomeWindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
