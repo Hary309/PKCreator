@@ -20,8 +20,8 @@ Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 
 	RefreshTextureBox();
 	
-	m_xCenter = 0;
-	m_yCenter = 0;
+	m_xCenter = -1;
+	m_yCenter = -1;
 
 	connect(m_ui.textureBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &Sprite::TextureBox_activated);
 
@@ -189,10 +189,12 @@ void Sprite::RefreshSpriteCenter()
 	if (!m_pCurrTex)
 		return;
 
-	m_xCenter = m_pCurrTex->GetWidth() / 2;
-	m_yCenter = m_pCurrTex->GetHeight() / 2;
+	if (m_xCenter == -1 || m_yCenter == -1)
+	{
+		m_xCenter = m_pCurrTex->GetWidth() / 2;
+		m_yCenter = m_pCurrTex->GetHeight() / 2;
 
-	m_ui.centerXEdit->setText(QString::number(m_xCenter));
-	m_ui.centerYEdit->setText(QString::number(m_yCenter));
-
+		m_ui.centerXEdit->setText(QString::number(m_xCenter));
+		m_ui.centerYEdit->setText(QString::number(m_yCenter));
+	}
 }
