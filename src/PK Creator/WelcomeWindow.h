@@ -12,6 +12,8 @@ struct Project
 	QString name;
 	qint64 timestamp;
 	QString path;
+
+	QTreeWidgetItem *item;
 };
 
 
@@ -32,5 +34,8 @@ public:
 
 private slots:
 	void CreateButton_clicked();
+	void OpenButton_clicked();
+	void DeleteButton_clicked();
+	void OpenFolderButton_clicked();
 };
 
