@@ -7,6 +7,8 @@
 
 class QWidget;
 
+class MainWindow;
+
 struct Project
 {
 	QString name;
@@ -16,7 +18,6 @@ struct Project
 	QTreeWidgetItem *item;
 };
 
-
 class WelcomeWindow : public QDialog
 {
 	Q_OBJECT
@@ -24,6 +25,8 @@ class WelcomeWindow : public QDialog
 private:
 	Ui::WelcomeWindow	m_ui;
 	QList<Project*>		m_projectList;
+
+	MainWindow			*m_pMainWnd;
 
 public:
 	WelcomeWindow(QWidget *parent = 0);

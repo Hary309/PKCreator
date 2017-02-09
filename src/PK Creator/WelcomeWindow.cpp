@@ -5,6 +5,8 @@
 #include <QMessageBox>
 #include <QProcess>
 
+#include <MainWindow.h>
+
 #include <Windows.h>
 #include <shellapi.h>
 
@@ -16,11 +18,16 @@ WelcomeWindow::WelcomeWindow(QWidget *parent)
 
 	LoadList();
 
+	m_pMainWnd = new MainWindow();
+	m_pMainWnd->hide();
+
 	connect(m_ui.createButton, &QPushButton::clicked, this, &WelcomeWindow::CreateButton_clicked);
 	connect(m_ui.openButton, &QPushButton::clicked, this, &WelcomeWindow::OpenButton_clicked);
 	connect(m_ui.deleteButton, &QPushButton::clicked, this, &WelcomeWindow::DeleteButton_clicked);
 	connect(m_ui.openFolderButton, &QPushButton::clicked, this, &WelcomeWindow::OpenFolderButton_clicked);
 	connect(m_ui.exitButton, &QPushButton::clicked, this, [this] { this->close(); } );
+
+	connect(m_ui.projectView, &QTreeWidget::doubleClicked, this, &WelcomeWindow::OpenButton_clicked);
 }
 
 WelcomeWindow::~WelcomeWindow()
@@ -29,6 +36,12 @@ WelcomeWindow::~WelcomeWindow()
 
 	qDeleteAll(m_projectList);
 	m_projectList.clear();
+
+	if (m_pMainWnd)
+	{
+		delete m_pMainWnd;
+		m_pMainWnd = nullptr;
+	}
 }
 
 void WelcomeWindow::SaveList()
@@ -131,7 +144,24 @@ void WelcomeWindow::CreateButton_clicked()
 
 void WelcomeWindow::OpenButton_clicked()
 {
+	if (m_ui.projectView->selectedItems().isEmpty())
+	{
+		QMessageBox::information(this, "PK Creator", "Please select project!");
+		return;
+	}
 
+	QTreeWidgetItem *treeItem = m_ui.projectView->selectedItems().first();
+
+	for (int i = 0; i < m_projectList.size(); ++i)
+	{
+		if (m_projectList[i])
+		{
+			if (m_projectList[i]->item == treeItem)
+			{
+
+			}
+		}
+	}
 }
 
 void WelcomeWindow::DeleteButton_clicked()
