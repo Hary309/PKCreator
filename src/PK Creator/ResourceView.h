@@ -44,6 +44,9 @@ public:
 
 	void InsertItem(Item *item);
 
+	void Load(const char *filePath);
+	void Save(const char *filePath);
+
 	bool IsNameExists(const QString &name);
 
 	Item *GetItem(const QStandardItem *treeItem);

@@ -258,6 +258,14 @@ void ResourceView::InsertItem(Item *item)
 	m_items.push_back(item);
 }
 
+void ResourceView::Load(const char *filePath)
+{
+}
+
+void ResourceView::Save(const char *filePath)
+{
+}
+
 bool ResourceView::IsNameExists(const QString &name)
 {
 	for (int i = 0; i < m_items.size(); ++i)

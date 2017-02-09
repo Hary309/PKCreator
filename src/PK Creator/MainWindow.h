@@ -5,6 +5,7 @@
 
 class ResourceView;
 class ObjectWindow;
+class Project;
 
 class QStandardItem;
 
@@ -16,14 +17,20 @@ private:
 	Ui::MainWindowClass		ui;
 	ResourceView			*m_pResView;
 
+	Project					*m_proInfo;
+
 	static MainWindow		*s_pInst;
 
 public:
 	MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
+	void Load(Project *project);
+	void Save();
+
 	static MainWindow *Get() { return s_pInst; }
 
 private slots:
-	void ActionExit_clicked();
+	void ActionExit_triggered();
+	void ActionSaveProject_triggered();
 };

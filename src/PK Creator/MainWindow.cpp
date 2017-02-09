@@ -7,6 +7,7 @@
 
 #include <ResourceView.h>
 #include <Object.h>
+#include <WelcomeWindow.h>
 
 MainWindow *MainWindow::s_pInst;
 
@@ -24,7 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
 	m_pResView->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 	ui.verticalLayout->addWidget(m_pResView);
 
-	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(ActionExit_clicked()));
+	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(ActionExit_triggered()));
+	connect(ui.actionSaveProject, SIGNAL(triggered()), this, SLOT(ActionSaveProject_triggered()));
 
 	s_pInst = this;
 }
@@ -38,7 +40,22 @@ MainWindow::~MainWindow()
 	}
 }
 
-void MainWindow::ActionExit_clicked()
+void MainWindow::Load(Project * project)
+{
+}
+
+void MainWindow::Save()
+{
+	if (m_proInfo)
+		m_pResView->Save(m_proInfo->path + m_proInfo->name + QString("pkp"));
+}
+
+void MainWindow::ActionSaveProject_triggered()
+{
+	Save()
+}
+
+void MainWindow::ActionExit_triggered()
 {
 	this->close();
 }
