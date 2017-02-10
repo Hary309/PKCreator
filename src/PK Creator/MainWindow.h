@@ -33,4 +33,5 @@ public:
 private slots:
 	void ActionExit_triggered();
 	void ActionSaveProject_triggered();
+	void ActionOpenProject_triggered();
 };

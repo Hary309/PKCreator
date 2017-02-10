@@ -16,6 +16,18 @@ EventItem::~EventItem()
 {
 }
 
+void EventItem::Load(QDataStream *const dataStream)
+{
+	*dataStream >> m_code;
+
+	m_pCodeEditor->setPlainText(m_code);
+}
+
+void EventItem::Save(QDataStream *const dataStream)
+{
+	*dataStream << m_type << m_code;
+}
+
 void EventItem::ActionSave_triggered()
 {
 	if (m_codeChanged)

@@ -18,7 +18,7 @@ WelcomeWindow::WelcomeWindow(QWidget *parent)
 
 	LoadList();
 
-	m_pMainWnd = new MainWindow();
+	m_pMainWnd = new MainWindow(this);
 	m_pMainWnd->hide();
 
 	connect(m_ui.createButton, &QPushButton::clicked, this, &WelcomeWindow::CreateButton_clicked);
@@ -158,7 +158,9 @@ void WelcomeWindow::OpenButton_clicked()
 		{
 			if (m_projectList[i]->item == treeItem)
 			{
-
+				m_pMainWnd->Load(m_projectList[i]);
+				m_pMainWnd->show();
+				this->hide();
 			}
 		}
 	}

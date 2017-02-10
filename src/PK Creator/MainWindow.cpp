@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(ActionExit_triggered()));
 	connect(ui.actionSaveProject, SIGNAL(triggered()), this, SLOT(ActionSaveProject_triggered()));
+	connect(ui.actionOpenProject, SIGNAL(triggered()), this, SLOT(ActionOpenProject_triggered()));
 
 	s_pInst = this;
 }
@@ -42,17 +43,73 @@ MainWindow::~MainWindow()
 
 void MainWindow::Load(Project * project)
 {
+	m_proInfo = project;
+
+	if (m_proInfo)
+	{
+		printf("Opening...\n");
+
+		QFile file(m_proInfo->path + m_proInfo->name + QString(".pkp"));
+		
+		if (!file.exists())
+			return;
+
+		file.open(QFile::ReadOnly);
+
+		if (file.error() != QFile::NoError)
+			return;
+
+		printf("Opened!\n");
+
+		QDataStream stream(&file);
+
+		//QString version;
+
+		//stream >> version;
+
+		//printf("Version: \"%s\"", version.toStdString().c_str());
+
+		//if (version != "PKP1")
+		//	return;
+
+		//printf("Version checked!\n");
+
+		m_pResView->Load(&stream);
+
+		file.close();
+	}
+
+
+	printf("Loaded: \"%s\" \"%s\"\n", m_proInfo->name.toStdString().c_str(), m_proInfo->path.toStdString().c_str());
 }
 
 void MainWindow::Save()
 {
 	if (m_proInfo)
-		m_pResView->Save(m_proInfo->path + m_proInfo->name + QString("pkp"));
+	{
+		QFile file(m_proInfo->path + m_proInfo->name + QString(".pkp"));
+		file.open(QFile::WriteOnly);
+
+		QDataStream stream(&file);
+
+		// version id
+		//stream << "PKP1";
+
+		m_pResView->Save(&stream);
+
+		file.close();
+	}
 }
 
 void MainWindow::ActionSaveProject_triggered()
 {
-	Save()
+	Save();
+}
+
+void MainWindow::ActionOpenProject_triggered()
+{
+	reinterpret_cast<QMainWindow*>(parent())->show();
+	this->hide();
 }
 
 void MainWindow::ActionExit_triggered()

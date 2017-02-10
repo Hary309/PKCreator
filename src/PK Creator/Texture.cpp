@@ -69,3 +69,15 @@ void Texture::LoadButton_clicked()
 	m_width = size.width();
 	m_height = size.height();
 }
+
+void Texture::Load(QDataStream *const dataStream)
+{
+	*dataStream >> m_width >> m_height;
+}
+
+void Texture::Save(QDataStream *const dataStream)
+{
+	Item::Save(dataStream);
+
+	*dataStream << m_width << m_height;
+}

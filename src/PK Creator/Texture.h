@@ -23,6 +23,9 @@ public:
 	int GetWidth() { return m_width; }
 	int GetHeight() { return m_height; }
 
+	virtual void Load(QDataStream *const dataStream) override;
+	virtual void Save(QDataStream *const dataStream) override;
+
 private slots:
 	void OkButton_clicked();
 	void LoadButton_clicked();

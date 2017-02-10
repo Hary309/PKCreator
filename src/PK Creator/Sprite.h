@@ -22,9 +22,9 @@ private:
 
 	QVector<ComboBoxItem*>	m_textures;
 
+	// to save
 	Texture					*m_pCurrTex;
 
-private: // to save
 	int						m_xCenter;
 	int						m_yCenter;
 
@@ -40,6 +40,8 @@ public:
 	~Sprite();
 
 	virtual void SetName(const QString &name) override;
+	virtual void Load(QDataStream * const dataStream) override;
+	virtual void Save(QDataStream * const dataStream) override;
 
 private slots:
 	void OkButton_clicked();

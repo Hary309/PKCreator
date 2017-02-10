@@ -13,6 +13,9 @@ class ResourceView : public QTreeView
 	Q_OBJECT
 
 private:
+	QStringList			m_defaultModel;
+
+	// to save
 	QStandardItemModel	*m_pTreeModel;
 	
 	QVector<Item*>		m_items;
@@ -21,13 +24,14 @@ private:
 	int					m_lastSpriteID;
 	int					m_lastObjectID;
 
-	QStringList			m_defaultModel;
-
+	
 	static ResourceView *s_pInst;
 
 private:
 	void mousePressEvent(QMouseEvent * mouseEvent) override;
 	void mouseDoubleClickEvent(QMouseEvent *mouseEvent) override;
+
+	static bool ItemsSort(const Item *item1, const Item *item2);
 
 private slots:
 	void ActionAdd_triggered();
@@ -44,12 +48,13 @@ public:
 
 	void InsertItem(Item *item);
 
-	void Load(const char *filePath);
-	void Save(const char *filePath);
+	void Load(QDataStream *const dataStream);
+	void Save(QDataStream *const dataStream);
 
 	bool IsNameExists(const QString &name);
 
 	Item *GetItem(const QStandardItem *treeItem);
+	Item *GetItem(const QString &name);
 
 	// @type - Item::Type
 	QVector <Item*> GetItemsByType(int type);

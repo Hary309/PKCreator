@@ -3,6 +3,7 @@
 #include <QString>
 #include <QDialog>
 #include <QStandardItem>
+#include <QDataStream>
 
 class QStandardItem;
 
@@ -36,8 +37,13 @@ public:
 	const QString& GetName()		{ return m_itemName; }
 	const QStandardItem *GetItem()	{ return m_pItem; }
 
-	Type GetType()					{ return m_type; }
+	Type GetType() const			{ return m_type; }
 
-	virtual void SetName(const QString &name) = 0;
+	virtual void SetName(const QString &name) { m_itemName = name; }
+	virtual void Load(QDataStream *const dataStream){}
+
+	virtual void Save(QDataStream *const dataStream) { *dataStream << m_type << m_itemName; }
+
+	bool operator<(const Item *item) { return m_type < item->GetType(); }
 };
 

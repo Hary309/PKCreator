@@ -25,7 +25,6 @@ private:
 
 	QStandardItemModel		*m_pModel;
 
-	QVector<EventItem*>		m_events;
 	QStringList				m_eventName;
 
 	QMenu					*m_pContextMenu;
@@ -33,7 +32,9 @@ private:
 
 	QVector<ComboBoxItem*>	m_sprites;
 
-	Sprite					*m_pCurrentSprite;
+	// to save
+	Sprite					*m_pCurrSpr;
+	QVector<EventItem*>		m_events;
 
 private:
 	void SetupContextMenu();
@@ -50,6 +51,10 @@ public:
 
 	EventItem *GetEvent(int eventType);
 	EventItem *GetEvent(QStandardItem *item);
+
+	virtual void Load(QDataStream *const dataStream) override;
+	virtual void Save(QDataStream *const dataStream) override;
+
 
 private slots:
 	void OkButton_clicked();

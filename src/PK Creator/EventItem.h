@@ -37,6 +37,9 @@ public:
 	Type GetType() { return m_type; }
 	QStandardItem *GetItem() { return m_item; }
 
+	void Load(QDataStream * const dataStream);
+	void Save(QDataStream * const dataStream);
+
 private slots:
 	void ActionOk_triggered();
 	void ActionSave_triggered();

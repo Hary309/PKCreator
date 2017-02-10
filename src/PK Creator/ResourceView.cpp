@@ -123,6 +123,15 @@ void ResourceView::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 	}
 }
 
+bool ResourceView::ItemsSort(const Item *item1, const Item *item2)
+{
+	if (item1->GetType() < item2->GetType())
+		return true;
+
+	if (item1->GetType() > item2->GetType())
+		return false;
+}
+
 void ResourceView::ActionAdd_triggered()
 {
 	QModelIndex index = selectionModel()->currentIndex();
@@ -159,7 +168,6 @@ void ResourceView::ActionAdd_triggered()
 				if (!IsNameExists(name))
 					break;
 			}
-
 			treeItem = InsertRow(treeItem, name);
 
 			Item *item = new Sprite(this, treeItem, name);
@@ -258,12 +266,81 @@ void ResourceView::InsertItem(Item *item)
 	m_items.push_back(item);
 }
 
-void ResourceView::Load(const char *filePath)
+void ResourceView::Load(QDataStream *const dataStream)
 {
+	*dataStream >> m_lastTextureID >> m_lastSpriteID >> m_lastObjectID;
+
+	printf("%d %d %d\n", m_lastTextureID, m_lastSpriteID, m_lastObjectID);
+
+	int size = 0;
+
+	*dataStream >> size;
+
+	printf("Size: %d\n", size);
+
+	for (int i = 0; i < size; ++i)
+	{
+		int type = 0;
+		QString name;
+
+		*dataStream >> type >> name;
+
+		printf("\n[%d] Type: %d Name: \"%s\"\n", i, type, name.toStdString().c_str());
+
+		QStandardItem *treeItem = m_pTreeModel->item(type);
+
+		treeItem = InsertRow(treeItem, name);
+
+		Item *item = nullptr;
+
+		switch (type)
+		{
+			case Item::TEXTURE:
+			{
+				item = new Texture(this, treeItem, name);
+			} break;
+			case Item::SPRITE:
+			{
+				item = new Sprite(this, treeItem, name);
+			} break;
+			case Item::BACKGROUND:
+			{
+
+			} break;
+			case Item::OBJECT:
+			{
+				item = new Object(this, treeItem, name);
+			} break;
+			case Item::SCENE:
+			{
+
+			} break;
+		}
+
+		if (!item)
+			return;
+
+		item->Load(dataStream);
+		item->hide();
+		m_items.push_back(item);
+	}
 }
 
-void ResourceView::Save(const char *filePath)
+void ResourceView::Save(QDataStream *const dataStream)
 {
+	*dataStream << m_lastTextureID << m_lastSpriteID << m_lastObjectID;
+
+	qSort(m_items.begin(), m_items.end(), ItemsSort);
+
+	*dataStream << m_items.size();
+
+	for (int i = 0; i < m_items.size(); ++i)
+	{
+		if (m_items[i])
+		{
+			m_items[i]->Save(dataStream);
+		}
+	}
 }
 
 bool ResourceView::IsNameExists(const QString &name)
@@ -282,6 +359,19 @@ Item *ResourceView::GetItem(const QStandardItem *treeItem)
 	for (int i = 0; i < m_items.size(); ++i)
 	{
 		if (m_items[i]->GetItem() == treeItem)
+		{
+			return m_items[i];
+		}
+	}
+
+	return nullptr;
+}
+
+Item *ResourceView::GetItem(const QString &name)
+{
+	for (int i = 0; i < m_items.size(); ++i)
+	{
+		if (m_items[i]->GetName() == name)
 		{
 			return m_items[i];
 		}

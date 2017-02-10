@@ -23,6 +23,8 @@ Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 	m_xCenter = -1;
 	m_yCenter = -1;
 
+	m_pCurrTex = nullptr;
+
 	connect(m_ui.textureBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &Sprite::TextureBox_activated);
 
 	connect(m_ui.okButton, SIGNAL(clicked()), this, SLOT(OkButton_clicked()));
@@ -63,7 +65,7 @@ bool Sprite::event(QEvent *e)
 		RefreshTextureBox();
 		RefreshSpriteCenter();
 	}
-
+	
 	return false;
 }
 
@@ -198,3 +200,24 @@ void Sprite::RefreshSpriteCenter()
 		m_ui.centerYEdit->setText(QString::number(m_yCenter));
 	}
 }
+
+void Sprite::Load(QDataStream *const dataStream)
+{
+	QString name;
+
+	*dataStream >> name;
+
+	printf("Name: %s\n", name.toStdString().c_str());
+
+	m_pCurrTex = (Texture*)ResourceView::Get()->GetItem(name);
+
+	*dataStream >> m_xCenter >> m_yCenter;
+}
+
+void Sprite::Save(QDataStream *const dataStream)
+{
+	Item::Save(dataStream);
+
+	*dataStream << (m_pCurrTex ? m_pCurrTex->GetName() : QString("")) << m_xCenter << m_yCenter;
+}
+

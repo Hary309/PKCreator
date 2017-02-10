@@ -26,7 +26,7 @@ Object::Object(QWidget *parent, QStandardItem *item, const QString &itemName)
 	SetupContextMenu();
 	RefreshSpriteBox();
 
-	m_pCurrentSprite = nullptr;
+	m_pCurrSpr = nullptr;
 
 	m_ui.spriteBox->setCurrentIndex(0);
 
@@ -164,8 +164,6 @@ bool Object::event(QEvent * e)
 	if (e->type() == QEvent::WindowActivate)
 	{
 		RefreshSpriteBox();
-
-		printf("refresh\n");
 	}
 
 	return false;
@@ -294,7 +292,7 @@ void Object::AddSprButton_clicked()
 	spr->show();
 	res->InsertItem(spr);
 
-	m_pCurrentSprite = spr;
+	m_pCurrSpr = spr;
 
 	RefreshSpriteBox();
 
@@ -305,8 +303,8 @@ void Object::AddSprButton_clicked()
 
 void Object::EditSprButton_clicked()
 {
-	if (m_pCurrentSprite)
-		m_pCurrentSprite->show();
+	if (m_pCurrSpr)
+		m_pCurrSpr->show();
 }
 
 void Object::SpriteBox_activated(int index)
@@ -317,20 +315,63 @@ void Object::SpriteBox_activated(int index)
 	{
 		if (m_sprites[i])
 		{
-			printf("%d ", i);
-
 			if (m_sprites[i]->index == index)
 			{
-				printf("Done");
-				m_pCurrentSprite = m_sprites[i]->pSpr;
+				m_pCurrSpr = m_sprites[i]->pSpr;
 				return;
 			}
-
-			printf("\n");
 		}
 	}
 
-	printf("Brak na liscie!\n");
+	m_pCurrSpr = nullptr;
+}
 
-	m_pCurrentSprite = nullptr;
+void Object::Load(QDataStream *const dataStream)
+{
+	QString name;
+
+	*dataStream >> name;
+
+	m_pCurrSpr = (Sprite*)ResourceView::Get()->GetItem(name);
+
+	printf("Name: %s\n", name.toStdString().c_str());
+
+	int size;
+	*dataStream >> size;
+
+	printf("Size: %d\n", size);
+
+	for (int i = 0; i < size; ++i)
+	{
+		int type = 0;
+
+		*dataStream >> type;
+
+		printf("Type: %d\n", type);
+
+		QStandardItem *item = new QStandardItem(m_eventName[type]);
+		item->setEditable(false);
+		m_pModel->appendRow(item);
+
+		EventItem *eventItem = new EventItem(this, (EventItem::Type)type, item);
+
+		eventItem->Load(dataStream);
+
+		m_events.push_back(eventItem);
+	}
+}
+
+void Object::Save(QDataStream *const dataStream)
+{
+	Item::Save(dataStream);
+
+	*dataStream << (m_pCurrSpr ? m_pCurrSpr->GetName() : QString("")) << m_events.size();
+
+	for (int i = 0; i < m_events.size(); ++i)
+	{
+		if (m_events[i])
+		{
+			m_events[i]->Save(dataStream);
+		}
+	}
 }
