@@ -63,16 +63,14 @@ void MainWindow::Load(Project * project)
 
 		QDataStream stream(&file);
 
-		//QString version;
+		QString version;
+		stream >> version;
+		printf("Version: \"%s\"\n", version.toStdString().c_str());
 
-		//stream >> version;
+		if (version != "PKP1")
+			return;
 
-		//printf("Version: \"%s\"", version.toStdString().c_str());
-
-		//if (version != "PKP1")
-		//	return;
-
-		//printf("Version checked!\n");
+		printf("Version checked!\n");
 
 		m_pResView->Load(&stream);
 
@@ -93,7 +91,7 @@ void MainWindow::Save()
 		QDataStream stream(&file);
 
 		// version id
-		//stream << "PKP1";
+		stream << QString("PKP1");
 
 		m_pResView->Save(&stream);
 
