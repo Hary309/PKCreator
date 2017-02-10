@@ -211,6 +211,16 @@ void Sprite::Load(QDataStream *const dataStream)
 
 	m_pCurrTex = (Texture*)ResourceView::Get()->GetItem(name);
 
+	RefreshTextureBox();
+
+	for (int i = 0; i < m_textures.size(); ++i)
+	{
+		if (m_pCurrTex == m_textures[i]->pTex)
+		{
+			m_ui.textureBox->setCurrentIndex(m_textures[i]->index);
+		}
+	}
+
 	*dataStream >> m_xCenter >> m_yCenter;
 }
 

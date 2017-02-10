@@ -332,9 +332,20 @@ void Object::Load(QDataStream *const dataStream)
 
 	*dataStream >> name;
 
-	m_pCurrSpr = (Sprite*)ResourceView::Get()->GetItem(name);
+	printf("Name: \"%s\"\n", name.toStdString().c_str());
 
-	printf("Name: %s\n", name.toStdString().c_str());
+	m_pCurrSpr = (Sprite*)ResourceView::Get()->GetItem(name);
+	RefreshSpriteBox();
+
+	for (int i = 0; i < m_sprites.size(); ++i)
+	{
+		if (m_pCurrSpr == m_sprites[i]->pSpr)
+		{
+			m_ui.spriteBox->setCurrentIndex(m_sprites[i]->index + 1);
+
+			printf("%s\n", m_ui.spriteBox->currentText().toStdString().c_str());
+		}
+	}
 
 	int size;
 	*dataStream >> size;
