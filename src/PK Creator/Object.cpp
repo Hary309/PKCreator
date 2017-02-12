@@ -30,6 +30,8 @@ Object::Object(QWidget *parent, QStandardItem *item, const QString &itemName)
 
 	m_ui.spriteBox->setCurrentIndex(0);
 
+	m_ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
+
 	connect(m_ui.okButton, SIGNAL(clicked()), this, SLOT(OkButton_clicked()));
 	connect(m_ui.addButton, SIGNAL(clicked()), this, SLOT(AddEventButton_clicked()));
 	connect(m_ui.removeButton, SIGNAL(clicked()), this, SLOT(RemoveEventButton_clicked()));
@@ -365,7 +367,7 @@ void Object::Load(QDataStream *const dataStream)
 		m_pModel->appendRow(item);
 
 		EventItem *eventItem = new EventItem(this, (EventItem::Type)type, item);
-
+		eventItem->setWindowTitle(QString::asprintf("%s - %s", windowTitle().toStdString().c_str(), m_eventName[type].toStdString().c_str()));
 		eventItem->Load(dataStream);
 
 		m_events.push_back(eventItem);

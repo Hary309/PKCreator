@@ -25,6 +25,8 @@ Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 
 	m_pCurrTex = nullptr;
 
+	m_ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
+
 	connect(m_ui.textureBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &Sprite::TextureBox_activated);
 
 	connect(m_ui.okButton, SIGNAL(clicked()), this, SLOT(OkButton_clicked()));
