@@ -17,6 +17,8 @@ Texture::Texture(QWidget *parent, QStandardItem *item, const QString &itemName)
 	m_width = -1;
 	m_height = -1;
 
+	m_texPath = QString();
+
 	connect(m_ui.okButton, SIGNAL(clicked()), this, SLOT(OkButton_clicked()));
 	connect(m_ui.loadButton, SIGNAL(clicked()), this, SLOT(LoadButton_clicked()));
 }
@@ -27,6 +29,17 @@ Texture::~Texture()
 
 void Texture::SetName(const QString &name)
 {
+	if (!m_texPath.isEmpty())
+	{
+		QString resPath = ResourceView::Get()->GetMainDir();
+
+		QString newPath = QString("resources/") + name + QString(".") + m_texPath.split(".").last();
+
+		QFile::rename(resPath + m_texPath, resPath + newPath);
+	
+		m_texPath = newPath;
+	}
+
 	m_itemName = name;
 	setWindowTitle(name);
 	m_ui.nameEdit->setText(name);
@@ -50,13 +63,19 @@ void Texture::OkButton_clicked()
 
 void Texture::LoadButton_clicked()
 {
-	QString filePath = QFileDialog::getOpenFileName(this, "Open image", QDir::currentPath(), "All (*.*)");
+	QString filePath = QFileDialog::getOpenFileName(this, "Open image", ResourceView::Get()->GetMainDir(), "Images (*.png *.jpg *.jpeg *.bmp)");
 
 	if (filePath.isEmpty())
 		return;
+	
+	m_texPath = QString("resources/") + m_itemName + QString(".") + filePath.split(".").last();
 
-	QFileInfo fileInfo(filePath);
-	m_ui.imagePathLabel->setText(fileInfo.fileName());
+	QFile file(ResourceView::Get()->GetMainDir() + m_texPath);
+	file.remove();
+
+	QFile::copy(filePath, ResourceView::Get()->GetMainDir() + m_texPath);
+	
+	m_ui.imagePathLabel->setText(m_texPath);
 
 	QImage myImage;
 	myImage.load(filePath);
@@ -72,12 +91,24 @@ void Texture::LoadButton_clicked()
 
 void Texture::Load(QDataStream *const dataStream)
 {
-	*dataStream >> m_width >> m_height;
+	*dataStream >> m_texPath >> m_width >> m_height;
+
+	if (m_texPath.isEmpty())
+		return;
+		
+	m_ui.imagePathLabel->setText(m_texPath);
+
+	QImage myImage;
+	myImage.load(ResourceView::Get()->GetMainDir() + m_texPath);
+	m_ui.imageLabel->setPixmap(QPixmap::fromImage(myImage));
+
+	m_ui.widthValueLabel->setText(QString::number(m_width) + "px");
+	m_ui.heightValueLabel->setText(QString::number(m_height) + "px");
 }
 
 void Texture::Save(QDataStream *const dataStream)
 {
 	Item::Save(dataStream);
 
-	*dataStream << m_width << m_height;
+	*dataStream << m_texPath << m_width << m_height;
 }

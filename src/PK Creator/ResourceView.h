@@ -15,6 +15,8 @@ class ResourceView : public QTreeView
 private:
 	QStringList			m_defaultModel;
 
+	QString				m_mainDir;
+
 	// to save
 	QStandardItemModel	*m_pTreeModel;
 	
@@ -23,7 +25,6 @@ private:
 	int					m_lastTextureID;
 	int					m_lastSpriteID;
 	int					m_lastObjectID;
-
 	
 	static ResourceView *s_pInst;
 
@@ -48,13 +49,15 @@ public:
 
 	void InsertItem(Item *item);
 
-	void Load(QDataStream *const dataStream);
+	void Load(QDataStream *const dataStream, const QString &currPath);
 	void Save(QDataStream *const dataStream);
 
 	bool IsNameExists(const QString &name);
 
 	Item *GetItem(const QStandardItem *treeItem);
 	Item *GetItem(const QString &name);
+
+	const QString &GetMainDir() { return m_mainDir; }
 
 	// @type - Item::Type
 	QVector <Item*> GetItemsByType(int type);

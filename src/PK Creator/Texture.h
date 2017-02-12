@@ -13,6 +13,9 @@ private:
 private: // to save
 	int					m_width;
 	int					m_height;
+	QString				m_texPath; // relative path ("resources/m_itemName.ext")
+
+
 
 public:
 	Texture(QWidget *parent, QStandardItem *item, const QString &itemName);

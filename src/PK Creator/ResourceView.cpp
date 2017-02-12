@@ -266,9 +266,11 @@ void ResourceView::InsertItem(Item *item)
 	m_items.push_back(item);
 }
 
-void ResourceView::Load(QDataStream *const dataStream)
+void ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 {
 	*dataStream >> m_lastTextureID >> m_lastSpriteID >> m_lastObjectID;
+
+	m_mainDir = currPath;
 
 	printf("%d %d %d\n", m_lastTextureID, m_lastSpriteID, m_lastObjectID);
 

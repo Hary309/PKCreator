@@ -77,7 +77,7 @@ void MainWindow::Load(Project * project)
 
 		printf("Version checked!\n");
 
-		m_pResView->Load(&stream);
+		m_pResView->Load(&stream, project->path);
 
 		file.close();
 	}

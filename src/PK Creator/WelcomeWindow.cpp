@@ -194,12 +194,10 @@ void WelcomeWindow::DeleteButton_clicked()
 		return;
 	}
 
-	QTreeWidgetItem *treeItem = m_ui.projectView->selectedItems().first();
-
 	if (QMessageBox::question(this, "Pk Creator", "Are you sure you want to remove project with all files?") == QMessageBox::No)
 		return;
 
-
+	QTreeWidgetItem *treeItem = m_ui.projectView->selectedItems().first();
 
 	for (int i = 0; i < m_projectList.size(); ++i)
 	{
