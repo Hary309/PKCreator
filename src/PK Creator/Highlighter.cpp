@@ -33,7 +33,6 @@ Highlighter::Highlighter(QTextDocument *parent)
 	rule.format = m_functionFormat;
 	m_highlightingRules.append(rule);
 
-
 	// comments
 	m_singleLineCommentFormat.setForeground(Qt::darkGreen);
 	rule.pattern = QRegExp("--[^\n]*");

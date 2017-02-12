@@ -131,6 +131,9 @@
     <ClCompile Include="..\..\QtFiles\Release\moc_WelcomeWindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="LuaDebugger.cpp">
+      <Filter>Source Files\CodeEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -209,6 +212,9 @@
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_WelcomeWindow.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaDebugger.h">
+      <Filter>Header Files\CodeEditor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@
 #include <Sprite.h>
 #include <Object.h>
 
+#include <LuaDebugger.h>
+
 ResourceView *ResourceView::s_pInst;
 
 ResourceView::ResourceView(QWidget * parent)
@@ -24,6 +26,9 @@ ResourceView::ResourceView(QWidget * parent)
 	m_lastTextureID = 0;
 	m_lastSpriteID = 0;
 	m_lastObjectID = 0;
+
+	m_pLuaDebugger = new LuaDebugger();
+
 	s_pInst = this;
 }
 
@@ -33,6 +38,12 @@ ResourceView::~ResourceView()
 	{
 		delete m_pTreeModel;
 		m_pTreeModel = nullptr;
+	}
+
+	if (m_pLuaDebugger)
+	{
+		delete m_pLuaDebugger;
+		m_pLuaDebugger = nullptr;
 	}
 
 	for (int i = 0; i < m_items.size(); ++i)
