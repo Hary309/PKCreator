@@ -1,9 +1,13 @@
 #include "CodeEditorWindow.h"
 
 #include <QFileDialog>
+#include <QTimer>
 
+#include <ResourceView.h>
 #include <CodeEditor.h>
 #include <Highlighter.h>
+
+#include <LuaDebugger.h>
 
 CodeEditorWindow::CodeEditorWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -17,6 +21,11 @@ CodeEditorWindow::CodeEditorWindow(QWidget *parent)
 	m_pHighlighter = new Highlighter(m_pCodeEditor->document());
 
 	m_codeChanged = false;
+
+	m_pTimer = new QTimer(this);
+	m_pTimer->setSingleShot(true);
+
+	connect(m_pTimer, &QTimer::timeout, this, &CodeEditorWindow::Timer_timeout);
 
 	connect(m_ui.actionCut, &QAction::triggered, m_pCodeEditor, &QPlainTextEdit::cut);
 	connect(m_ui.actionCopy, &QAction::triggered, m_pCodeEditor, &QPlainTextEdit::copy);
@@ -71,4 +80,13 @@ void CodeEditorWindow::CodeEditor_textChanged()
 	}
 
 	m_codeChanged = true;
+
+	m_pTimer->start(1000);
+}
+
+void CodeEditorWindow::Timer_timeout()
+{
+	QString error = ResourceView::Get()->GetLuaDebugger()->TestScript(m_pCodeEditor->toPlainText(), QString("@script"));
+	
+	statusBar()->showMessage(error);
 }

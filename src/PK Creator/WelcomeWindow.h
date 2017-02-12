@@ -23,10 +23,12 @@ class WelcomeWindow : public QDialog
 	Q_OBJECT
 
 private:
-	Ui::WelcomeWindow	m_ui;
-	QList<Project*>		m_projectList;
+	Ui::WelcomeWindow		m_ui;
+	QList<Project*>			m_projectList;
 
-	MainWindow			*m_pMainWnd;
+	MainWindow				*m_pMainWnd;
+
+	static WelcomeWindow	*s_pInst;
 
 public:
 	WelcomeWindow(QWidget *parent = 0);
@@ -34,6 +36,8 @@ public:
 
 	void SaveList();
 	void LoadList();
+
+	static WelcomeWindow *Get() { return s_pInst; }
 
 private slots:
 	void CreateButton_clicked();

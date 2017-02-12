@@ -10,6 +10,7 @@
 #include <Windows.h>
 #include <shellapi.h>
 
+WelcomeWindow *WelcomeWindow::s_pInst;
 
 WelcomeWindow::WelcomeWindow(QWidget *parent)
 	: QDialog(parent)
@@ -27,6 +28,8 @@ WelcomeWindow::WelcomeWindow(QWidget *parent)
 	connect(m_ui.exitButton, &QPushButton::clicked, this, [this] { this->close(); } );
 
 	connect(m_ui.projectView, &QTreeWidget::doubleClicked, this, &WelcomeWindow::OpenButton_clicked);
+
+	s_pInst = this;
 }
 
 WelcomeWindow::~WelcomeWindow()
@@ -176,7 +179,7 @@ void WelcomeWindow::OpenButton_clicked()
 					m_pMainWnd = nullptr;
 				}
 
-				m_pMainWnd = new MainWindow(this);
+				m_pMainWnd = new MainWindow();
 
 				m_pMainWnd->Load(m_projectList[i]);
 				m_pMainWnd->show();

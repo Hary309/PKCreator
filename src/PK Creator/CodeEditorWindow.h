@@ -4,18 +4,22 @@
 
 #include <ui_CodeWindow.h>
 
+class QTimer;
+
 class CodeEditor;
 class Highlighter;
 
 class CodeEditorWindow : public QMainWindow
 {
 protected:
-	Ui::CodeWindow	m_ui;
+	Ui::CodeWindow		m_ui;
 
-	CodeEditor		*m_pCodeEditor;
-	Highlighter		*m_pHighlighter;
+	CodeEditor			*m_pCodeEditor;
+	Highlighter			*m_pHighlighter;
 
-	bool			m_codeChanged;
+	QTimer				*m_pTimer;
+
+	bool				m_codeChanged;
 
 public:
 	CodeEditorWindow(QWidget *parent);
@@ -28,5 +32,7 @@ private slots:
 	void ActionSaveAs_triggered();
 	void ActionOpen_triggered();
 	void CodeEditor_textChanged();
+
+	void Timer_timeout();
 };
 
