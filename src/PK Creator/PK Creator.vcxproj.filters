@@ -134,6 +134,15 @@
     <ClCompile Include="LuaDebugger.cpp">
       <Filter>Source Files\CodeEditor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_Scene.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_Scene.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -184,6 +193,12 @@
     <CustomBuild Include="WelcomeWindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="SceneWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Scene.h">
+      <Filter>Header Files\Items</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
@@ -215,6 +230,9 @@
     </ClInclude>
     <ClInclude Include="LuaDebugger.h">
       <Filter>Header Files\CodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_SceneWindow.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
