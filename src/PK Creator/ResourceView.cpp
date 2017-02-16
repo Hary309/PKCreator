@@ -10,6 +10,7 @@
 #include <Texture.h>
 #include <Sprite.h>
 #include <Object.h>
+#include <Scene.h>
 
 #include <LuaDebugger.h>
 
@@ -26,6 +27,7 @@ ResourceView::ResourceView(QWidget * parent)
 	m_lastTextureID = 0;
 	m_lastSpriteID = 0;
 	m_lastObjectID = 0;
+	m_lastSceneID = 0;
 
 	m_pLuaDebugger = new LuaDebugger();
 
@@ -206,7 +208,18 @@ void ResourceView::ActionAdd_triggered()
 		} break;
 		case Item::SCENE:
 		{
+			while (true)
+			{
+				name.sprintf("scene%d", m_lastSceneID++);
 
+				if (!IsNameExists(name))
+					break;
+			}
+			treeItem = InsertRow(treeItem, name);
+
+			Item *item = new Scene(this, treeItem, name);
+			item->show();
+			m_items.push_back(item);
 		} break;
 	}
 }
@@ -341,7 +354,7 @@ void ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 
 void ResourceView::Save(QDataStream *const dataStream)
 {
-	*dataStream << m_lastTextureID << m_lastSpriteID << m_lastObjectID;
+	*dataStream << m_lastTextureID << m_lastSpriteID << m_lastObjectID; // << m_lastSceneID
 
 	qSort(m_items.begin(), m_items.end(), ItemsSort);
 
