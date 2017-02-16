@@ -52,6 +52,8 @@ public:
 	EventItem *GetEvent(int eventType);
 	EventItem *GetEvent(QStandardItem *item);
 
+	Sprite *GetSprite() { return m_pCurrSpr; }
+
 	virtual void Load(QDataStream *const dataStream) override;
 	virtual void Save(QDataStream *const dataStream) override;
 

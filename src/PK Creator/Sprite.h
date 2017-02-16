@@ -43,6 +43,8 @@ public:
 	virtual void Load(QDataStream * const dataStream) override;
 	virtual void Save(QDataStream * const dataStream) override;
 
+	Texture *GetTexture() { return m_pCurrTex; }
+
 private slots:
 	void OkButton_clicked();
 	void AddButton_clicked();
