@@ -71,5 +71,9 @@ public:
 	LuaDebugger *GetLuaDebugger() { return m_pLuaDebugger; }
 
 	static ResourceView *Get() { return s_pInst; }
+
+private slots:
+	void ResourceView_expanded(const QModelIndex &index);
+	void ResourceView_collapsed(const QModelIndex &index);
 };
 

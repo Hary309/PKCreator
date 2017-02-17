@@ -32,6 +32,9 @@ ResourceView::ResourceView(QWidget * parent)
 	m_pLuaDebugger = new LuaDebugger();
 
 	s_pInst = this;
+
+	connect(this, &QTreeView::expanded, this, &ResourceView::ResourceView_expanded);
+	connect(this, &QTreeView::collapsed, this, &ResourceView::ResourceView_collapsed);
 }
 
 ResourceView::~ResourceView()
@@ -73,10 +76,23 @@ void ResourceView::Setup()
 	for (int i = 0; i < m_defaultModel.size(); ++i)
 	{
 		QStandardItem *item = new QStandardItem(m_defaultModel.at(i));
+
+		QIcon icon;
+		icon.addFile(":/ResourceView/res/folderCloseIcon.png");
+
+		item->setIcon(icon);
 		item->setEditable(false);
 
 		m_pTreeModel->appendRow(item);
 	}
+
+	QStandardItem *item = new QStandardItem("Config");
+	QIcon icon;
+	icon.addFile(":/ResourceView/res/configIcon.png");
+	item->setIcon(icon);
+	item->setEditable(false);
+
+	m_pTreeModel->appendRow(item);
 }
 
 void ResourceView::mousePressEvent(QMouseEvent * mouseEvent)
@@ -339,7 +355,7 @@ void ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 			} break;
 			case Item::SCENE:
 			{
-
+				item = new Scene(this, treeItem, name);
 			} break;
 		}
 
@@ -422,4 +438,24 @@ QVector<Item*> ResourceView::GetItemsByType(int type)
 	}
 
 	return items;
+}
+
+void ResourceView::ResourceView_expanded(const QModelIndex &index)
+{
+	QStandardItem *item = m_pTreeModel->itemFromIndex(index);
+
+	QIcon icon;
+	icon.addFile(":/ResourceView/res/folderOpenIcon.png");
+
+	item->setIcon(icon);
+}
+
+void ResourceView::ResourceView_collapsed(const QModelIndex &index)
+{
+	QStandardItem *item = m_pTreeModel->itemFromIndex(index);
+
+	QIcon icon;
+	icon.addFile(":/ResourceView/res/folderCloseIcon.png");
+
+	item->setIcon(icon);
 }
