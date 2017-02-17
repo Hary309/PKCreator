@@ -143,6 +143,18 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
+    <ClCompile Include="SceneEditor.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_Config.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_Config.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -199,6 +211,12 @@
     <CustomBuild Include="Scene.h">
       <Filter>Header Files\Items</Filter>
     </CustomBuild>
+    <CustomBuild Include="Config.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ConfigWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
@@ -232,6 +250,12 @@
       <Filter>Header Files\CodeEditor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_SceneWindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneEditor.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_ConfigWindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
