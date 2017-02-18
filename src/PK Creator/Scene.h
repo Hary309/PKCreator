@@ -29,6 +29,9 @@ public:
 
 	void RefreshObjectList();
 
+	virtual void Load(QDataStream *const dataStream) override;
+	virtual void Save(QDataStream *const dataStream) override;
+
 private slots:
 	void OkButton_clicked();
 };

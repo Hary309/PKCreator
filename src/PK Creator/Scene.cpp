@@ -21,8 +21,11 @@ Scene::Scene(QWidget *parent, QStandardItem *item, const QString &itemName)
 
 	RefreshObjectList();
 
+	m_type = Item::SCENE;
+
+	ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
+
 	m_pSceneEditor = new SceneEditor(this);
-	m_pSceneEditor->show();
 
 	m_pSceneEditor->setWindowTitle(itemName + QString(" - Scene Editor"));
 
@@ -85,6 +88,16 @@ void Scene::RefreshObjectList()
 
 		ui.objectList->addItem(item);
 	}
+}
+
+void Scene::Load(QDataStream * const dataStream)
+{
+
+}
+
+void Scene::Save(QDataStream * const dataStream)
+{
+	Item::Save(dataStream);
 }
 
 void Scene::OkButton_clicked()
