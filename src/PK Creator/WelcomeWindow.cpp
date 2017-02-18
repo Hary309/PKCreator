@@ -149,7 +149,7 @@ void WelcomeWindow::CreateButton_clicked()
 
 	QDataStream stream(&projectFile);
 
-	stream << QString("PKP1") << projectName;
+	stream << QString("PKP1") << projectName << QString("Game") << QString("800") << QString("600");
 
 	projectFile.close();
 
