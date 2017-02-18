@@ -8,6 +8,7 @@
         <file>res/openIcon.png</file>
         <file>res/pasteIcon.png</file>
         <file>res/saveIcon.png</file>
+        <file>res/DejaVuSansMono.ttf</file>
     </qresource>
     <qresource prefix="/ResourceView">
         <file>res/configIcon.png</file>

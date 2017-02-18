@@ -43,7 +43,7 @@
         <locale language="English" country="UnitedStates"/>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="ObjectsTab">
         <attribute name="title">
@@ -114,7 +114,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="MainWindow.qrc"/>
+  <include location="Resources.qrc"/>
  </resources>
  <connections/>
 </ui>
