@@ -11,6 +11,7 @@
 #include <Sprite.h>
 #include <Object.h>
 #include <Scene.h>
+#include <Config.h>
 
 #include <LuaDebugger.h>
 
@@ -28,6 +29,8 @@ ResourceView::ResourceView(QWidget * parent)
 	m_lastSpriteID = 0;
 	m_lastObjectID = 0;
 	m_lastSceneID = 0;
+
+	m_pProConfig = new Config(this);
 
 	m_pLuaDebugger = new LuaDebugger();
 
@@ -61,6 +64,12 @@ ResourceView::~ResourceView()
 	}
 
 	m_items.clear();
+
+	if (m_pProConfig)
+	{
+		delete m_pProConfig;
+		m_pProConfig = nullptr;
+	}
 }
 
 void ResourceView::Setup()
@@ -141,7 +150,12 @@ void ResourceView::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 		QStandardItem *treeItem = m_pTreeModel->itemFromIndex(index);
 
 		if (!treeItem->parent())
+		{
+			if (treeItem->text() == QString("Config"))
+				m_pProConfig->show();
+			
 			return;
+		}
 
 		Item *item = GetItem(treeItem);
 
@@ -308,11 +322,13 @@ void ResourceView::InsertItem(Item *item)
 
 void ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 {
-	*dataStream >> m_lastTextureID >> m_lastSpriteID >> m_lastObjectID;
+	m_pProConfig->Load(dataStream);
+
+	*dataStream >> m_lastTextureID >> m_lastSpriteID >> m_lastObjectID >> m_lastSceneID;
 
 	m_mainDir = currPath;
 
-	printf("%d %d %d\n", m_lastTextureID, m_lastSpriteID, m_lastObjectID);
+	printf("%d %d %d %d\n", m_lastTextureID, m_lastSpriteID, m_lastObjectID, m_lastSceneID);
 
 	int size = 0;
 
@@ -370,7 +386,9 @@ void ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 
 void ResourceView::Save(QDataStream *const dataStream)
 {
-	*dataStream << m_lastTextureID << m_lastSpriteID << m_lastObjectID; // << m_lastSceneID
+	m_pProConfig->Save(dataStream);
+
+	*dataStream << m_lastTextureID << m_lastSpriteID << m_lastObjectID << m_lastSceneID;
 
 	qSort(m_items.begin(), m_items.end(), ItemsSort);
 

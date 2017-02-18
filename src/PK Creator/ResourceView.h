@@ -11,6 +11,8 @@ class Item;
 
 class LuaDebugger;
 
+class Config;
+
 class ResourceView : public QTreeView
 {
 	Q_OBJECT
@@ -26,6 +28,8 @@ private:
 	QStandardItemModel	*m_pTreeModel;
 	
 	QVector<Item*>		m_items;
+	
+	Config				*m_pProConfig;
 
 	int					m_lastTextureID;
 	int					m_lastSpriteID;

@@ -7,10 +7,16 @@ class Config : public QDialog
 {
 	Q_OBJECT
 
+private:
+	Ui::Config ui;
+
 public:
 	Config(QWidget *parent = Q_NULLPTR);
 	~Config();
 
-private:
-	Ui::Config ui;
+	void Load(QDataStream *const dataStream);
+	void Save(QDataStream *const dataStream);
+
+private slots:
+	void OkButton_clicked();
 };
