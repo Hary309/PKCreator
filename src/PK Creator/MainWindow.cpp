@@ -30,8 +30,9 @@ MainWindow::MainWindow(QWidget *parent)
 	setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::Dialog);
 
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(ActionExit_triggered()));
-	connect(ui.actionSaveProject, SIGNAL(triggered()), this, SLOT(ActionSaveProject_triggered()));
+	connect(ui.actionNewProject, SIGNAL(triggered()), this, SLOT(ActionOpenProject_triggered()));
 	connect(ui.actionOpenProject, SIGNAL(triggered()), this, SLOT(ActionOpenProject_triggered()));
+	connect(ui.actionSaveProject, SIGNAL(triggered()), this, SLOT(ActionSaveProject_triggered()));
 
 	s_pInst = this;
 }
