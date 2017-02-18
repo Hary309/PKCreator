@@ -113,6 +113,9 @@ void ResourceView::mousePressEvent(QMouseEvent * mouseEvent)
 		QModelIndex index = selectionModel()->currentIndex();
 		QStandardItem *treeItem = m_pTreeModel->itemFromIndex(index);
 
+		if (treeItem->text() == QString("Config"))
+			return;
+
 		int type = treeItem->parent() ? treeItem->parent()->row() : treeItem->row();
 
 		QMenu contextMenu(tr("Context menu"), this);
@@ -122,7 +125,7 @@ void ResourceView::mousePressEvent(QMouseEvent * mouseEvent)
 		QAction actionRemove(this);
 
 		actionAdd.setText(QString::asprintf("Add %s", m_defaultModel.at(type).toStdString().c_str()));
-		actionEdit.setText(QString::asprintf("Edit %s", m_defaultModel.at(type).toStdString().c_str()));
+		actionEdit.setText(QString::asprintf("Edit %s", treeItem->text().toStdString().c_str()));
 		actionRemove.setText(QString::asprintf("Remove %s", treeItem->text().toStdString().c_str()));
 
 		connect(&actionAdd, SIGNAL(triggered()), this, SLOT(ActionAdd_triggered()));
