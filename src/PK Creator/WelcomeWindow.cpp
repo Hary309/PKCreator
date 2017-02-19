@@ -21,6 +21,8 @@ WelcomeWindow::WelcomeWindow(QWidget *parent)
 
 	LoadList();
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 	connect(m_ui.createButton, &QPushButton::clicked, this, &WelcomeWindow::CreateButton_clicked);
 	connect(m_ui.openButton, &QPushButton::clicked, this, &WelcomeWindow::OpenButton_clicked);
 	connect(m_ui.deleteButton, &QPushButton::clicked, this, &WelcomeWindow::DeleteButton_clicked);

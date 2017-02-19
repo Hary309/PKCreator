@@ -19,6 +19,8 @@ SceneEditor::SceneEditor(QWidget *parent)
 
 	move(QApplication::desktop()->width() / 2 - width / 2, QApplication::desktop()->height() / 2 - height / 2);
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 	// (HWND)QWidget::winId();
 }
 

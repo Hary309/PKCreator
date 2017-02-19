@@ -16,6 +16,8 @@ Config::Config(QWidget *parent)
 	ui.widthEdit->setText("800");
 	ui.heightEdit->setText("600");
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 	connect(ui.okButton, &QPushButton::clicked, this, [this] { this->hide(); });
 }
 
