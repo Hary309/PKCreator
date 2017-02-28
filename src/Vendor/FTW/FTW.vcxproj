@@ -60,7 +60,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;FTW_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DXSDK_DIR)\Include;.\.;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXSDK_DIR)\Include;.\FTW;.\.</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
@@ -81,7 +81,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;FTW_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DXSDK_DIR)\Include;.\.;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXSDK_DIR)\Include;.\FTW;.\.</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
@@ -95,30 +95,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Background.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Common.h" />
-    <ClInclude Include="Declspec.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="FTWMath.h" />
-    <ClInclude Include="Line.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="FTW\Background.h" />
+    <ClInclude Include="FTW\Camera.h" />
+    <ClInclude Include="FTW\Common.h" />
+    <ClInclude Include="FTW\Declspec.h" />
+    <ClInclude Include="FTW\Font.h" />
+    <ClInclude Include="FTW\FTWMath.h" />
+    <ClInclude Include="FTW\Line.h" />
+    <ClInclude Include="FTW\Logger.h" />
+    <ClInclude Include="FTW\Renderer.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="FTW\Sprite.h" />
+    <ClInclude Include="FTW\Texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Background.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Common.cpp" />
-    <ClCompile Include="Font.cpp" />
-    <ClCompile Include="FTWMath.cpp" />
-    <ClCompile Include="Line.cpp" />
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="FTW\Background.cpp" />
+    <ClCompile Include="FTW\Camera.cpp" />
+    <ClCompile Include="FTW\Common.cpp" />
+    <ClCompile Include="FTW\Font.cpp" />
+    <ClCompile Include="FTW\FTWMath.cpp" />
+    <ClCompile Include="FTW\Line.cpp" />
+    <ClCompile Include="FTW\Logger.cpp" />
+    <ClCompile Include="FTW\Renderer.cpp" />
+    <ClCompile Include="FTW\Sprite.cpp" />
+    <ClCompile Include="FTW\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
