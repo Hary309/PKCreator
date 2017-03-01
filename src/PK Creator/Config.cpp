@@ -44,6 +44,15 @@ void Config::Save(QDataStream *const dataStream)
 	*dataStream << ui.titleEdit->text() << ui.widthEdit->text() << ui.heightEdit->text();
 }
 
+QSize Config::GetWndSize()
+{
+	QSize size;
+	size.setWidth(ui.widthEdit->text().toInt());
+	size.setHeight(ui.heightEdit->text().toInt());
+
+	return size;
+}
+
 void Config::OkButton_clicked()
 {
 	hide();

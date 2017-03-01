@@ -17,6 +17,8 @@ public:
 	void Load(QDataStream *const dataStream);
 	void Save(QDataStream *const dataStream);
 
+	QSize GetWndSize();
+
 private slots:
 	void OkButton_clicked();
 };
