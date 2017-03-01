@@ -10,8 +10,7 @@
 
 #include <d3dx9.h>
 #include <Windows.h>
-
-#define DECLSPEC __declspec(dllexport)
+#include <FTW/Declspec.h>
 
 namespace FTW
 {

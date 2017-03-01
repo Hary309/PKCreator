@@ -44,7 +44,11 @@ bool FTW::Texture::Create(const char *filePath, unsigned width, unsigned height,
 {
 	Logger::Msg("Loading texture from file \"%s\" %dx%d", filePath, width, height);
 
-	assert(s_pRenderer);
+	if (!s_pRenderer)
+		return false;
+
+	if (!s_pRenderer->GetDevice())
+		return false;
 
 	HRESULT result = D3DXCreateTextureFromFileEx(s_pRenderer->GetDevice(), filePath, width, height, D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colorKey, 0, 0, &m_pTexture);
 

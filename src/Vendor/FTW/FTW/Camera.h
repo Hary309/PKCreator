@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Declspec.h>
+#include <FTW/Declspec.h>
 
 struct D3DXMATRIX;
 struct D3DXVECTOR2;

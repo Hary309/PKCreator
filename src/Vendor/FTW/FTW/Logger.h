@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <Declspec.h>
+#include <FTW/Declspec.h>
 #include <iostream>
 
 namespace FTW

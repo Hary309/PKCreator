@@ -11,7 +11,7 @@
 #define THROW_EXCEPTION
 #define ALLOC_CONSOLE
 
-#include <Declspec.h>
+#include <FTW/Declspec.h>
 #include <Windows.h>
 
 namespace FTW
