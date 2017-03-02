@@ -5,7 +5,7 @@
 class LineNumberArea : public QWidget
 {
 public:
-	LineNumberArea(CodeEditor *editor) : QWidget(editor) {
+	explicit LineNumberArea(CodeEditor *editor) : QWidget(editor) {
 		codeEditor = editor;
 	}
 

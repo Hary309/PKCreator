@@ -22,7 +22,7 @@ protected:
 	bool				m_codeChanged;
 
 public:
-	CodeEditorWindow(QWidget *parent);
+	explicit CodeEditorWindow(QWidget *parent);
 	~CodeEditorWindow();
 
 private slots:
@@ -33,6 +33,6 @@ private slots:
 	void ActionOpen_triggered();
 	void CodeEditor_textChanged();
 
-	void Timer_timeout();
+	void Timer_timeout() const;
 };
 

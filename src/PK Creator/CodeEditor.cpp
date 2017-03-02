@@ -30,7 +30,7 @@ CodeEditor::~CodeEditor()
 	}
 }
 
-int CodeEditor::LineNumberAreaWidth()
+int CodeEditor::LineNumberAreaWidth() const
 {
 	int digits = 1;
 	int max = qMax<int>(1, blockCount());
@@ -109,7 +109,7 @@ void CodeEditor::HighlightCurrentLine()
 	setExtraSelections(extraSelections);
 }
 
-void CodeEditor::LineNumberAreaPaintEvent(QPaintEvent *event)
+void CodeEditor::LineNumberAreaPaintEvent(QPaintEvent *event) const
 {
 	QPainter painter(m_pLineNumberArea);
 	QColor numberAreaColor;

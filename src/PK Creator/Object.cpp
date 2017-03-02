@@ -14,7 +14,7 @@ Object::Object(QWidget *parent, QStandardItem *item, const QString &itemName)
 {
 	m_ui.setupUi(this);
 
-	SetName(itemName);
+	Object::SetName(itemName);
 
 	m_type = Item::OBJECT;
 
@@ -207,7 +207,7 @@ void Object::OkButton_clicked()
 	hide();
 }
 
-void Object::AddEventButton_clicked()
+void Object::AddEventButton_clicked() const
 {
 	m_pContextMenu->exec(QCursor::pos());
 }
@@ -303,7 +303,7 @@ void Object::AddSprButton_clicked()
 	m_ui.spriteBox->setCurrentIndex(row);
 }
 
-void Object::EditSprButton_clicked()
+void Object::EditSprButton_clicked() const
 {
 	if (m_pCurrSpr)
 		m_pCurrSpr->show();

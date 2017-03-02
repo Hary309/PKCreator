@@ -13,7 +13,7 @@ public:
 	LuaDebugger();
 	~LuaDebugger();
 
-	const QString TestScript(const QString &script, const QString &name);
+	QString TestScript(const QString &script, const QString &name);
 
 	void ReloadLua();
 };

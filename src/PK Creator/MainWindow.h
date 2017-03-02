@@ -22,16 +22,16 @@ private:
 	static MainWindow		*s_pInst;
 
 public:
-	MainWindow(QWidget *parent = 0);
+	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
 	void Load(Project *project);
-	void Save();
+	void Save() const;
 
 	static MainWindow *Get() { return s_pInst; }
 
 private slots:
 	void ActionExit_triggered();
-	void ActionSaveProject_triggered();
+	void ActionSaveProject_triggered() const;
 	void ActionOpenProject_triggered();
 };

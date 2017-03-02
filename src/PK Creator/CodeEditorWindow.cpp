@@ -84,7 +84,7 @@ void CodeEditorWindow::CodeEditor_textChanged()
 	m_pTimer->start(1000);
 }
 
-void CodeEditorWindow::Timer_timeout()
+void CodeEditorWindow::Timer_timeout() const
 {
 	QString error = ResourceView::Get()->GetLuaDebugger()->TestScript(m_pCodeEditor->toPlainText(), QString("@script"));
 	

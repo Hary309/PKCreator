@@ -41,31 +41,31 @@ private:
 	void RefreshSpriteBox();
 
 protected:
-	virtual bool event(QEvent *e) override;
+	bool event(QEvent *e) override;
 
 public:
 	Object(QWidget *parent, QStandardItem *item, const QString &itemName);
 	virtual ~Object();
 
-	virtual void SetName(const QString &name) override;
+	void SetName(const QString &name) override;
 
 	EventItem *GetEvent(int eventType);
 	EventItem *GetEvent(QStandardItem *item);
 
-	Sprite *GetSprite() { return m_pCurrSpr; }
+	Sprite *GetSprite() const { return m_pCurrSpr; }
 
-	virtual void Load(QDataStream *const dataStream) override;
-	virtual void Save(QDataStream *const dataStream) override;
+	void Load(QDataStream *const dataStream) override;
+	void Save(QDataStream *const dataStream) override;
 
 
 private slots:
 	void OkButton_clicked();
-	void AddEventButton_clicked();
+	void AddEventButton_clicked() const;
 	void RemoveEventButton_clicked();
 	void EditButton_clicked();
 	void AddEventAction_triggered(int type);
 	void AddSprButton_clicked();
-	void EditSprButton_clicked();
+	void EditSprButton_clicked() const;
 	void SpriteBox_activated(int index);
 };
 

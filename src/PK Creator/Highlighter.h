@@ -28,5 +28,5 @@ protected:
 	void highlightBlock(const QString &text) override;
 
 public:
-	Highlighter(QTextDocument *parent = 0);
+	explicit Highlighter(QTextDocument *parent = 0);
 };

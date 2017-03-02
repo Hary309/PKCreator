@@ -16,7 +16,7 @@ LuaDebugger::~LuaDebugger()
 	lua_close(m_pLuaVM);
 }
 
-const QString LuaDebugger::TestScript(const QString &script, const QString &name)
+QString LuaDebugger::TestScript(const QString &script, const QString &name)
 {
 	int result = luaL_loadbuffer(m_pLuaVM, script.toStdString().c_str(), script.size(), name.toStdString().c_str());
 

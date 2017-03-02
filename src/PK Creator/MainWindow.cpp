@@ -91,7 +91,7 @@ void MainWindow::Load(Project * project)
 	printf("Loaded \"%s\" in %d ms \n", m_proInfo->name.toStdString().c_str(), timer.elapsed());
 }
 
-void MainWindow::Save()
+void MainWindow::Save() const
 {
 	QTime timer;
 	timer.start();
@@ -114,7 +114,7 @@ void MainWindow::Save()
 	printf("Saved in: %d ms\n", timer.elapsed());
 }
 
-void MainWindow::ActionSaveProject_triggered()
+void MainWindow::ActionSaveProject_triggered() const
 {
 	Save();
 }

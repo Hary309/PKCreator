@@ -14,7 +14,7 @@ Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 	m_ui.centerXEdit->setValidator(new QIntValidator);
 	m_ui.centerYEdit->setValidator(new QIntValidator);
 
-	SetName(itemName);
+	Sprite::SetName(itemName);
 
 	m_type = Item::SPRITE;
 
@@ -155,7 +155,7 @@ void Sprite::AddButton_clicked()
 	m_ui.textureBox->setCurrentIndex(row);
 }
 
-void Sprite::EditButton_clicked()
+void Sprite::EditButton_clicked() const
 {
 	if (m_pCurrTex)
 		m_pCurrTex->show();

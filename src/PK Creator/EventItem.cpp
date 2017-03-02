@@ -23,7 +23,7 @@ void EventItem::Load(QDataStream *const dataStream)
 	m_pCodeEditor->setPlainText(m_code);
 }
 
-void EventItem::Save(QDataStream *const dataStream)
+void EventItem::Save(QDataStream *const dataStream) const
 {
 	*dataStream << m_type << m_code;
 }

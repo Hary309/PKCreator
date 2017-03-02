@@ -5,6 +5,7 @@
 
 #include <QMoveEvent>
 
+
 #include <Scene.h>
 
 SceneEditor::SceneEditor(QWidget *parent)

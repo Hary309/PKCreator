@@ -50,12 +50,12 @@ private slots:
 	void ActionRemove_triggered();
 
 public:
-	ResourceView(QWidget *parent);
+	explicit ResourceView(QWidget *parent);
 	virtual ~ResourceView();
 
 	void Setup();
 	QStandardItem *InsertRow(QStandardItem *parent, const QString &name);
-	void RemoveRow(QStandardItem *item);
+	void RemoveRow(QStandardItem *item) const;
 
 	void InsertItem(Item *item);
 
@@ -67,17 +67,17 @@ public:
 	Item *GetItem(const QStandardItem *treeItem);
 	Item *GetItem(const QString &name);
 
-	const QString &GetMainDir() { return m_mainDir; }
+	const QString &GetMainDir() const { return m_mainDir; }
 
 	// @type - Item::Type
 	QVector <Item*> GetItemsByType(int type);
 
-	LuaDebugger *GetLuaDebugger() { return m_pLuaDebugger; }
+	LuaDebugger *GetLuaDebugger() const { return m_pLuaDebugger; }
 
 	static ResourceView *Get() { return s_pInst; }
 
 private slots:
-	void ResourceView_expanded(const QModelIndex &index);
-	void ResourceView_collapsed(const QModelIndex &index);
+	void ResourceView_expanded(const QModelIndex &index) const;
+	void ResourceView_collapsed(const QModelIndex &index) const;
 };
 

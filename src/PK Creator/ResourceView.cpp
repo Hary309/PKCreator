@@ -176,6 +176,8 @@ bool ResourceView::ItemsSort(const Item *item1, const Item *item2)
 
 	if (item1->GetType() > item2->GetType())
 		return false;
+
+	return false;
 }
 
 void ResourceView::ActionAdd_triggered()
@@ -307,7 +309,7 @@ QStandardItem *ResourceView::InsertRow(QStandardItem *parent, const QString & na
 	return child;
 }
 
-void ResourceView::RemoveRow(QStandardItem *item)
+void ResourceView::RemoveRow(QStandardItem *item) const
 {
 	if (item->parent() == 0)
 		return;
@@ -461,7 +463,7 @@ QVector<Item*> ResourceView::GetItemsByType(int type)
 	return items;
 }
 
-void ResourceView::ResourceView_expanded(const QModelIndex &index)
+void ResourceView::ResourceView_expanded(const QModelIndex &index) const
 {
 	QStandardItem *item = m_pTreeModel->itemFromIndex(index);
 
@@ -471,7 +473,7 @@ void ResourceView::ResourceView_expanded(const QModelIndex &index)
 	item->setIcon(icon);
 }
 
-void ResourceView::ResourceView_collapsed(const QModelIndex &index)
+void ResourceView::ResourceView_collapsed(const QModelIndex &index) const
 {
 	QStandardItem *item = m_pTreeModel->itemFromIndex(index);
 

@@ -19,15 +19,15 @@ public:
 	Texture(QWidget *parent, QStandardItem *item, const QString &itemName);
 	virtual ~Texture();
 
-	virtual void SetName(const QString &name) override;
+	void SetName(const QString &name) override;
 
-	int GetWidth() { return m_width; }
-	int GetHeight() { return m_height; }
+	int GetWidth() const { return m_width; }
+	int GetHeight() const { return m_height; }
 
-	const QString &GetPath() { return m_texPath; }
+	const QString &GetPath() const { return m_texPath; }
 
-	virtual void Load(QDataStream *const dataStream) override;
-	virtual void Save(QDataStream *const dataStream) override;
+	void Load(QDataStream *const dataStream) override;
+	void Save(QDataStream *const dataStream) override;
 
 private slots:
 	void OkButton_clicked();

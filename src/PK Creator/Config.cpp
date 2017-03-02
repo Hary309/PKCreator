@@ -26,7 +26,7 @@ Config::~Config()
 
 }
 
-void Config::Load(QDataStream *const dataStream)
+void Config::Load(QDataStream *const dataStream) const
 {
 	QString title, width, height;
 
@@ -39,12 +39,12 @@ void Config::Load(QDataStream *const dataStream)
 	ui.heightEdit->setText(height);
 }
 
-void Config::Save(QDataStream *const dataStream)
+void Config::Save(QDataStream *const dataStream) const
 {
 	*dataStream << ui.titleEdit->text() << ui.widthEdit->text() << ui.heightEdit->text();
 }
 
-QSize Config::GetWndSize()
+QSize Config::GetWndSize() const
 {
 	QSize size;
 	size.setWidth(ui.widthEdit->text().toInt());

@@ -17,17 +17,17 @@ Scene::Scene(QWidget *parent, QStandardItem *item, const QString &itemName)
 {
 	ui.setupUi(this);
 
-	SetName(itemName);
+	Scene::SetName(itemName);
 
-	RefreshObjectList();
-
-	m_type = Item::SCENE;
+	m_type = SCENE;
 
 	ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
 
 	m_pSceneEditor = new SceneEditor(this);
 
 	m_pSceneEditor->setWindowTitle(itemName + QString(" - Scene Editor"));
+
+	RefreshObjectList();
 
 	connect(ui.okButton, &QPushButton::clicked, this, &Scene::OkButton_clicked);
 }
@@ -70,7 +70,7 @@ void Scene::showEvent(QShowEvent *e)
 		m_pSceneEditor->show();
 }
 
-void Scene::RefreshObjectList()
+void Scene::RefreshObjectList() const
 {
 	ui.objectList->clear();
 

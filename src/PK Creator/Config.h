@@ -11,13 +11,13 @@ private:
 	Ui::Config ui;
 
 public:
-	Config(QWidget *parent = Q_NULLPTR);
+	explicit Config(QWidget *parent = Q_NULLPTR);
 	~Config();
 
-	void Load(QDataStream *const dataStream);
-	void Save(QDataStream *const dataStream);
+	void Load(QDataStream *const dataStream) const;
+	void Save(QDataStream *const dataStream) const;
 
-	QSize GetWndSize();
+	QSize GetWndSize() const;
 
 private slots:
 	void OkButton_clicked();

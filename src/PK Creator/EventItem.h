@@ -27,21 +27,21 @@ private:
 	QStandardItem	*m_item;
 
 private:
-	void closeEvent(QCloseEvent *closeEvent);
-	void keyPressEvent(QKeyEvent * e);
+	void closeEvent(QCloseEvent *closeEvent) override;
+	void keyPressEvent(QKeyEvent * e) override;
 
 public:
 	EventItem(QWidget *parent, Type type, QStandardItem *item);
 	~EventItem();
 
-	Type GetType() { return m_type; }
-	QStandardItem *GetItem() { return m_item; }
+	Type GetType() const { return m_type; }
+	QStandardItem *GetItem() const { return m_item; }
 
 	void Load(QDataStream * const dataStream);
-	void Save(QDataStream * const dataStream);
+	void Save(QDataStream * const dataStream) const;
 
 private slots:
-	void ActionOk_triggered();
-	void ActionSave_triggered();
+	void ActionOk_triggered() override;
+	void ActionSave_triggered() override;
 };
 

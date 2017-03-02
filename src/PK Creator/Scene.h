@@ -25,12 +25,12 @@ public:
 	Scene(QWidget *parent, QStandardItem *item, const QString &itemName);
 	~Scene();
 
-	void SetName(const QString &name);
+	void SetName(const QString &name) override;
 
-	void RefreshObjectList();
+	void RefreshObjectList() const;
 
-	virtual void Load(QDataStream *const dataStream) override;
-	virtual void Save(QDataStream *const dataStream) override;
+	void Load(QDataStream *const dataStream) override;
+	void Save(QDataStream *const dataStream) override;
 
 private slots:
 	void OkButton_clicked();

@@ -27,15 +27,15 @@ protected:
 
 public:
 	Item(QWidget *parent, QStandardItem *item, const QString &itemName) 
-		: QDialog(parent), m_pItem(item), m_itemName(itemName)
+		: QDialog(parent), m_itemName(itemName), m_pItem(item)
 	{
 		setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 	}
 
 	virtual ~Item() { }
 
-	const QString& GetName()		{ return m_itemName; }
-	const QStandardItem *GetItem()	{ return m_pItem; }
+	const QString& GetName()		const { return m_itemName; }
+	const QStandardItem *GetItem()	const { return m_pItem; }
 
 	Type GetType() const			{ return m_type; }
 
@@ -44,6 +44,6 @@ public:
 
 	virtual void Save(QDataStream *const dataStream) { *dataStream << m_type << m_itemName; }
 
-	bool operator<(const Item *item) { return m_type < item->GetType(); }
+	bool operator<(const Item *item) const { return m_type < item->GetType(); }
 };
 

@@ -22,11 +22,11 @@ private:
 	void SetupEditor();
 
 public:
-	CodeEditor(QWidget *parent);
+	explicit CodeEditor(QWidget *parent);
 	~CodeEditor();
 
-	void LineNumberAreaPaintEvent(QPaintEvent *event);
-	int LineNumberAreaWidth();
+	void LineNumberAreaPaintEvent(QPaintEvent *event) const;
+	int LineNumberAreaWidth() const;
 
 private slots:
 	void UpdateLineNumberAreaWidth(int newBlockCount);
