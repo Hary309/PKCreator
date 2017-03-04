@@ -45,7 +45,7 @@ MainWindow::~MainWindow()
 	s_pInst = nullptr;
 }
 
-void MainWindow::Load(Project * project)
+bool MainWindow::Load(Project * project)
 {
 	m_proInfo = project;
 
@@ -59,12 +59,12 @@ void MainWindow::Load(Project * project)
 		QFile file(m_proInfo->path + m_proInfo->name + QString(".pkp"));
 		
 		if (!file.exists())
-			return;
+			return false;
 
 		file.open(QFile::ReadOnly);
 
 		if (file.error() != QFile::NoError)
-			return;
+			return false;
 
 		printf("Opened!\n");
 
@@ -75,17 +75,22 @@ void MainWindow::Load(Project * project)
 		printf("Version: \"%s\"\n", version.toStdString().c_str());
 
 		if (version != "PKP1")
-			return;
+			return false;
 
 		printf("Version checked!\n");
 
-		m_pResView->Load(&stream, project->path);
+		if (!m_pResView->Load(&stream, project->path))
+		{
+			file.close();
+			return false;
+		}
 
 		file.close();
 	}
 
-
 	printf("Loaded \"%s\" in %d ms \n", m_proInfo->name.toStdString().c_str(), timer.elapsed());
+
+	return true;
 }
 
 void MainWindow::Save() const

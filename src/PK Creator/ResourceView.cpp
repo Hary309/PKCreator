@@ -12,6 +12,7 @@
 #include <Config.h>
 
 #include <LuaDebugger.h>
+#include <QMessageBox>
 
 ResourceView *ResourceView::s_pInst;
 
@@ -326,7 +327,7 @@ void ResourceView::InsertItem(Item *item)
 	m_items.push_back(item);
 }
 
-void ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
+bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 {
 	m_pProConfig->Load(dataStream);
 
@@ -379,15 +380,22 @@ void ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 			{
 				item = new Scene(this, treeItem, name);
 			} break;
+			default: 
+			{
+				QMessageBox::critical(this, "Error", "Project file is invalid!");
+				return false;
+			}
 		}
 
 		if (!item)
-			return;
+			return false;
 
 		item->Load(dataStream);
 		item->hide();
 		m_items.push_back(item);
 	}
+
+	return true;
 }
 
 void ResourceView::Save(QDataStream *const dataStream)

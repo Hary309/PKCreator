@@ -128,6 +128,43 @@ void WelcomeWindow::CreateButton_clicked()
 	QString projectName = fileName.split(".").first();
 	QString folderPath = filePath.left(filePath.length() - fileName.length());
 
+
+
+	QFile projectFile(filePath);
+
+	bool isFileValid = false;
+
+	if (projectFile.exists())
+	{
+		// check version
+		projectFile.open(QFile::ReadOnly);
+
+		QDataStream stream(&projectFile);
+
+		QString version, name;
+
+		stream >> version >> name;
+
+		if (version == QString("PKP1") && !name.isEmpty())
+		{
+			isFileValid = true;
+		}
+
+		projectFile.close();
+	}
+
+	if (!isFileValid)
+	{
+		projectFile.open(QFile::WriteOnly);
+
+		QDataStream stream(&projectFile);
+
+		stream << QString("PKP1") << projectName << QString("Game") << QString("800") << QString("600");
+
+		projectFile.close();
+	}
+
+
 	QDateTime currDateTime = QDateTime::currentDateTime();
 
 	QTreeWidgetItem *treeItem = new QTreeWidgetItem();
@@ -145,18 +182,10 @@ void WelcomeWindow::CreateButton_clicked()
 
 	m_ui.projectView->insertTopLevelItem(m_ui.projectView->topLevelItemCount(), treeItem);
 
-	QFile projectFile(filePath);
-
-	projectFile.open(QFile::WriteOnly);
-
-	QDataStream stream(&projectFile);
-
-	stream << QString("PKP1") << projectName << QString("Game") << QString("800") << QString("600");
-
-	projectFile.close();
-
 	QDir currDir(folderPath);
 	currDir.mkdir("resources");
+
+	SaveList();
 }
 
 void WelcomeWindow::OpenButton_clicked()
@@ -183,7 +212,16 @@ void WelcomeWindow::OpenButton_clicked()
 
 				m_pMainWnd = new MainWindow();
 
-				m_pMainWnd->Load(m_projectList[i]);
+				if (!m_pMainWnd->Load(m_projectList[i]))
+				{
+					QMessageBox::critical(this, "Error", "Cannot open project!");
+					
+					delete m_pMainWnd;
+					m_pMainWnd = nullptr;
+
+					return;
+				}
+
 				m_pMainWnd->show();
 				this->hide();
 			}
@@ -226,6 +264,8 @@ void WelcomeWindow::DeleteButton_clicked()
 			}
 		}
 	}
+
+	SaveList();
 }
 
 void WelcomeWindow::OpenFolderButton_clicked()
@@ -244,7 +284,7 @@ void WelcomeWindow::OpenFolderButton_clicked()
 		{
 			if (m_projectList[i]->item == treeItem)
 			{
-				ShellExecuteA(NULL, "open", m_projectList[i]->path.toStdString().c_str(), NULL, NULL, SW_SHOWDEFAULT);
+				ShellExecuteA(nullptr, "open", m_projectList[i]->path.toStdString().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
 			}
 		}
 	}

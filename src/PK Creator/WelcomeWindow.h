@@ -31,7 +31,7 @@ private:
 	static WelcomeWindow	*s_pInst;
 
 public:
-	explicit WelcomeWindow(QWidget *parent = 0);
+	explicit WelcomeWindow(QWidget *parent = nullptr);
 	~WelcomeWindow();
 
 	void SaveList();

@@ -24,7 +24,7 @@ public:
 	explicit MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
-	void Load(Project *project);
+	bool Load(Project *project);
 	void Save() const;
 
 	static MainWindow *Get() { return s_pInst; }

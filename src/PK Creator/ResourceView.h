@@ -59,7 +59,7 @@ public:
 
 	void InsertItem(Item *item);
 
-	void Load(QDataStream *const dataStream, const QString &currPath);
+	bool Load(QDataStream *const dataStream, const QString &currPath);
 	void Save(QDataStream *const dataStream);
 
 	bool IsNameExists(const QString &name);
