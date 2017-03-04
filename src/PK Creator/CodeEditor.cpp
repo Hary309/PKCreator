@@ -120,8 +120,8 @@ void CodeEditor::LineNumberAreaPaintEvent(QPaintEvent *event) const
 
 	QTextBlock block = firstVisibleBlock();
 	int blockNumber = block.blockNumber();
-	int top = (int)blockBoundingGeometry(block).translated(contentOffset()).top();
-	int bottom = top + (int)blockBoundingRect(block).height();
+	int top = int(blockBoundingGeometry(block).translated(contentOffset()).top());
+	int bottom = int(blockBoundingRect(block).height()) + top;
 
 	while (block.isValid() && top <= event->rect().bottom()) 
 	{
@@ -135,7 +135,7 @@ void CodeEditor::LineNumberAreaPaintEvent(QPaintEvent *event) const
 
 		block = block.next();
 		top = bottom;
-		bottom = top + (int)blockBoundingRect(block).height();
+		bottom = int(blockBoundingRect(block).height()) + top;
 		++blockNumber;
 	}
 }

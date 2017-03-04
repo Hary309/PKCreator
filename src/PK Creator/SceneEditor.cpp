@@ -1,10 +1,7 @@
 #include "SceneEditor.h"
 
-#include <QApplication>
-#include <QDesktopWidget>
 
 #include <QMoveEvent>
-
 
 #include <Scene.h>
 

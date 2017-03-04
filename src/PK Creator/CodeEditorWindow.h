@@ -1,7 +1,5 @@
 #pragma once
 
-#include <QMainWindow>
-
 #include <ui_CodeWindow.h>
 
 class QTimer;

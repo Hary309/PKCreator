@@ -1,9 +1,6 @@
 #include "MainWindow.h"
 
-#include <QMessageBox>
 #include <QResizeEvent>
-#include <QItemSelection>
-#include <QModelIndex>
 #include <QTime>
 
 #include <ResourceView.h>

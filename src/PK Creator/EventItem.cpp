@@ -1,6 +1,5 @@
 #include "EventItem.h"
 
-#include <QCloseEvent>
 #include <QMessageBox>
 
 #include <CodeEditor.h>
@@ -77,7 +76,7 @@ void EventItem::closeEvent(QCloseEvent *closeEvent)
 
 void EventItem::keyPressEvent(QKeyEvent *e)
 {
-	if ((e->key() == Qt::Key_S) && QApplication::keyboardModifiers() && Qt::ControlModifier)
+	if (e->key() == Qt::Key_S && QApplication::keyboardModifiers() == Qt::ControlModifier)
 	{
 		ActionSave_triggered();
 	}

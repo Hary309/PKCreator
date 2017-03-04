@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QDialog>
 #include "ui_ConfigWindow.h"
 
 class Config : public QDialog

@@ -1,7 +1,6 @@
 #include "Object.h"
 
 #include <QMessageBox>
-#include <QMenu>
 #include <QCursor>
 #include <QCloseEvent>
 
@@ -143,7 +142,7 @@ void Object::RefreshSpriteBox()
 		ComboBoxItem *texItem = new ComboBoxItem();
 
 		texItem->index = i;
-		texItem->pSpr = (Sprite*)sprites[i];
+		texItem->pSpr = static_cast<Sprite*>(sprites[i]);
 
 		m_sprites.push_back(texItem);
 	}
@@ -261,7 +260,7 @@ void Object::AddEventAction_triggered(int eventType)
 	item->setEditable(false);
 	m_pModel->appendRow(item);
 
-	EventItem *objEvent = new EventItem(this, (EventItem::Type)eventType, item);
+	EventItem *objEvent = new EventItem(this, EventItem::Type(eventType), item);
 	objEvent->setWindowTitle(QString::asprintf("%s - %s", windowTitle().toStdString().c_str(), m_eventName[eventType].toStdString().c_str()));
 	objEvent->show();
 
@@ -336,7 +335,7 @@ void Object::Load(QDataStream *const dataStream)
 
 	printf("Name: \"%s\"\n", name.toStdString().c_str());
 
-	m_pCurrSpr = (Sprite*)ResourceView::Get()->GetItem(name);
+	m_pCurrSpr = static_cast<Sprite*>(ResourceView::Get()->GetItem(name));
 	RefreshSpriteBox();
 
 	for (int i = 0; i < m_sprites.size(); ++i)
@@ -366,7 +365,7 @@ void Object::Load(QDataStream *const dataStream)
 		item->setEditable(false);
 		m_pModel->appendRow(item);
 
-		EventItem *eventItem = new EventItem(this, (EventItem::Type)type, item);
+		EventItem *eventItem = new EventItem(this, EventItem::Type(type), item);
 		eventItem->setWindowTitle(QString::asprintf("%s - %s", windowTitle().toStdString().c_str(), m_eventName[type].toStdString().c_str()));
 		eventItem->Load(dataStream);
 

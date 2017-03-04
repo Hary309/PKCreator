@@ -2,12 +2,10 @@
 
 #include <QString>
 #include <QTreeView>
-#include <QStandardItemModel>
 #include <QMouseEvent>
 #include <QMenu>
 #include <QCursor>
 
-#include <Texture.h>
 #include <Sprite.h>
 #include <Object.h>
 #include <Scene.h>
@@ -256,6 +254,9 @@ void ResourceView::ActionAdd_triggered()
 			item->show();
 			m_items.push_back(item);
 		} break;
+		default: 
+		{
+		} break;
 	}
 }
 
@@ -311,7 +312,7 @@ QStandardItem *ResourceView::InsertRow(QStandardItem *parent, const QString & na
 
 void ResourceView::RemoveRow(QStandardItem *item) const
 {
-	if (item->parent() == 0)
+	if (item->parent() == nullptr)
 		return;
 
 	m_pTreeModel->removeRow(item->row(), item->parent()->index());

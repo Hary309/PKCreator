@@ -1,7 +1,5 @@
 #pragma once
 
-#include <QString>
-
 #include <CodeEditorWindow.h>
 
 class QStandardItem;

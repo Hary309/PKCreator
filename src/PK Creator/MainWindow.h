@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QtWidgets/QMainWindow>
 #include "ui_MainWindow.h"
 
 class ResourceView;
@@ -22,7 +21,7 @@ private:
 	static MainWindow		*s_pInst;
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
 	void Load(Project *project);
