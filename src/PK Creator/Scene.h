@@ -17,9 +17,10 @@ private:
 	SceneEditor			*m_pSceneEditor;
 
 protected:
-	virtual void enterEvent(QEvent *event) override;
-	virtual void closeEvent(QCloseEvent *event) override;
-	virtual void showEvent(QShowEvent *event) override;
+	void enterEvent(QEvent *event) override;
+	void closeEvent(QCloseEvent *event) override;
+	void showEvent(QShowEvent *event) override;
+
 
 public:
 	Scene(QWidget *parent, QStandardItem *item, const QString &itemName);
@@ -28,6 +29,8 @@ public:
 	void SetName(const QString &name) override;
 
 	void RefreshObjectList() const;
+
+	void SetSceneEditorSize(const QSize &size) const;
 
 	void Load(QDataStream *const dataStream) override;
 	void Save(QDataStream *const dataStream) override;

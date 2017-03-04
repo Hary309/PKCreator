@@ -4,7 +4,8 @@
 #include <QStandardItemModel>
 
 #include <ResourceView.h>
-#include <Texture.h>
+#include <QFileDialog>
+#include <QDateTime>
 
 Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 	: Item(parent, item, itemName)
@@ -17,37 +18,24 @@ Sprite::Sprite(QWidget *parent, QStandardItem *item, const QString &itemName)
 	Sprite::SetName(itemName);
 
 	m_type = Item::SPRITE;
-
-	RefreshTextureBox();
 	
-	m_xCenter = -1;
-	m_yCenter = -1;
-
-	m_pCurrTex = nullptr;
+	m_size = QSize(0, 0);
+	m_center = QPoint(0, 0);
 
 	m_ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
 
-	connect(m_ui.textureBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &Sprite::TextureBox_activated);
+	connect(m_ui.okButton, &QPushButton::clicked, this, &Sprite::OkButton_clicked);;
+	connect(m_ui.loadSpriteButton, &QPushButton::clicked, this, &Sprite::LoadSpriteButton_clicked);
+	connect(m_ui.centerButton, &QPushButton::clicked, this, &Sprite::CenterButton_clicked);
 
-	connect(m_ui.okButton, SIGNAL(clicked()), this, SLOT(OkButton_clicked()));
-	connect(m_ui.addButton, SIGNAL(clicked()), this, SLOT(AddButton_clicked()));
-	connect(m_ui.editButton, SIGNAL(clicked()), this, SLOT(EditButton_clicked()));
+	connect(m_ui.centerXEdit, &QLineEdit::editingFinished, this, &Sprite::CenterXEdit_editingFinished);
+	connect(m_ui.centerYEdit, &QLineEdit::editingFinished, this, &Sprite::CenterYEdit_editingFinished);
 }
 
 
 Sprite::~Sprite()
 {
-	for (int i = 0; i < m_textures.size(); ++i)
-	{
-		if (m_textures[i])
-		{
-			delete m_textures[i];
-			m_textures[i] = nullptr;
-		}
-	}
 
-	m_textures.clear();
-	m_ui.textureBox->clear();
 }
 
 void Sprite::SetName(const QString & name)
@@ -58,51 +46,43 @@ void Sprite::SetName(const QString & name)
 	m_pItem->setText(name);
 }
 
-bool Sprite::event(QEvent *e)
+void Sprite::LoadSpriteButton_clicked()
 {
-	Item::event(e);
-	
-	if (e->type() == QEvent::WindowActivate)
-	{
-		RefreshTextureBox();
-		RefreshSpriteCenter();
-	}
-	
-	return false;
+	QString filePath = QFileDialog::getOpenFileName(this, "Open image", ResourceView::Get()->GetMainDir(), "Images (*.png *.jpg *.jpeg *.bmp)");
+
+	if (filePath.isEmpty())
+		return;
+
+	QDateTime dateTime = QDateTime::currentDateTime();
+	QString newFileName;
+	newFileName.sprintf("%llx", dateTime.toSecsSinceEpoch());
+
+	m_texPath = QString("resources/") + newFileName + QString(".") + filePath.split(".").last();
+
+	QFile file(ResourceView::Get()->GetMainDir() + m_texPath);
+	file.remove();
+
+	QFile::copy(filePath, ResourceView::Get()->GetMainDir() + m_texPath);
+
+	m_ui.imagePathLabel->setText(m_texPath);
+
+	QImage myImage;
+	myImage.load(filePath);
+	m_ui.imageLabel->setPixmap(QPixmap::fromImage(myImage));
+
+	QSize size = myImage.size();
+	m_ui.widthValueLabel->setText(QString::number(size.width()) + "px");
+	m_ui.heightValueLabel->setText(QString::number(size.height()) + "px");
+
+	m_size = size;
 }
 
-void Sprite::RefreshTextureBox()
+void Sprite::CenterButton_clicked()
 {
-	for (int i = 0; i < m_textures.size(); ++i)
-	{
-		if (m_textures[i])
-		{
-			delete m_textures[i];
-			m_textures[i] = nullptr;
-		}
-	}
+	m_center = QPoint(m_size.width() / 2, m_size.height() / 2);
 
-	m_textures.clear();
-
-	QString currentIndex = m_ui.textureBox->currentText();
-
-	m_ui.textureBox->clear();
-
-	const QVector<Item*> textures = ResourceView::Get()->GetItemsByType(Item::TEXTURE);
-
-	for (int i = 0; i < textures.size(); ++i)
-	{
-		m_ui.textureBox->insertItem(i, textures[i]->GetName());
-
-		ComboBoxItem *texItem = new ComboBoxItem();
-
-		texItem->index = i;
-		texItem->pTex = (Texture*)textures[i];
-
-		m_textures.push_back(texItem);
-	}
-
-	m_ui.textureBox->setCurrentIndex(m_ui.textureBox->findText(currentIndex));
+	m_ui.centerXEdit->setText(QString::number(m_center.x()));
+	m_ui.centerYEdit->setText(QString::number(m_center.y()));
 }
 
 void Sprite::OkButton_clicked()
@@ -119,131 +99,36 @@ void Sprite::OkButton_clicked()
 	hide();
 }
 
-void Sprite::AddButton_clicked()
-{
-	QString texName;
-	ResourceView *res = ResourceView::Get();
-	
-	int i = 0;
-	
-	while (true)
-	{
-		texName = m_itemName + QString("_tex") + QString::number(i);
-
-		if (!res->IsNameExists(texName))
-			break;
-	
-		i++;
-	}
-
-	QStandardItem *treeItem = reinterpret_cast<QStandardItemModel*>(res->model())->item(0);
-	
-	treeItem = res->InsertRow(treeItem, texName);
-
-	Texture *tex = new Texture(res, treeItem, texName);
-	tex->show();
-	res->InsertItem(tex);
-
-	connect(tex, &QDialog::accepted, this, [this] { RefreshSpriteCenter(); });
-
-	m_pCurrTex = tex;
-
-	RefreshTextureBox();
-
-	int row = m_ui.textureBox->findText(treeItem->text());
-
-	m_ui.textureBox->setCurrentIndex(row);
-}
-
-void Sprite::EditButton_clicked() const
-{
-	if (m_pCurrTex)
-		m_pCurrTex->show();
-}
-
-void Sprite::TextureBox_activated(int index)
-{
-	for (int i = 0; i < m_textures.size(); ++i)
-	{
-		if (m_textures[i])
-		{
-			if (m_textures[i]->index == index)
-			{
-				m_pCurrTex = m_textures[i]->pTex;
-
-				RefreshSpriteCenter();
-				break;
-			}
-		}
-	}
-}
-
-void Sprite::AutoCenterButton_clicked()
-{
-	if (!m_pCurrTex)
-		return;
-
-	m_xCenter = m_pCurrTex->GetWidth() / 2;
-	m_yCenter = m_pCurrTex->GetHeight() / 2;
-
-	m_ui.centerXEdit->setText(QString::number(m_xCenter));
-	m_ui.centerYEdit->setText(QString::number(m_yCenter));
-}
-
 void Sprite::CenterXEdit_editingFinished()
 {
-	 m_xCenter = m_ui.centerXEdit->text().toInt();
+	 m_center.setX(m_ui.centerXEdit->text().toInt());
 }
 
 void Sprite::CenterYEdit_editingFinished()
 {
-	m_yCenter = m_ui.centerYEdit->text().toInt();
-}
-
-void Sprite::RefreshSpriteCenter()
-{
-	if (!m_pCurrTex)
-		return;
-
-	if (m_xCenter == -1 || m_yCenter == -1)
-	{
-		m_xCenter = m_pCurrTex->GetWidth() / 2;
-		m_yCenter = m_pCurrTex->GetHeight() / 2;
-
-		m_ui.centerXEdit->setText(QString::number(m_xCenter));
-		m_ui.centerYEdit->setText(QString::number(m_yCenter));
-	}
+	m_center.setY(m_ui.centerYEdit->text().toInt());
 }
 
 void Sprite::Load(QDataStream *const dataStream)
 {
-	QString name;
+	*dataStream >> m_size >> m_texPath >> m_center;
 
-	*dataStream >> name;
+	m_ui.imagePathLabel->setText(m_texPath);
 
-	printf("Name: %s\n", name.toStdString().c_str());
+	m_ui.widthValueLabel->setText(QString::number(m_size.width()) + "px");
+	m_ui.heightValueLabel->setText(QString::number(m_size.height()) + "px");
 
-	m_pCurrTex = (Texture*)ResourceView::Get()->GetItem(name);
+	m_ui.centerXEdit->setText(QString::number(m_center.x()));
+	m_ui.centerYEdit->setText(QString::number(m_center.y()));
 
-	RefreshTextureBox();
-
-	for (int i = 0; i < m_textures.size(); ++i)
-	{
-		if (m_pCurrTex == m_textures[i]->pTex)
-		{
-			m_ui.textureBox->setCurrentIndex(m_textures[i]->index);
-		}
-	}
-
-	*dataStream >> m_xCenter >> m_yCenter;
-
-	m_ui.centerXEdit->setText(QString::number(m_xCenter));
-	m_ui.centerYEdit->setText(QString::number(m_yCenter));
+	QImage myImage;
+	myImage.load(ResourceView::Get()->GetMainDir() + m_texPath);
+	m_ui.imageLabel->setPixmap(QPixmap::fromImage(myImage));
 }
 
 void Sprite::Save(QDataStream *const dataStream)
 {
 	Item::Save(dataStream);
 
-	*dataStream << (m_pCurrTex ? m_pCurrTex->GetName() : QString("")) << m_xCenter << m_yCenter;
+	*dataStream << m_size << m_texPath << m_center;
 }

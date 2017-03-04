@@ -19,8 +19,8 @@ ResourceView *ResourceView::s_pInst;
 ResourceView::ResourceView(QWidget * parent)
 	: QTreeView(parent)
 {
-	m_defaultModel << QString("Textures") << QString("Sprites")
-		<< QString("Backgrounds") << QString("Objects") << QString("Scenes");
+	m_defaultModel << QString("Sprites") << QString("Backgrounds") 
+				   << QString("Objects") << QString("Scenes");
 
 	Setup();
 
@@ -165,6 +165,11 @@ void ResourceView::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 			return;
 
 		item->show();
+
+		if (item->GetType() == Item::SCENE)
+		{
+			reinterpret_cast<Scene*>(item)->SetSceneEditorSize(m_pProConfig->GetWndSize());
+		}
 	}
 }
 
@@ -191,21 +196,6 @@ void ResourceView::ActionAdd_triggered()
 
 	switch (type)
 	{
-		case Item::TEXTURE:
-		{
-			while (true)
-			{
-				name.sprintf("texture%d", m_lastTextureID++);
-
-				if (!IsNameExists(name))
-					break;
-			}
-			treeItem = InsertRow(treeItem, name);
-
-			Item *item = new Texture(this, treeItem, name);
-			item->show();
-			m_items.push_back(item);
-		} break;
 		case Item::SPRITE:
 		{
 			while (true)
@@ -360,10 +350,6 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 
 		switch (type)
 		{
-			case Item::TEXTURE:
-			{
-				item = new Texture(this, treeItem, name);
-			} break;
 			case Item::SPRITE:
 			{
 				item = new Sprite(this, treeItem, name);

@@ -12,8 +12,7 @@ class Item : public QDialog
 public:
 	enum Type
 	{
-		TEXTURE = 0,
-		SPRITE,
+		SPRITE = 0,
 		BACKGROUND,
 		OBJECT,
 		SCENE

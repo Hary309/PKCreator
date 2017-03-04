@@ -8,7 +8,6 @@
 #include <Item.h>
 #include <Object.h>
 #include <Sprite.h>
-#include <Texture.h>
 
 #include <SceneEditor.h>
 
@@ -72,21 +71,40 @@ void Scene::showEvent(QShowEvent *e)
 
 void Scene::RefreshObjectList() const
 {
+	if (!m_pSceneEditor)
+		return;
 	ui.objectList->clear();
 
 	QVector<Item*> items = ResourceView::Get()->GetItemsByType(Item::OBJECT);
+	printf("Size: %d\n", items.size());
 
 	for (int i = 0; i < items.size(); ++i)
 	{
 		Object *obj = reinterpret_cast<Object*>(items[i]);
 		QListWidgetItem *item = new QListWidgetItem;
 
-		item->setText(obj->GetName());
 		if (obj->GetSprite())
-			if (obj->GetSprite()->GetTexture())
-				item->setIcon(QIcon(ResourceView::Get()->GetMainDir() + obj->GetSprite()->GetTexture()->GetPath()));
+		{
+			Sprite *spr = obj->GetSprite();
 
-		ui.objectList->addItem(item);
+			item->setText(obj->GetName());
+
+			if (spr)
+			{
+				item->setIcon(QIcon(ResourceView::Get()->GetMainDir() + spr->GetTexPath()));
+
+				ui.objectList->addItem(item);
+
+			}
+		}
+	}
+}
+
+void Scene::SetSceneEditorSize(const QSize &size) const
+{
+	if (m_pSceneEditor)
+	{
+		m_pSceneEditor->setFixedSize(size);
 	}
 }
 

@@ -4,53 +4,36 @@
 
 #include <Item.h>
 
-class Texture;
-
 class Sprite : public Item
 {
 	Q_OBJECT
 
 private:
-	struct ComboBoxItem
-	{
-		int			index;
-		Texture		*pTex;
-	};
-
-private:
 	Ui::SpriteWindow		m_ui;
 
-	QVector<ComboBoxItem*>	m_textures;
+	QSize					m_size;
 
-	// to save
-	Texture					*m_pCurrTex;
+	QString					m_texPath; // relative path ("resources/m_itemName.ext")
 
-	int						m_xCenter;
-	int						m_yCenter;
-
-private:
-	void RefreshTextureBox();
-	void RefreshSpriteCenter();
-
-protected:
-	bool event(QEvent *e) override;
+	QPoint					m_center;
 
 public:
 	Sprite(QWidget *parent, QStandardItem *item, const QString &itemName);
 	~Sprite();
 
-	void SetName(const QString &name) override;
+	QSize GetSize()			const	 { return m_size; }
+	QPoint GetCenter()		const	 { return m_center; }
+	QString GetTexPath()	const	 { return m_texPath; }
+
+	void SetName(const QString &name)		  override;
 	void Load(QDataStream * const dataStream) override;
 	void Save(QDataStream * const dataStream) override;
 
-	Texture *GetTexture() { return m_pCurrTex; }
-
 private slots:
 	void OkButton_clicked();
-	void AddButton_clicked();
-	void EditButton_clicked() const;
-	void AutoCenterButton_clicked();
-	void TextureBox_activated(int index);
+	void CenterButton_clicked();
+	void LoadSpriteButton_clicked();
+
 	void CenterXEdit_editingFinished();
 	void CenterYEdit_editingFinished();
 };
