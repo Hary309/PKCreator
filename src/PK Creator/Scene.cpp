@@ -10,6 +10,7 @@
 #include <Sprite.h>
 
 #include <SceneEditor.h>
+#include <TextureMgr.h>
 
 Scene::Scene(QWidget *parent, QStandardItem *item, const QString &itemName)
 	: Item(parent, item, itemName)
@@ -29,6 +30,7 @@ Scene::Scene(QWidget *parent, QStandardItem *item, const QString &itemName)
 	RefreshObjectList();
 
 	connect(ui.okButton, &QPushButton::clicked, this, &Scene::OkButton_clicked);
+	connect(ui.objectList, &QListWidget::itemClicked, this, &Scene::ObjectList_ItemClicked);
 }
 
 Scene::~Scene()
@@ -60,7 +62,7 @@ void Scene::enterEvent(QEvent *e)
 void Scene::closeEvent(QCloseEvent *e)
 {
 	if (m_pSceneEditor)
-		m_pSceneEditor->hide();
+		m_pSceneEditor->close();
 }
 
 void Scene::showEvent(QShowEvent *e)
@@ -73,9 +75,14 @@ void Scene::RefreshObjectList() const
 {
 	if (!m_pSceneEditor)
 		return;
+
+	if (!m_pSceneEditor->GetTexMgr())
+		return;
+
 	ui.objectList->clear();
 
 	QVector<Item*> items = ResourceView::Get()->GetItemsByType(Item::OBJECT);
+	
 	printf("Size: %d\n", items.size());
 
 	for (int i = 0; i < items.size(); ++i)
@@ -94,7 +101,6 @@ void Scene::RefreshObjectList() const
 				item->setIcon(QIcon(ResourceView::Get()->GetMainDir() + spr->GetTexPath()));
 
 				ui.objectList->addItem(item);
-
 			}
 		}
 	}
@@ -132,4 +138,18 @@ void Scene::OkButton_clicked()
 	hide();
 
 	m_pSceneEditor->hide();
+}
+
+void Scene::ObjectList_ItemClicked(QListWidgetItem *item) const
+{
+	if (ResourceView::Get()->GetItem(item->text())->GetType() == Item::OBJECT)
+	{
+		Object *objItem = static_cast<Object*>(ResourceView::Get()->GetItem(item->text()));
+
+		QString path = ResourceView::Get()->GetMainDir() + objItem->GetSprite()->GetTexPath();
+	
+		m_pSceneEditor->GetTexMgr()->LoadTexture(objItem->GetSprite());
+
+		m_pSceneEditor->SetCurrObject(objItem->GetSprite()->GetName());
+	}
 }

@@ -21,7 +21,6 @@ protected:
 	void closeEvent(QCloseEvent *event) override;
 	void showEvent(QShowEvent *event) override;
 
-
 public:
 	Scene(QWidget *parent, QStandardItem *item, const QString &itemName);
 	~Scene();
@@ -37,4 +36,5 @@ public:
 
 private slots:
 	void OkButton_clicked();
+	void ObjectList_ItemClicked(QListWidgetItem *item) const;
 };
