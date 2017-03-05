@@ -24,7 +24,6 @@ ResourceView::ResourceView(QWidget * parent)
 
 	Setup();
 
-	m_lastTextureID = 0;
 	m_lastSpriteID = 0;
 	m_lastObjectID = 0;
 	m_lastSceneID = 0;
@@ -321,11 +320,12 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 {
 	m_pProConfig->Load(dataStream);
 
-	*dataStream >> m_lastTextureID >> m_lastSpriteID >> m_lastObjectID >> m_lastSceneID;
+
+	*dataStream >> m_lastSpriteID >> m_lastObjectID >> m_lastSceneID;
 
 	m_mainDir = currPath;
 
-	printf("%d %d %d %d\n", m_lastTextureID, m_lastSpriteID, m_lastObjectID, m_lastSceneID);
+	printf("%d %d %d\n", m_lastSpriteID, m_lastObjectID, m_lastSceneID);
 
 	int size = 0;
 
@@ -388,7 +388,7 @@ void ResourceView::Save(QDataStream *const dataStream)
 {
 	m_pProConfig->Save(dataStream);
 
-	*dataStream << m_lastTextureID << m_lastSpriteID << m_lastObjectID << m_lastSceneID;
+	*dataStream << m_lastSpriteID << m_lastObjectID << m_lastSceneID;
 
 	qSort(m_items.begin(), m_items.end(), ItemsSort);
 

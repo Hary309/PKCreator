@@ -31,7 +31,6 @@ private:
 	
 	Config				*m_pProConfig;
 
-	int					m_lastTextureID;
 	int					m_lastSpriteID;
 	int					m_lastObjectID;
 	int					m_lastSceneID;
