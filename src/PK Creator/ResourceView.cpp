@@ -164,11 +164,6 @@ void ResourceView::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 			return;
 
 		item->show();
-
-		if (item->GetType() == Item::SCENE)
-		{
-			reinterpret_cast<Scene*>(item)->SetSceneEditorSize(m_pProConfig->GetWndSize());
-		}
 	}
 }
 

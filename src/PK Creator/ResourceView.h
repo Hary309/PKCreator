@@ -71,7 +71,8 @@ public:
 	// @type - Item::Type
 	QVector <Item*> GetItemsByType(int type);
 
-	LuaDebugger *GetLuaDebugger() const { return m_pLuaDebugger; }
+	LuaDebugger *GetLuaDebugger()	const { return m_pLuaDebugger; }
+	Config		*GetConfig()		const { return m_pProConfig; }
 
 	static ResourceView *Get() { return s_pInst; }
 

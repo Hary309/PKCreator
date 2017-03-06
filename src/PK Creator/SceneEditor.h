@@ -11,19 +11,30 @@ namespace sf
 	class Sprite;
 }
 
+class Scene;
+
 class TextureMgr;
 
 class SceneEditor : public QDialog
 {
-private:
+protected:
 	sf::RenderWindow	*m_pWindow = nullptr;
 
 	sf::Sprite			*m_pCurrObject;
 	
 	TextureMgr			*m_pTexMgr;
 
+	QSize				m_windowSize;
+
+	int					m_snapX;
+	int					m_snapY;
+
+	sf::RectangleShape	*m_hLine; // horizontal
+	sf::RectangleShape	*m_vLine; // vertical
+	
 	QTimer				m_timer;
 
+	friend Scene;
 
 protected:
 	void mouseMoveEvent(QMouseEvent *e) override;

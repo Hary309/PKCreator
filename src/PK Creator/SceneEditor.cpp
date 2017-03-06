@@ -8,14 +8,20 @@
 
 #include <Scene.h>
 #include <TextureMgr.h>
+#include <ResourceView.h>
+#include <Config.h>
 
 #include <QOpenGLWidget>
 
 SceneEditor::SceneEditor(QWidget *parent)
 	: QDialog(parent)
 {
-	const int width = 800,
-		height = 600;
+	m_windowSize = ResourceView::Get()->GetConfig()->GetWndSize();
+
+	setFixedSize(m_windowSize);
+
+	const int width = m_windowSize.width(),
+		height = m_windowSize.height();
 
 	resize(width, height);
 	setMinimumSize(QSize(width, height));
@@ -30,6 +36,12 @@ SceneEditor::SceneEditor(QWidget *parent)
 	m_pTexMgr = nullptr;
 	m_pCurrObject = nullptr;
 
+	m_snapX = 16;
+	m_snapY = 16;
+
+	m_hLine = nullptr;
+	m_vLine = nullptr;
+
 	move(QApplication::desktop()->width()  / 2 - width  / 2, 
 		 QApplication::desktop()->height() / 2 - height / 2);
 
@@ -43,6 +55,18 @@ SceneEditor::SceneEditor(QWidget *parent)
 
 SceneEditor::~SceneEditor()
 {
+	if (m_hLine)
+	{
+		delete m_hLine;
+		m_hLine = nullptr;
+	}
+
+	if (m_vLine)
+	{
+		delete m_vLine;
+		m_vLine = nullptr;
+	}
+
 	if (m_pCurrObject)
 	{
 		delete m_pCurrObject;
@@ -89,13 +113,39 @@ void SceneEditor::Render()
 		if (m_pCurrObject)
 			m_pWindow->draw(*m_pCurrObject);
 
+		if (m_snapX > 1)
+		{
+			for (int i = 0; i < m_windowSize.width() / m_snapX + 1; ++i)
+			{
+				m_hLine->setPosition(i * m_snapX, 0);
+				m_pWindow->draw(*m_hLine);
+			}
+		}
+
+		if (m_snapY > 1)
+		{
+			for (int i = 0; i < m_windowSize.height() / m_snapY + 1; ++i)
+			{
+				m_vLine->setPosition(0, i * m_snapY);
+				m_pWindow->draw(*m_vLine);
+			}
+		}
+
 		m_pWindow->display();
 	}
 }
 
 void SceneEditor::mouseMoveEvent(QMouseEvent *e)
 {
-	m_pCurrObject->setPosition(e->pos().x(), e->pos().y());
+	if (m_pCurrObject && m_pCurrObject->getTexture())
+	{
+		QPoint pos;
+
+		pos.setX(e->pos().x() / m_snapX * m_snapX);
+		pos.setY(e->pos().y() / m_snapY * m_snapY);
+
+		m_pCurrObject->setPosition(pos.x(), pos.y());
+	}
 }
 
 void SceneEditor::moveEvent(QMoveEvent *e)
@@ -116,6 +166,8 @@ void SceneEditor::moveEvent(QMoveEvent *e)
 
 void SceneEditor::showEvent(QShowEvent *e)
 {
+	m_windowSize = ResourceView::Get()->GetConfig()->GetWndSize();
+
 	if (!m_pWindow)
 		m_pWindow = new sf::RenderWindow(HWND(QDialog::winId()));
 
@@ -124,6 +176,17 @@ void SceneEditor::showEvent(QShowEvent *e)
 
 	if (!m_pCurrObject)
 		m_pCurrObject = new sf::Sprite();
+
+	if (!m_hLine)
+		m_hLine = new sf::RectangleShape(sf::Vector2f(1, m_windowSize.height()));
+	
+	if (!m_vLine)
+		m_vLine = new sf::RectangleShape(sf::Vector2f(m_windowSize.width(), 1));
+
+	m_hLine->setFillColor(sf::Color(0, 0, 0));
+	m_vLine->setFillColor(sf::Color(0, 0, 0));
+
+	setFixedSize(m_windowSize);
 }
 
 void SceneEditor::closeEvent(QCloseEvent *e)
@@ -150,6 +213,18 @@ void SceneEditor::closeEvent(QCloseEvent *e)
 	{
 		delete m_pCurrObject;
 		m_pCurrObject = nullptr;
+	}
+
+	if (m_hLine)
+	{
+		delete m_hLine;
+		m_hLine = nullptr;
+	}
+
+	if (m_vLine)
+	{
+		delete m_vLine;
+		m_vLine = nullptr;
 	}
 }
 

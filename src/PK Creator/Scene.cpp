@@ -31,6 +31,9 @@ Scene::Scene(QWidget *parent, QStandardItem *item, const QString &itemName)
 
 	connect(ui.okButton, &QPushButton::clicked, this, &Scene::OkButton_clicked);
 	connect(ui.objectList, &QListWidget::itemClicked, this, &Scene::ObjectList_ItemClicked);
+
+	connect(ui.snapXBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Scene::snapXBox_valueChanged);
+	connect(ui.snapYBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Scene::snapYBox_valueChanged);
 }
 
 Scene::~Scene()
@@ -106,14 +109,6 @@ void Scene::RefreshObjectList() const
 	}
 }
 
-void Scene::SetSceneEditorSize(const QSize &size) const
-{
-	if (m_pSceneEditor)
-	{
-		m_pSceneEditor->setFixedSize(size);
-	}
-}
-
 void Scene::Load(QDataStream * const dataStream)
 {
 
@@ -152,4 +147,14 @@ void Scene::ObjectList_ItemClicked(QListWidgetItem *item) const
 
 		m_pSceneEditor->SetCurrObject(objItem->GetSprite()->GetName());
 	}
+}
+
+void Scene::snapXBox_valueChanged(int i)
+{
+	m_pSceneEditor->m_snapX = i;
+}
+
+void Scene::snapYBox_valueChanged(int i)
+{
+	m_pSceneEditor->m_snapY = i;
 }

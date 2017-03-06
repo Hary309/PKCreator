@@ -108,7 +108,10 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox">
+             <widget class="QSpinBox" name="snapXBox">
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="maximum">
                <number>999</number>
               </property>
@@ -125,7 +128,10 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_2">
+             <widget class="QSpinBox" name="snapYBox">
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="maximum">
                <number>999</number>
               </property>

@@ -29,12 +29,13 @@ public:
 
 	void RefreshObjectList() const;
 
-	void SetSceneEditorSize(const QSize &size) const;
-
 	void Load(QDataStream *const dataStream) override;
 	void Save(QDataStream *const dataStream) override;
 
 private slots:
 	void OkButton_clicked();
 	void ObjectList_ItemClicked(QListWidgetItem *item) const;
+
+	void snapXBox_valueChanged(int i);
+	void snapYBox_valueChanged(int i);
 };
