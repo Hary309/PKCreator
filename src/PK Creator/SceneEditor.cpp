@@ -39,8 +39,12 @@ SceneEditor::SceneEditor(QWidget *parent)
 	m_snapX = 16;
 	m_snapY = 16;
 
+	m_drawGrid = true;
+
 	m_hLine = nullptr;
 	m_vLine = nullptr;
+
+	m_bgColor = sf::Color(158, 158, 158).toInteger();
 
 	move(QApplication::desktop()->width()  / 2 - width  / 2, 
 		 QApplication::desktop()->height() / 2 - height / 2);
@@ -86,12 +90,20 @@ SceneEditor::~SceneEditor()
 	}
 }
 
-void SceneEditor::SetCurrObject(const QString &sprName) const
+void SceneEditor::SetCurrObject(const QString &sprName)
 {
 	TextureMgr::TexInfo *texInfo = m_pTexMgr->GetTexture(sprName);
 
 	if (!texInfo)
 		return;
+
+	if (m_pCurrObject)
+	{
+		delete m_pCurrObject;
+		m_pCurrObject = nullptr;
+	}
+
+	m_pCurrObject = new sf::Sprite();
 
 	m_pCurrObject->setTexture(*texInfo->pTex);
 	m_pCurrObject->setOrigin(texInfo->center.x(), texInfo->center.y());
@@ -108,26 +120,29 @@ void SceneEditor::Render()
 {
 	if (m_pWindow)
 	{
-		m_pWindow->clear(sf::Color(158, 158, 158));
+		m_pWindow->clear(sf::Color(m_bgColor));
 
 		if (m_pCurrObject)
 			m_pWindow->draw(*m_pCurrObject);
 
-		if (m_snapX > 1)
+		if (m_drawGrid)
 		{
-			for (int i = 0; i < m_windowSize.width() / m_snapX + 1; ++i)
+			if (m_snapX > 1)
 			{
-				m_hLine->setPosition(i * m_snapX, 0);
-				m_pWindow->draw(*m_hLine);
+				for (int i = 0; i < m_windowSize.width() / m_snapX + 1; ++i)
+				{
+					m_hLine->setPosition(i * m_snapX, 0);
+					m_pWindow->draw(*m_hLine);
+				}
 			}
-		}
 
-		if (m_snapY > 1)
-		{
-			for (int i = 0; i < m_windowSize.height() / m_snapY + 1; ++i)
+			if (m_snapY > 1)
 			{
-				m_vLine->setPosition(0, i * m_snapY);
-				m_pWindow->draw(*m_vLine);
+				for (int i = 0; i < m_windowSize.height() / m_snapY + 1; ++i)
+				{
+					m_vLine->setPosition(0, i * m_snapY);
+					m_pWindow->draw(*m_vLine);
+				}
 			}
 		}
 
@@ -173,9 +188,6 @@ void SceneEditor::showEvent(QShowEvent *e)
 
 	if (!m_pTexMgr)
 		m_pTexMgr = new TextureMgr();
-
-	if (!m_pCurrObject)
-		m_pCurrObject = new sf::Sprite();
 
 	if (!m_hLine)
 		m_hLine = new sf::RectangleShape(sf::Vector2f(1, m_windowSize.height()));

@@ -34,8 +34,11 @@ public:
 
 private slots:
 	void OkButton_clicked();
+	void BgColorButton_clicked();
 	void ObjectList_ItemClicked(QListWidgetItem *item) const;
 
 	void snapXBox_valueChanged(int i);
 	void snapYBox_valueChanged(int i);
+
+	void DrawGrid_stateChanged(int state);
 };

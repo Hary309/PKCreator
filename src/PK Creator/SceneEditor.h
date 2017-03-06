@@ -26,6 +26,9 @@ protected:
 
 	QSize				m_windowSize;
 
+	unsigned			m_bgColor;
+
+	bool				m_drawGrid;
 	int					m_snapX;
 	int					m_snapY;
 
@@ -51,7 +54,7 @@ public:
 	explicit SceneEditor(QWidget *parent);
 	~SceneEditor();
 
-	void SetCurrObject(const QString &sprName) const;
+	void SetCurrObject(const QString &sprName);
 
 	TextureMgr *GetTexMgr() const { return m_pTexMgr; }
 };
