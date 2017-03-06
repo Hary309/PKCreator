@@ -26,7 +26,7 @@ bool TextureMgr::LoadTexture(Sprite *sprite)
 
 bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSize &size, const QPoint &center)
 {
-	printf("Adding texture \"%s\" \"%s\"...\n", name.toStdString().c_str(), path.toStdString().c_str());
+	printf("Loading texture \"%s\" \"%s\"... ", name.toStdString().c_str(), path.toStdString().c_str());
 
 	for (int i = 0; i < m_textures.size(); ++i)
 	{
@@ -44,6 +44,8 @@ bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSi
 		delete pTex;
 		pTex = nullptr;
 
+		printf("[FAIL]\n");
+
 		return false;
 	}
 	
@@ -51,6 +53,8 @@ bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSi
 	{
 		delete pTex;
 		pTex = nullptr;
+
+		printf("[FAIL]\n");
 
 		return false;
 	}
@@ -74,8 +78,6 @@ TextureMgr::TexInfo *TextureMgr::GetTexture(const QString &name)
 	{
 		if (pTex)
 		{
-			printf("\"%s\" vs \"%s\"", pTex->name.toStdString().c_str(), name.toStdString().c_str());
-
 			if (pTex->name == name)
 				return pTex;
 		}
