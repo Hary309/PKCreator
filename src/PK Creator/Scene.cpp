@@ -176,7 +176,7 @@ void Scene::ObjectList_ItemClicked(QListWidgetItem *item) const
 	
 		m_pSceneEditor->GetTexMgr()->LoadTexture(objItem->GetSprite());
 
-		m_pSceneEditor->SetCurrObject(objItem->GetSprite()->GetName());
+		m_pSceneEditor->SetCurrObject(objItem);
 	}
 }
 

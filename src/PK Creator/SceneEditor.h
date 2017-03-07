@@ -4,6 +4,7 @@
 
 #include <QDialog>
 #include <QTimer>
+#include <QList>
 
 namespace sf
 {
@@ -12,39 +13,53 @@ namespace sf
 }
 
 class Scene;
+class Object;
 
 class TextureMgr;
 
 class SceneEditor : public QDialog
 {
+private:
+	struct SceneObject
+	{
+		const Object		*pObj;
+		sf::Sprite			*pSpr;
+	};
+
 protected:
-	sf::RenderWindow	*m_pWindow = nullptr;
+	sf::RenderWindow		*m_pWindow = nullptr;
 
-	sf::Sprite			*m_pCurrObject;
+	QList <SceneObject*>	m_objects;
+
+	const Object			*m_pSelectedObj;
 	
-	TextureMgr			*m_pTexMgr;
+	SceneObject				*m_pCurrObj;
 
-	QSize				m_windowSize;
+	TextureMgr				*m_pTexMgr;
 
-	unsigned			m_bgColor;
+	QSize					m_windowSize;
 
-	bool				m_drawGrid;
-	int					m_snapX;
-	int					m_snapY;
+	unsigned				m_bgColor;
 
-	sf::RectangleShape	*m_hLine; // horizontal
-	sf::RectangleShape	*m_vLine; // vertical
+	bool					m_drawGrid;
+	int						m_snapX;
+	int						m_snapY;
+
+	sf::RectangleShape		*m_hLine; // horizontal
+	sf::RectangleShape		*m_vLine; // vertical
 	
-	QTimer				m_timer;
+	QTimer					m_timer;
 
 	friend Scene;
 
 protected:
-	void mouseMoveEvent(QMouseEvent *e) override;
-	void moveEvent(QMoveEvent *e)		override;
-	void showEvent(QShowEvent *e)		override;
-	void closeEvent(QCloseEvent *e)		override;
-	void paintEvent(QPaintEvent *e)		override;
+	void mouseMoveEvent(QMouseEvent *e)		override;
+	void mousePressEvent(QMouseEvent *e)	override;
+	void mouseReleaseEvent(QMouseEvent *e)	override;
+	void moveEvent(QMoveEvent *e)			override;
+	void showEvent(QShowEvent *e)			override;
+	void closeEvent(QCloseEvent *e)			override;
+	void paintEvent(QPaintEvent *e)			override;
 
 private:
 	void Render();
@@ -54,7 +69,7 @@ public:
 	explicit SceneEditor(QWidget *parent);
 	~SceneEditor();
 
-	void SetCurrObject(const QString &sprName);
+	void SetCurrObject(const Object *obj);
 
 	TextureMgr *GetTexMgr() const { return m_pTexMgr; }
 };
