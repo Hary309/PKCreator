@@ -204,8 +204,10 @@ void SceneEditor::mouseMoveEvent(QMouseEvent *e)
 
 void SceneEditor::mousePressEvent(QMouseEvent *e)
 {
-	for (SceneObject *obj : m_objects)
+	for (int i = 0; i < m_objects.size(); ++i)
 	{
+		SceneObject *obj = m_objects[i];
+
 		if (obj)
 		{
 			sf::Sprite *spr = obj->pSpr;
@@ -220,7 +222,19 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 					e->pos().y() >= int(pos.y) &&
 					e->pos().y() <= int(pos.y + rect.height))
 				{
-					m_pCurrObj = obj;
+					if (e->button() == Qt::MouseButton::LeftButton)
+						m_pCurrObj = obj;
+					else if (e->button() == Qt::MouseButton::RightButton)
+					{
+						delete spr;
+						spr = nullptr;
+						delete obj;
+						obj = nullptr;
+
+						m_objects.removeAt(i);
+						m_pCurrObj = nullptr;
+					}
+
 					return;
 				}
 
@@ -229,6 +243,9 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 	}
 
 	if (!m_pSelectedObj)
+		return;
+
+	if (e->button() != Qt::MouseButton::LeftButton)
 		return;
 
 	TextureMgr::TexInfo *texInfo = m_pTexMgr->GetTexture(m_pSelectedObj->GetSprite()->GetName());

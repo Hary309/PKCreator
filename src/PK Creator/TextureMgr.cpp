@@ -9,7 +9,6 @@
 
 TextureMgr::TextureMgr()
 {
-	printf("Tex Mgr\n");
 }
 
 TextureMgr::~TextureMgr()
