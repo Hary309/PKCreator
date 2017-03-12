@@ -51,6 +51,12 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Source Files\Items\Windows">
+      <UniqueIdentifier>{cf8ebc25-d3fb-4317-bc0f-38db98fe1698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Items\Windows">
+      <UniqueIdentifier>{769aee32-4be3-4fca-8669-21509d813dec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,16 +71,10 @@
     <ClCompile Include="..\..\QtFiles\Release\moc_ResourceView.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Release\moc_Object.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_MainWindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_CodeEditor.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Release\moc_EventItem.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="CodeEditor.cpp">
@@ -83,20 +83,11 @@
     <ClCompile Include="CodeEditorWindow.cpp">
       <Filter>Source Files\CodeEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Source Files\Items</Filter>
-    </ClCompile>
     <ClCompile Include="EventItem.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
     <ClCompile Include="Highlighter.cpp">
       <Filter>Source Files\CodeEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>Source Files\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Release\moc_Sprite.cpp">
-      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="WelcomeWindow.cpp">
       <Filter>Source Files</Filter>
@@ -107,20 +98,11 @@
     <ClCompile Include="LuaDebugger.cpp">
       <Filter>Source Files\CodeEditor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Release\moc_Scene.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files\Items</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_Config.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneEditor.cpp">
-      <Filter>Source Files\SceneEditor</Filter>
     </ClCompile>
     <ClCompile Include="TextureMgr.cpp">
       <Filter>Source Files\SceneEditor</Filter>
@@ -137,23 +119,65 @@
     <ClCompile Include="..\..\QtFiles\Debug\moc_Config.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Debug\moc_Sprite.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Debug\moc_Scene.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Debug\moc_Object.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Debug\moc_EventItem.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\QtFiles\Debug\moc_CodeEditor.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\qrc_Resources.cpp">
       <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_SpriteItemWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_SpriteItemWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteItemWindow.cpp">
+      <Filter>Source Files\Items\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_ObjectItemWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_ObjectItemWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectItemWindow.cpp">
+      <Filter>Source Files\Items\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="EventItemWindow.cpp">
+      <Filter>Source Files\Items\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_EventItemWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_EventItemWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectItem.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteItem.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneItemWindow.cpp">
+      <Filter>Source Files\Items\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_SceneItemWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_SceneItemWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneItem.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_SceneEditor.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_SceneEditor.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneEditor.cpp">
+      <Filter>Source Files\SceneEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,20 +187,11 @@
     <CustomBuild Include="CodeEditor.h">
       <Filter>Header Files\CodeEditor</Filter>
     </CustomBuild>
-    <CustomBuild Include="Object.h">
-      <Filter>Header Files\Items</Filter>
-    </CustomBuild>
     <CustomBuild Include="EventItem.h">
-      <Filter>Header Files\Items</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Sprite.h">
       <Filter>Header Files\Items</Filter>
     </CustomBuild>
     <CustomBuild Include="WelcomeWindow.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Scene.h">
-      <Filter>Header Files\Items</Filter>
     </CustomBuild>
     <CustomBuild Include="Config.h">
       <Filter>Header Files</Filter>
@@ -207,6 +222,33 @@
     </CustomBuild>
     <CustomBuild Include="ResourceView.h">
       <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SpriteItemWindow.h">
+      <Filter>Header Files\Items\Windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ItemWindow.h">
+      <Filter>Header Files\Items\Windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ObjectItemWindow.h">
+      <Filter>Header Files\Items\Windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="EventItemWindow.h">
+      <Filter>Header Files\Items\Windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ObjectItem.h">
+      <Filter>Header Files\Items</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SpriteItem.h">
+      <Filter>Header Files\Items</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SceneItemWindow.h">
+      <Filter>Header Files\Items\Windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SceneItem.h">
+      <Filter>Header Files\Items</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SceneEditor.h">
+      <Filter>Header Files\SceneEditor</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -242,9 +284,6 @@
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_ConfigWindow.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneEditor.h">
-      <Filter>Header Files\SceneEditor</Filter>
     </ClInclude>
     <ClInclude Include="TextureMgr.h">
       <Filter>Header Files\SceneEditor</Filter>

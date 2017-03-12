@@ -3,7 +3,6 @@
 #include <QTreeView>
 #include <QVector>
 
-
 class QStandardItemModel;
 class QStandardItem;
 

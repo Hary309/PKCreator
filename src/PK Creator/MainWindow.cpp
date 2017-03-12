@@ -4,7 +4,6 @@
 #include <QTime>
 
 #include <ResourceView.h>
-#include <Object.h>
 #include <WelcomeWindow.h>
 
 

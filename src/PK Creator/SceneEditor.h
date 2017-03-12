@@ -1,76 +1,67 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
-#include <QDialog>
+#include <QWidget>
 #include <QTimer>
 #include <QList>
 
 namespace sf
 {
 	class RenderWindow;
-	class Sprite;
+	class RectangleShape;
 }
 
-class Scene;
-class Object;
-
 class TextureMgr;
+class ObjectItem;
+class SceneItemWindow;
+class SceneObject;
 
-class SceneEditor : public QDialog
+class SceneEditor : public QWidget
 {
+	Q_OBJECT
+
 private:
-	struct SceneObject
-	{
-		const Object		*pObj;
-		sf::Sprite			*pSpr;
-	};
+	sf::RenderWindow		*m_pRenderer;
 
-protected:
-	sf::RenderWindow		*m_pWindow = nullptr;
+	QList<SceneObject*>		*m_pObjects;
 
-	QList <SceneObject*>	m_objects;
+	const ObjectItem		*m_pSelectedObj;
 
-	const Object			*m_pSelectedObj;
-	
 	SceneObject				*m_pCurrObj;
 
 	TextureMgr				*m_pTexMgr;
-
-	QSize					m_windowSize;
-
-	unsigned				m_bgColor;
 
 	bool					m_drawGrid;
 	int						m_snapX;
 	int						m_snapY;
 
+	QSize					m_windowSize;
+
+	unsigned				m_bgColor;
+
 	sf::RectangleShape		*m_hLine; // horizontal
 	sf::RectangleShape		*m_vLine; // vertical
-	
+
 	QTimer					m_timer;
 
-	friend Scene;
+	friend					SceneItemWindow;
 
 protected:
 	void mouseMoveEvent(QMouseEvent *e)		override;
 	void mousePressEvent(QMouseEvent *e)	override;
 	void mouseReleaseEvent(QMouseEvent *e)	override;
-	void moveEvent(QMoveEvent *e)			override;
-	void showEvent(QShowEvent *e)			override;
-	void closeEvent(QCloseEvent *e)			override;
-	void paintEvent(QPaintEvent *e)			override;
-
-private:
-	void Render();
-	void Pulse();
+	void resizeEvent(QResizeEvent *e)		override;
 
 public:
 	explicit SceneEditor(QWidget *parent);
 	~SceneEditor();
 
-	void SetCurrObject(const Object *obj);
+	void SetObjectList(QList<void*> *list);
+
+	void SetCurrObject(const ObjectItem *obj) { m_pSelectedObj = obj; }
 
 	TextureMgr *GetTexMgr() const { return m_pTexMgr; }
+
+public slots:
+	void Render();
 };
 

@@ -5,7 +5,8 @@
 #include <QFile>
 
 #include <ResourceView.h>
-#include <Sprite.h>
+#include <SpriteItem.h>
+
 
 TextureMgr::TextureMgr()
 {
@@ -16,7 +17,7 @@ TextureMgr::~TextureMgr()
 	Reset();
 }
 
-bool TextureMgr::LoadTexture(Sprite *sprite)
+bool TextureMgr::LoadTexture(SpriteItem *sprite)
 {
 	QString path = ResourceView::Get()->GetMainDir() + sprite->GetTexPath();
 
@@ -41,7 +42,6 @@ bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSi
 	if (!pTex->create(size.width(), size.height()))
 	{
 		delete pTex;
-		pTex = nullptr;
 
 		printf("[FAIL]\n");
 
@@ -51,7 +51,6 @@ bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSi
 	if (!pTex->loadFromFile(path.toStdString()))
 	{
 		delete pTex;
-		pTex = nullptr;
 
 		printf("[FAIL]\n");
 

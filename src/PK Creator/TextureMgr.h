@@ -4,12 +4,13 @@
 #include <QSize>
 #include <QPoint>
 
+
 namespace sf
 {
 	class Texture;
 }
 
-class Sprite;
+class SpriteItem;
 
 class TextureMgr
 {
@@ -28,10 +29,9 @@ public:
 	TextureMgr();
 	~TextureMgr();
 
-	bool LoadTexture(Sprite *sprite);
+	bool LoadTexture(SpriteItem *sprite);
 	bool LoadTexture(const QString &name, const QString &path, const QSize &size, const QPoint &center);
 	TexInfo *GetTexture(const QString &name);
 
 	void Reset();
 };
-

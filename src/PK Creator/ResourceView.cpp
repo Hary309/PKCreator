@@ -6,9 +6,9 @@
 #include <QMenu>
 #include <QCursor>
 
-#include <Sprite.h>
-#include <Object.h>
-#include <Scene.h>
+#include <SpriteItem.h>
+#include <ObjectItem.h>
+#include <SceneItem.h>
 #include <Config.h>
 
 #include <LuaDebugger.h>
@@ -163,7 +163,7 @@ void ResourceView::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 		if (!item)
 			return;
 
-		item->show();
+		item->Show(this);
 	}
 }
 
@@ -201,8 +201,8 @@ void ResourceView::ActionAdd_triggered()
 			}
 			treeItem = InsertRow(treeItem, name);
 
-			Item *item = new Sprite(this, treeItem, name);
-			item->show();
+			Item *item = new SpriteItem(treeItem, name);
+			item->Show(this);
 			m_items.push_back(item);
 		} break;
 		case Item::BACKGROUND:
@@ -220,8 +220,8 @@ void ResourceView::ActionAdd_triggered()
 			}
 			treeItem = InsertRow(treeItem, name);
 
-			Item *item = new Object(this, treeItem, name);
-			item->show();
+			Item *item = new ObjectItem(treeItem, name);
+			item->Show(this);
 			m_items.push_back(item);
 		} break;
 		case Item::SCENE:
@@ -235,8 +235,8 @@ void ResourceView::ActionAdd_triggered()
 			}
 			treeItem = InsertRow(treeItem, name);
 
-			Item *item = new Scene(this, treeItem, name);
-			item->show();
+			Item *item = new SceneItem(treeItem, name);
+			item->Show(this);
 			m_items.push_back(item);
 		} break;
 		default: 
@@ -258,7 +258,7 @@ void ResourceView::ActionEdit_triggered()
 	if (!item)
 		return;
 
-	item->show();
+	item->Show(this);
 }
 
 void ResourceView::ActionRemove_triggered()
@@ -273,7 +273,7 @@ void ResourceView::ActionRemove_triggered()
 
 	for (int i = 0; i < m_items.size(); ++i)
 	{
-		if (m_items[i]->GetItem() == treeItem)
+		if (m_items[i]->GetTreeItem() == treeItem)
 		{
 			delete m_items[i];
 			m_items[i] = nullptr;
@@ -347,7 +347,7 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 		{
 			case Item::SPRITE:
 			{
-				item = new Sprite(this, treeItem, name);
+				item = new SpriteItem(treeItem, name);
 			} break;
 			case Item::BACKGROUND:
 			{
@@ -355,11 +355,11 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 			} break;
 			case Item::OBJECT:
 			{
-				item = new Object(this, treeItem, name);
+				item = new ObjectItem(treeItem, name);
 			} break;
 			case Item::SCENE:
 			{
-				item = new Scene(this, treeItem, name);
+				item = new SceneItem(treeItem, name);
 			} break;
 			default: 
 			{
@@ -372,7 +372,6 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 			return false;
 
 		item->Load(dataStream);
-		item->hide();
 		m_items.push_back(item);
 	}
 
@@ -413,7 +412,7 @@ Item *ResourceView::GetItem(const QStandardItem *treeItem)
 {
 	for (int i = 0; i < m_items.size(); ++i)
 	{
-		if (m_items[i]->GetItem() == treeItem)
+		if (m_items[i]->GetTreeItem() == treeItem)
 		{
 			return m_items[i];
 		}
