@@ -222,7 +222,7 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 						delete spr;
 						delete obj;
 
-						//m_objects.removeAt(i);
+						m_pObjects->removeAt(i);
 						m_pCurrObj = nullptr;
 					}
 
