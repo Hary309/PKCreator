@@ -33,7 +33,6 @@ SceneEditor::SceneEditor(QWidget *parent)
 	m_timer.start();
 
 	setAttribute(Qt::WA_PaintOnScreen);
-	setAttribute(Qt::WA_OpaquePaintEvent);
 	setAttribute(Qt::WA_NoSystemBackground);
 
 	m_pRenderer = new sf::RenderWindow(HWND(winId()));

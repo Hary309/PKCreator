@@ -14,6 +14,7 @@
 #include <SceneEditor.h>
 #include <ObjectItem.h>
 #include <TextureMgr.h>
+#include <Config.h>
 
 SceneItemWindow::SceneItemWindow(QWidget* parent)
 	: QMainWindow(parent)
@@ -27,6 +28,12 @@ SceneItemWindow::SceneItemWindow(QWidget* parent)
 	m_pEditor->setObjectName(QStringLiteral("widget"));
 
 	ui.gridLayout_3->addWidget(m_pEditor);
+
+	QSize size = ResourceView::Get()->GetConfig()->GetWndSize();
+
+	int menuViewWidth = 180, statusBarHeight = 20, margin = 16;
+
+	resize(size.height() + menuViewWidth + margin * 2, size.height() + statusBarHeight + margin * 2);
 
 	connect(ui.okButton, &QPushButton::clicked, this, &SceneItemWindow::OkButton_clicked);
 	connect(ui.bgColorButton, &QPushButton::clicked, this, &SceneItemWindow::BgColorButton_clicked);

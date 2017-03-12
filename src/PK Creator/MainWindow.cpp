@@ -122,8 +122,8 @@ void MainWindow::ActionSaveProject_triggered() const
 
 void MainWindow::ActionOpenProject_triggered()
 {
+	hide();
 	WelcomeWindow::Get()->show();
-	this->hide();
 }
 
 void MainWindow::ActionExit_triggered()

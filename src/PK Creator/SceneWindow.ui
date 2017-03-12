@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>575</width>
-    <height>466</height>
+    <width>1025</width>
+    <height>717</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -36,6 +36,12 @@
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QTabWidget" name="resourcesWidget">
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>180</width>
@@ -242,7 +248,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>575</width>
+     <width>1025</width>
      <height>21</height>
     </rect>
    </property>

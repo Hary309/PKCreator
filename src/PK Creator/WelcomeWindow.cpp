@@ -128,8 +128,6 @@ void WelcomeWindow::CreateButton_clicked()
 	QString projectName = fileName.split(".").first();
 	QString folderPath = filePath.left(filePath.length() - fileName.length());
 
-
-
 	QFile projectFile(filePath);
 
 	bool isFileValid = false;
