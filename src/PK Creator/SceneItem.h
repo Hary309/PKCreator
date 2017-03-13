@@ -28,7 +28,10 @@ protected:
 
 	QList<SceneObject*>		m_objects;
 
+	unsigned				m_bgColor;
+
 	friend					SceneItemWindow;
+	friend					SceneEditor;
 
 public:
 	SceneItem(QStandardItem *item, const QString &itemName);

@@ -27,8 +27,6 @@ SceneEditor::SceneEditor(QWidget *parent)
 	m_pCurrObj = nullptr;
 	m_pSelectedObj = nullptr;
 
-	m_bgColor = sf::Color(158, 158, 158).toInteger();
-
 	m_timer.setInterval(10);
 	m_timer.start();
 
@@ -86,16 +84,17 @@ SceneEditor::~SceneEditor()
 	}
 }
 
-void SceneEditor::SetObjectList(QList<void*> *list)
+void SceneEditor::SetSource(SceneItem *sceneItem)
 {
-	m_pObjects = reinterpret_cast<QList<SceneObject*>*>(list);
+	m_pSceneItem = sceneItem;
+	m_pObjects = &sceneItem->m_objects;
 
 	for (auto obj : *m_pObjects)
 	{
 		m_pTexMgr->LoadTexture(obj->pObj->GetSprite());
 
 		TextureMgr::TexInfo *texInfo = m_pTexMgr->GetTexture(obj->pObj->GetSprite()->GetName());
-		
+
 		if (!texInfo)
 			continue;
 
@@ -109,7 +108,7 @@ void SceneEditor::Render()
 {
 	if (m_pRenderer)
 	{
-		m_pRenderer->clear(sf::Color(m_bgColor));
+		m_pRenderer->clear(sf::Color(m_pSceneItem->m_bgColor));
 
 		if (m_pCurrObj)
 		{

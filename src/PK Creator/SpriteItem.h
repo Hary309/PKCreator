@@ -3,6 +3,7 @@
 #include <Item.h>
 
 class SpriteItemWindow;
+class SceneEditor;
 
 class SpriteItem : public Item
 {

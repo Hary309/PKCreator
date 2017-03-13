@@ -14,6 +14,7 @@ class TextureMgr;
 class ObjectItem;
 class SceneItemWindow;
 class SceneObject;
+class SceneItem;
 
 class SceneEditor : public QWidget
 {
@@ -23,6 +24,7 @@ private:
 	sf::RenderWindow		*m_pRenderer;
 
 	QList<SceneObject*>		*m_pObjects;
+	SceneItem				*m_pSceneItem;
 
 	const ObjectItem		*m_pSelectedObj;
 
@@ -35,8 +37,6 @@ private:
 	int						m_snapY;
 
 	QSize					m_windowSize;
-
-	unsigned				m_bgColor;
 
 	sf::RectangleShape		*m_hLine; // horizontal
 	sf::RectangleShape		*m_vLine; // vertical
@@ -55,7 +55,7 @@ public:
 	explicit SceneEditor(QWidget *parent);
 	~SceneEditor();
 
-	void SetObjectList(QList<void*> *list);
+	void SetSource(SceneItem *sceneItem);
 
 	void SetCurrObject(const ObjectItem *obj) { m_pSelectedObj = obj; }
 
