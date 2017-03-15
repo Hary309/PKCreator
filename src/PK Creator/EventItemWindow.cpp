@@ -26,7 +26,7 @@ void EventItemWindow::FillData(EventItem *item)
 
 	m_pCodeEditor->setPlainText(m_pItemParent->m_code);
 
-	setWindowTitle(QString::asprintf("%s - Event", m_pItemParent->GetItem()->text().toStdString().c_str()));
+	setWindowTitle(QString::asprintf("%s", m_pItemParent->GetItem()->text().toStdString().c_str()));
 }
 
 void EventItemWindow::closeEvent(QCloseEvent *e)

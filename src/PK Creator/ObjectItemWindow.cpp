@@ -58,26 +58,34 @@ ObjectItemWindow::~ObjectItemWindow()
 
 bool ObjectItemWindow::FillData(Item* item)
 {
+	m_pItemParent = static_cast<ObjectItem*>(item);
+
 	if (!m_pItemParent)
 		return false;
-
-	m_pItemParent = static_cast<ObjectItem*>(item);
 
 	if (m_pItemParent->m_type != Item::OBJECT)
 		return false;
 
+	setWindowTitle(item->GetName());
+
 	m_ui.nameEdit->setText(m_pItemParent->GetName());
 
 	RefreshSpriteBox();
+
+	bool set = false;
 
 	for (int i = 0; i < m_sprites.size(); ++i)
 	{
 		if (m_pItemParent->m_pCurrSpr == m_sprites[i]->pSpr)
 		{
 			m_ui.spriteBox->setCurrentIndex(m_sprites[i]->index + 1);
+			set = true;
 			break;
 		}
 	}
+
+	if (!set)
+		m_ui.spriteBox->setCurrentIndex(0);
 
 	for (auto eventItem : m_pItemParent->m_events)
 	{
@@ -134,6 +142,8 @@ void ObjectItemWindow::RefreshSpriteBox()
 	m_ui.spriteBox->insertItem(0, "None");
 
 	const QVector<Item*> sprites = ResourceView::Get()->GetItemsByType(Item::SPRITE);
+
+	printf("Size: %d\n", sprites.size());
 
 	for (int i = 0; i < sprites.size(); ++i)
 	{

@@ -42,6 +42,8 @@ bool SpriteItemWindow::FillData(Item *item)
 	if (m_pItemParent->m_type != Item::SPRITE)
 		return false;
 
+	setWindowTitle(item->GetName());
+
 	m_ui.nameEdit->setText(m_pItemParent->GetName());
 
 	m_ui.imagePathLabel->setText(m_pItemParent->m_texPath);

@@ -57,6 +57,8 @@ bool SceneItemWindow::FillData(SceneItem *item)
 {
 	m_pItemParent = reinterpret_cast<SceneItem*>(item);
 
+	setWindowTitle(item->GetName());
+
 	ui.nameEdit->setText(item->GetName());
 
 	RefreshObjectList();
