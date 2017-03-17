@@ -24,8 +24,6 @@ struct SceneObject
 class SceneItem : public Item
 {
 protected:
-	SceneItemWindow			*m_pItemWnd;
-
 	QList<SceneObject*>		m_objects;
 
 	unsigned				m_bgColor;

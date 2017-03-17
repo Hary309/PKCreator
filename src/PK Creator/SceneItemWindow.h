@@ -4,9 +4,11 @@
 
 class SceneItem;
 class SceneEditor;
+class Item;
 
+#include <ItemWindow.h>
 
-class SceneItemWindow : public QMainWindow
+class SceneItemWindow : public ItemWindow
 {
 	Q_OBJECT
 
@@ -26,7 +28,7 @@ public:
 
 	void RefreshObjectList() const;
 
-	bool FillData(SceneItem *item);
+	bool FillData(Item *item);
 
 private slots:
 	void OkButton_clicked();

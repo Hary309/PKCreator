@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>SceneWindow</class>
- <widget class="QMainWindow" name="SceneWindow">
+ <widget class="QDialog" name="SceneWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -28,8 +28,7 @@
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_4">
+  <layout class="QHBoxLayout" name="horizontalLayout_4">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -243,84 +242,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1025</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionOk">
-   <property name="icon">
-    <iconset resource="Resources.qrc">
-     <normaloff>:/CodeWindow/res/okIcon.png</normaloff>:/CodeWindow/res/okIcon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Ok</string>
-   </property>
-  </action>
-  <action name="actionSave">
-   <property name="icon">
-    <iconset resource="Resources.qrc">
-     <normaloff>:/CodeWindow/res/saveIcon.png</normaloff>:/CodeWindow/res/saveIcon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Save</string>
-   </property>
-  </action>
-  <action name="actionOpen">
-   <property name="icon">
-    <iconset resource="Resources.qrc">
-     <normaloff>:/CodeWindow/res/openIcon.png</normaloff>:/CodeWindow/res/openIcon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Open</string>
-   </property>
-  </action>
-  <action name="actionCut">
-   <property name="icon">
-    <iconset resource="Resources.qrc">
-     <normaloff>:/CodeWindow/res/cutIcon.png</normaloff>:/CodeWindow/res/cutIcon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Cut</string>
-   </property>
-  </action>
-  <action name="actionCopy">
-   <property name="icon">
-    <iconset resource="Resources.qrc">
-     <normaloff>:/CodeWindow/res/copyIcon.png</normaloff>:/CodeWindow/res/copyIcon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Copy</string>
-   </property>
-  </action>
-  <action name="actionPaste">
-   <property name="icon">
-    <iconset resource="Resources.qrc">
-     <normaloff>:/CodeWindow/res/pasteIcon.png</normaloff>:/CodeWindow/res/pasteIcon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Paste</string>
-   </property>
-  </action>
-  <action name="actionSaveAs">
-   <property name="icon">
-    <iconset resource="Resources.qrc">
-     <normaloff>:/CodeWindow/res/saveAsIcon.png</normaloff>:/CodeWindow/res/saveAsIcon.png</iconset>
-   </property>
-   <property name="text">
-    <string>SaveAs</string>
-   </property>
-   <property name="toolTip">
-    <string>Save As...</string>
-   </property>
-  </action>
- </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
   <include location="Resources.qrc"/>

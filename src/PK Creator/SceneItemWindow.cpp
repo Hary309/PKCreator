@@ -17,7 +17,7 @@
 #include <Config.h>
 
 SceneItemWindow::SceneItemWindow(QWidget* parent)
-	: QMainWindow(parent)
+	: ItemWindow(parent)
 {
 	ui.setupUi(this);
 	ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
@@ -53,7 +53,7 @@ SceneItemWindow::~SceneItemWindow()
 	}
 }
 
-bool SceneItemWindow::FillData(SceneItem *item)
+bool SceneItemWindow::FillData(Item *item)
 {
 	m_pItemParent = reinterpret_cast<SceneItem*>(item);
 
@@ -63,7 +63,7 @@ bool SceneItemWindow::FillData(SceneItem *item)
 
 	RefreshObjectList();
 
-	m_pEditor->SetSource(item);
+	m_pEditor->SetSource(m_pItemParent);
 
 	// Bit shift deletes alpha
 	QColor color(m_pItemParent->m_bgColor >> 8);
@@ -109,7 +109,7 @@ void SceneItemWindow::RefreshObjectList() const
 
 void SceneItemWindow::enterEvent(QEvent *e)
 {
-	QMainWindow::enterEvent(e);
+	ItemWindow::enterEvent(e);
 
 	RefreshObjectList();
 }
