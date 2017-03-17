@@ -57,11 +57,12 @@ bool SpriteItemWindow::FillData(Item *item)
 	QImage myImage;
 	myImage.load(ResourceView::Get()->GetMainDir() + m_pItemParent->m_texPath);
 	m_ui.imageLabel->setPixmap(QPixmap::fromImage(myImage));
+	m_ui.imageLabel->setFixedSize(myImage.size());
 
 	return true;
 }
 
-void SpriteItemWindow::closeEvent(QCloseEvent* event)
+void SpriteItemWindow::closeEvent(QCloseEvent *event)
 {
 	m_pItemParent->Close();
 }
