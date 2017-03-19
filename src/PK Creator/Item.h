@@ -42,6 +42,7 @@ public:
 
 	const QString& GetName()			const { return m_itemName; }
 	const QStandardItem *GetTreeItem()	const { return m_pTreeItem; }
+	qint64 GetID()						const { return m_id; }
 
 	Type GetType()						const { return m_type; }
 
