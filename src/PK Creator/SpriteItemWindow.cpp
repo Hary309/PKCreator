@@ -90,6 +90,7 @@ void SpriteItemWindow::LoadSpriteButton_clicked()
 	QImage myImage;
 	myImage.load(filePath);
 	m_ui.imageLabel->setPixmap(QPixmap::fromImage(myImage));
+	m_ui.imageLabel->setFixedSize(myImage.size());
 
 	QSize size = myImage.size();
 	m_ui.widthValueLabel->setText(QString::number(size.width()) + "px");
@@ -127,6 +128,5 @@ void SpriteItemWindow::CenterXEdit_editingFinished()
 
 void SpriteItemWindow::CenterYEdit_editingFinished()
 {
-
 	m_pItemParent->m_center.setY(m_ui.centerYEdit->text().toInt());
 }
