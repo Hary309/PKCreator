@@ -69,12 +69,13 @@ void ObjectItem::Load(QDataStream *const dataStream)
 {
 	Item::Load(dataStream);
 
-	QString name;
+	long long id;
 	int size;
 
-	*dataStream >> name >> size;
+	*dataStream >> id >> size;
 
-	m_pCurrSpr = static_cast<SpriteItem*>(ResourceView::Get()->GetItem(name));
+	if (id)
+		m_pCurrSpr = static_cast<SpriteItem*>(ResourceView::Get()->GetItem(id));
 
 	for (int i = 0; i < size; ++i)
 	{
@@ -93,7 +94,7 @@ void ObjectItem::Save(QDataStream *const dataStream)
 {
 	Item::Save(dataStream);
 
-	*dataStream << (m_pCurrSpr ? m_pCurrSpr->GetName() : QString("")) << m_events.size();
+	*dataStream << (m_pCurrSpr ? m_pCurrSpr->GetID() : static_cast<long long>(-1)) << m_events.size();
 
 	for (int i = 0; i < m_events.size(); ++i)
 	{

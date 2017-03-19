@@ -74,7 +74,7 @@ bool SceneItemWindow::FillData(Item *item)
 	return true;
 }
 
-void SceneItemWindow::RefreshObjectList() const
+void SceneItemWindow::RefreshObjectList()
 {
 	if (!m_pEditor)
 		return;
@@ -84,27 +84,45 @@ void SceneItemWindow::RefreshObjectList() const
 
 	ui.objectList->clear();
 
+	qDeleteAll(m_objectsList);
+	m_objectsList.clear();
+
 	QVector<Item*> items = ResourceView::Get()->GetItemsByType(Item::OBJECT);
 
 	for (int i = 0; i < items.size(); ++i)
 	{
 		ObjectItem *obj = reinterpret_cast<ObjectItem*>(items[i]);
-		QListWidgetItem *item = new QListWidgetItem;
+		QListWidgetItem *item = new QListWidgetItem();
 
-		if (obj->GetSprite())
+		item->setText(obj->GetName());
+
+		SpriteItem *spr = obj->GetSprite();
+
+		ObjectListItem *listItem = new ObjectListItem;
+
+		listItem->listItem = item;
+		listItem->id = obj->GetID();
+
+		m_objectsList.push_back(listItem);
+
+		if (spr)
 		{
-			SpriteItem *spr = obj->GetSprite();
+			item->setIcon(QIcon(ResourceView::Get()->GetMainDir() + spr->GetTexPath()));
 
-			item->setText(obj->GetName());
-
-			if (spr)
-			{
-				item->setIcon(QIcon(ResourceView::Get()->GetMainDir() + spr->GetTexPath()));
-
-				ui.objectList->addItem(item);
-			}
+			ui.objectList->addItem(item);
 		}
 	}
+}
+
+SceneItemWindow::ObjectListItem *SceneItemWindow::GetObjectListItem(QListWidgetItem *item)
+{
+	for (int i = 0; i < m_objectsList.size(); ++i)
+	{
+		if (m_objectsList[i]->listItem == item)
+			return m_objectsList[i];
+	}
+
+	return nullptr;
 }
 
 void SceneItemWindow::enterEvent(QEvent *e)
@@ -158,12 +176,15 @@ void SceneItemWindow::BgColorButton_clicked()
 	colorDialog.exec();
 }
 
-void SceneItemWindow::ObjectList_ItemClicked(QListWidgetItem *item) const
+void SceneItemWindow::ObjectList_ItemClicked(QListWidgetItem *item)
 {
-	if (ResourceView::Get()->GetItem(item->text())->GetType() == Item::OBJECT)
-	{
-		ObjectItem *objItem = static_cast<ObjectItem*>(ResourceView::Get()->GetItem(item->text()));
+	ObjectItem *objItem = static_cast<ObjectItem*>(ResourceView::Get()->GetItem(GetObjectListItem(item)->id));
 
+	if (!objItem)
+		return;
+
+	if (objItem->GetType() == Item::OBJECT)
+	{
 		QString path = ResourceView::Get()->GetMainDir() + objItem->GetSprite()->GetTexPath();
 
 		m_pEditor->GetTexMgr()->LoadTexture(objItem->GetSprite());

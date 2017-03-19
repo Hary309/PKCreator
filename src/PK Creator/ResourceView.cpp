@@ -421,14 +421,12 @@ Item *ResourceView::GetItem(const QStandardItem *treeItem)
 	return nullptr;
 }
 
-Item *ResourceView::GetItem(const QString &name)
+Item * ResourceView::GetItem(long long id)
 {
-	for (int i = 0; i < m_items.size(); ++i)
+	for (int i = 0; i < m_items.size() ; ++i)
 	{
-		if (m_items[i]->GetName() == name)
-		{
+		if (m_items[i]->GetID() == id)
 			return m_items[i];
-		}
 	}
 
 	return nullptr;

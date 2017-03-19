@@ -49,17 +49,17 @@ void SceneItem::Load(QDataStream *const dataStream)
 
 	for (int i = 0; i < size; ++i)
 	{
-		QString name;
+		long long id;
 		QPoint pos;
 	
-		*dataStream >> name >> pos;
+		*dataStream >> id >> pos;
 
 		//printf("Name: %s\n", name.toStdString().c_str());
 		//printf("Pos: (%d, %d)\n", pos.x(), pos.y());
 
 		SceneObject *sObj = new SceneObject();
 
-		sObj->pObj = static_cast<ObjectItem*>(ResourceView::Get()->GetItem(name));
+		sObj->pObj = static_cast<ObjectItem*>(ResourceView::Get()->GetItem(id));
 		sObj->pSpr = nullptr;
 		sObj->pos = pos;
 
@@ -77,7 +77,7 @@ void SceneItem::Save(QDataStream *const dataStream)
 
 	for (auto obj : m_objects)
 	{
-		*dataStream << obj->pObj->GetName();
+		*dataStream << obj->pObj->GetID();
 		*dataStream << obj->pos;
 	}
 }

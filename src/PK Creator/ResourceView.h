@@ -63,8 +63,8 @@ public:
 	bool IsNameExists(const QString &name);
 
 	Item *GetItem(const QStandardItem *treeItem);
-	Item *GetItem(const QString &name);
-
+	Item *GetItem(long long id);
+	
 	const QString &GetMainDir() const { return m_mainDir; }
 
 	// @type - Item::Type
