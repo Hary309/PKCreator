@@ -28,12 +28,6 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="Header Files\CodeEditor">
-      <UniqueIdentifier>{8c73e775-7413-4024-bcd2-6e5d5b9f3337}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\CodeEditor">
-      <UniqueIdentifier>{2a1ebc00-4379-4b2a-885f-3f358a7d419b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Items">
       <UniqueIdentifier>{0e07cd43-0f5c-41f9-8364-cbcf569620eb}</UniqueIdentifier>
     </Filter>
@@ -74,29 +68,14 @@
     <ClCompile Include="..\..\QtFiles\Release\moc_MainWindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Release\moc_CodeEditor.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="CodeEditor.cpp">
-      <Filter>Source Files\CodeEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="CodeEditorWindow.cpp">
-      <Filter>Source Files\CodeEditor</Filter>
-    </ClCompile>
     <ClCompile Include="EventItem.cpp">
       <Filter>Source Files\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="Highlighter.cpp">
-      <Filter>Source Files\CodeEditor</Filter>
     </ClCompile>
     <ClCompile Include="WelcomeWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_WelcomeWindow.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="LuaDebugger.cpp">
-      <Filter>Source Files\CodeEditor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_Config.cpp">
       <Filter>Generated Files\Release</Filter>
@@ -117,9 +96,6 @@
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\Debug\moc_Config.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Debug\moc_CodeEditor.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\qrc_Resources.cpp">
@@ -183,9 +159,6 @@
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="CodeEditor.h">
-      <Filter>Header Files\CodeEditor</Filter>
     </CustomBuild>
     <CustomBuild Include="EventItem.h">
       <Filter>Header Files\Items</Filter>
@@ -261,12 +234,6 @@
     <ClInclude Include="..\..\QtFiles\ui_CodeWindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="CodeEditorWindow.h">
-      <Filter>Header Files\CodeEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="LineNumberArea.h">
-      <Filter>Header Files\CodeEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
@@ -275,9 +242,6 @@
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_WelcomeWindow.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LuaDebugger.h">
-      <Filter>Header Files\CodeEditor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_SceneWindow.h">
       <Filter>Generated Files</Filter>

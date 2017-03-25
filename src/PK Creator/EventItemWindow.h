@@ -1,13 +1,13 @@
 #pragma once
 
-#include <CodeEditorWindow.h>
+#include <QDialog>
 
 class QStandardItem;
 class QCloseEvent;
 
 class EventItem;
 
-class EventItemWindow : public CodeEditorWindow
+class EventItemWindow : public QDialog
 {
 	Q_OBJECT
 
@@ -16,16 +16,11 @@ private:
 
 private:
 	void closeEvent(QCloseEvent *e) override;
-	void keyPressEvent(QKeyEvent *e) override;
 
 public:
 	explicit EventItemWindow(QWidget *parent);
 	~EventItemWindow();
 
 	void FillData(EventItem *item);
-
-private slots:
-	void ActionOk_triggered() override;
-	void ActionSave_triggered() override;
 };
 

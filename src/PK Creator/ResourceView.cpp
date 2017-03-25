@@ -11,7 +11,6 @@
 #include <SceneItem.h>
 #include <Config.h>
 
-#include <LuaDebugger.h>
 #include <QMessageBox>
 
 ResourceView *ResourceView::s_pInst;
@@ -30,8 +29,6 @@ ResourceView::ResourceView(QWidget * parent)
 
 	m_pProConfig = new Config(this);
 
-	m_pLuaDebugger = new LuaDebugger();
-
 	s_pInst = this;
 
 	connect(this, &QTreeView::expanded, this, &ResourceView::ResourceView_expanded);
@@ -44,12 +41,6 @@ ResourceView::~ResourceView()
 	{
 		delete m_pTreeModel;
 		m_pTreeModel = nullptr;
-	}
-
-	if (m_pLuaDebugger)
-	{
-		delete m_pLuaDebugger;
-		m_pLuaDebugger = nullptr;
 	}
 
 	for (int i = 0; i < m_items.size(); ++i)

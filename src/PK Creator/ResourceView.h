@@ -8,8 +8,6 @@ class QStandardItem;
 
 class Item;
 
-class LuaDebugger;
-
 class Config;
 
 class ResourceView : public QTreeView
@@ -20,8 +18,6 @@ private:
 	QStringList			m_defaultModel;
 
 	QString				m_mainDir;
-
-	LuaDebugger			*m_pLuaDebugger;
 
 	// to save
 	QStandardItemModel	*m_pTreeModel;
@@ -70,7 +66,6 @@ public:
 	// @type - Item::Type
 	QVector <Item*> GetItemsByType(int type);
 
-	LuaDebugger *GetLuaDebugger()	const { return m_pLuaDebugger; }
 	Config		*GetConfig()		const { return m_pProConfig; }
 
 	static ResourceView *Get() { return s_pInst; }
