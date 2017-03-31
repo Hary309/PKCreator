@@ -326,7 +326,7 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 
 		*dataStream >> type >> name;
 
-		printf("\n[%d] Type: %d Name: \"%s\"\n", i, type, name.toStdString().c_str());
+		printf("[%d] Type: %d Name: \"%s\"\n", i, type, name.toStdString().c_str());
 
 		QStandardItem *treeItem = m_pTreeModel->item(type);
 

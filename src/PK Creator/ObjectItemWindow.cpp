@@ -143,8 +143,6 @@ void ObjectItemWindow::RefreshSpriteBox()
 
 	const QVector<Item*> sprites = ResourceView::Get()->GetItemsByType(Item::SPRITE);
 
-	printf("Size: %d\n", sprites.size());
-
 	for (int i = 0; i < sprites.size(); ++i)
 	{
 		m_ui.spriteBox->insertItem(i + 1, sprites[i]->GetName());
