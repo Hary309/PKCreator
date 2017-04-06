@@ -3,9 +3,10 @@
 #include <QMessageBox>
 #include <QCursor>
 #include <QCloseEvent>
+#include <QMenu>
 
 #include <ResourceView.h>
-#include <EventItem.h>
+#include <EventObjectItem.h>
 #include <SpriteItem.h>
 #include <ObjectItem.h>
 
@@ -16,44 +17,25 @@ ObjectItemWindow::ObjectItemWindow(QWidget *parent)
 
 	m_ui.setupUi(this);
 
-	m_pModel = new QStandardItemModel(this);
-	m_ui.eventList->setModel(m_pModel);
+	m_pModel = QSharedPointer<QStandardItemModel>(new QStandardItemModel(this));
+	m_ui.eventList->setModel(m_pModel.data());
 
 	m_ui.spriteBox->setCurrentIndex(0);
 
 	m_ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
 
-	connect(m_ui.okButton, SIGNAL(clicked()), this, SLOT(OkButton_clicked()));
-	connect(m_ui.addButton, SIGNAL(clicked()), this, SLOT(AddEventButton_clicked()));
-	connect(m_ui.removeButton, SIGNAL(clicked()), this, SLOT(RemoveEventButton_clicked()));
-	connect(m_ui.editButton, SIGNAL(clicked()), this, SLOT(EditButton_clicked()));
+	connect(m_ui.okButton, &QPushButton::clicked, this, &ObjectItemWindow::OkButton_clicked);
+	connect(m_ui.addButton, &QPushButton::clicked, this, &ObjectItemWindow::AddEventButton_clicked);
+	connect(m_ui.removeButton, &QPushButton::clicked, this, &ObjectItemWindow::RemoveEventButton_clicked);
+	connect(m_ui.editButton, &QPushButton::clicked, this, &ObjectItemWindow::EditButton_clicked);
 	connect(m_ui.eventList, &QListView::doubleClicked, this, &ObjectItemWindow::EditButton_clicked);
-	connect(m_ui.addSprButton, SIGNAL(clicked()), this, SLOT(AddSprButton_clicked()));
-	connect(m_ui.editSprButton, SIGNAL(clicked()), this, SLOT(EditSprButton_clicked()));
+	connect(m_ui.addSprButton, &QPushButton::clicked, this, &ObjectItemWindow::AddSprButton_clicked);
+	connect(m_ui.editSprButton, &QPushButton::clicked, this, &ObjectItemWindow::EditSprButton_clicked);
 	connect(m_ui.spriteBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &ObjectItemWindow::SpriteBox_activated);
 }
 
 ObjectItemWindow::~ObjectItemWindow()
 {
-	m_pModel->clear();
-
-	if (m_pModel)
-	{
-		delete m_pModel;
-		m_pModel = nullptr;
-	}
-
-	qDeleteAll(m_actionList);
-
-	if (m_pContextMenu)
-	{
-		delete m_pContextMenu;
-		m_pContextMenu = nullptr;
-	}
-
-	qDeleteAll(m_sprites);
-
-	m_ui.spriteBox->clear();
 }
 
 bool ObjectItemWindow::FillData(Item* item)
@@ -74,11 +56,11 @@ bool ObjectItemWindow::FillData(Item* item)
 
 	bool set = false;
 
-	for (int i = 0; i < m_sprites.size(); ++i)
+	for (auto spr : m_sprites)
 	{
-		if (m_pItemParent->m_pCurrSpr == m_sprites[i]->pSpr)
+		if (m_pItemParent->m_pCurrSpr == spr->pSpr)
 		{
-			m_ui.spriteBox->setCurrentIndex(m_sprites[i]->index + 1);
+			m_ui.spriteBox->setCurrentIndex(spr->index + 1);
 			set = true;
 			break;
 		}
@@ -87,14 +69,14 @@ bool ObjectItemWindow::FillData(Item* item)
 	if (!set)
 		m_ui.spriteBox->setCurrentIndex(0);
 
-	for (auto eventItem : m_pItemParent->m_events)
+	/*for (auto eventItem : m_pItemParent->m_events)
 	{
 		QStandardItem *item = new QStandardItem(m_pItemParent->m_eventName[eventItem->GetType()]);
 
 		eventItem->SetItem(item);
 
 		m_pModel->appendRow(item);
-	}
+	}*/
 
 	CreateContextMenu();
 
@@ -105,34 +87,28 @@ bool ObjectItemWindow::FillData(Item* item)
 
 void ObjectItemWindow::CreateContextMenu()
 {
-	m_pContextMenu = new QMenu("Context menu", this);
+	m_pContextMenu = QSharedPointer<QMenu>(new QMenu("Context menu", this));
 
-	for (int i = 0; i < m_pItemParent->m_eventName.size(); ++i)
+	for (auto eventName : m_pItemParent->m_eventName)
 	{
-		QAction *action = new QAction(m_pItemParent->m_eventName[i], this);
+		auto action = QSharedPointer<QAction>(new QAction(eventName, this));
 
 		m_actionList.push_back(action);
 	}
 
-	connect(m_actionList[0], &QAction::triggered, this, [this] { AddEventAction_triggered(0); });
-	connect(m_actionList[1], &QAction::triggered, this, [this] { AddEventAction_triggered(1); });
-	connect(m_actionList[2], &QAction::triggered, this, [this] { AddEventAction_triggered(2); });
-	connect(m_actionList[3], &QAction::triggered, this, [this] { AddEventAction_triggered(3); });
+	connect(m_actionList[0].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(0); });
+	connect(m_actionList[1].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(1); });
+	connect(m_actionList[2].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(2); });
+	connect(m_actionList[3].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(3); });
 
-	for (int i = 0; i < m_actionList.size(); ++i)
+	for (auto actionItem : m_actionList)
 	{
-		m_pContextMenu->addAction(m_actionList[i]);
+		m_pContextMenu->addAction(actionItem.data());
 	}
 }
 
 void ObjectItemWindow::RefreshSpriteBox()
 {
-	for (int i = 0; i < m_sprites.size(); ++i)
-	{
-		if (m_sprites[i])
-			delete m_sprites[i];
-	}
-
 	m_sprites.clear();
 
 	QString currentIndex = m_ui.spriteBox->currentText();
@@ -147,7 +123,7 @@ void ObjectItemWindow::RefreshSpriteBox()
 	{
 		m_ui.spriteBox->insertItem(i + 1, sprites[i]->GetName());
 
-		ComboBoxItem *texItem = new ComboBoxItem();
+		auto texItem = QSharedPointer<ComboBoxItem>(new ComboBoxItem());
 
 		texItem->index = i;
 		texItem->pSpr = static_cast<SpriteItem*>(sprites[i]);
@@ -164,7 +140,7 @@ void ObjectItemWindow::changeEvent(QEvent *e)
 		RefreshSpriteBox();
 }
 
-void ObjectItemWindow::closeEvent(QCloseEvent* event)
+void ObjectItemWindow::closeEvent(QCloseEvent *e)
 {
 	m_pItemParent->Close();
 }
@@ -192,18 +168,14 @@ void ObjectItemWindow::RemoveEventButton_clicked()
 {
 	QModelIndex index = m_ui.eventList->currentIndex();
 
-	QVector<EventItem*> *events = &m_pItemParent->m_events;
+	auto events = &m_pItemParent->m_events;
 
 	for (int i = 0; i < events->size(); ++i)
 	{
 		if (events->at(i))
 		{
 			if (events->at(i)->GetItem() == m_pModel->itemFromIndex(index))
-			{
-				delete events->at(i);
-				
 				events->removeAt(i);
-			}
 		}
 	}
 
@@ -217,7 +189,7 @@ void ObjectItemWindow::EditButton_clicked()
 	if (!index.isValid())
 		return;
 
-	EventItem *ev = m_pItemParent->GetEvent(m_pModel->itemFromIndex(index));
+	EventObjectItem *ev = m_pItemParent->GetEvent(m_pModel->itemFromIndex(index));
 
 	ev->Show(this);
 }
@@ -238,7 +210,7 @@ void ObjectItemWindow::AddEventAction_triggered(int eventType)
 	item->setEditable(false);
 	m_pModel->appendRow(item);
 
-	EventItem *objEvent = new EventItem(EventItem::Type(eventType), item);
+	auto objEvent = QSharedPointer<EventObjectItem>(new EventObjectItem(EventObjectItem::Type(eventType), item));
 	objEvent->Show(this);
 
 	m_pItemParent->m_events.push_back(objEvent);
@@ -288,13 +260,13 @@ void ObjectItemWindow::SpriteBox_activated(int index)
 {
 	index--;
 
-	for (int i = 0; i < m_sprites.size(); ++i)
+	for (auto spr : m_sprites)
 	{
-		if (m_sprites[i])
+		if (spr)
 		{
-			if (m_sprites[i]->index == index)
+			if (spr->index == index)
 			{
-				m_pItemParent->m_pCurrSpr = m_sprites[i]->pSpr;
+				m_pItemParent->m_pCurrSpr = spr->pSpr;
 				return;
 			}
 		}

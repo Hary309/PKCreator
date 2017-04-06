@@ -3,19 +3,19 @@
 
 #include <QVector>
 
-class EventItem;
+class EventObjectItem;
 class SpriteItem;
 class ObjectItemWindow;
 
 class ObjectItem : public Item
 {
 protected:
-	SpriteItem				*m_pCurrSpr;
-	QVector<EventItem*>		m_events;
+	SpriteItem									*m_pCurrSpr;
+	QVector<QSharedPointer<EventObjectItem>>	m_events;
 
-	QStringList				m_eventName;
+	QStringList									m_eventName;
 
-	friend					ObjectItemWindow;
+	friend										ObjectItemWindow;
 
 public:
 	ObjectItem(QStandardItem *item, const QString &itemName);
@@ -23,8 +23,8 @@ public:
 
 	void SetName(const QString &name) override;
 
-	EventItem *GetEvent(int eventType);
-	EventItem *GetEvent(QStandardItem *item);
+	EventObjectItem *GetEvent(int eventType);
+	EventObjectItem *GetEvent(QStandardItem *item);
 
 	SpriteItem *GetSprite() const { return m_pCurrSpr; }
 

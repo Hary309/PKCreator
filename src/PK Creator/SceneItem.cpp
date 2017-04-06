@@ -25,11 +25,6 @@ SceneItem::SceneItem(QStandardItem *item, const QString &itemName)
 
 SceneItem::~SceneItem()
 {
-	if (m_pItemWnd)
-	{
-		delete m_pItemWnd;
-		m_pItemWnd = nullptr;
-	}
 }
 
 void SceneItem::SetName(const QString &name)
@@ -57,7 +52,7 @@ void SceneItem::Load(QDataStream *const dataStream)
 		//printf("Name: %s\n", name.toStdString().c_str());
 		//printf("Pos: (%d, %d)\n", pos.x(), pos.y());
 
-		SceneObject *sObj = new SceneObject();
+		auto sObj = QSharedPointer<SceneObject>(new SceneObject());
 
 		sObj->pObj = static_cast<ObjectItem*>(ResourceView::Get()->GetItem(id));
 		sObj->pSpr = nullptr;
@@ -86,17 +81,18 @@ void SceneItem::Show(QWidget * wndParent)
 {
 	if (!m_pItemWnd)
 	{
-		m_pItemWnd = new SceneItemWindow(wndParent);
-		m_pItemWnd->FillData(this);
+		m_pItemWnd = QSharedPointer<SceneItemWindow>(new SceneItemWindow(wndParent));
+
+		if (!m_pItemWnd->FillData(this))
+			m_pItemWnd.reset();
+
 		m_pItemWnd->show();
 	}
 }
 
 void SceneItem::Close()
 {
-	if (m_pItemWnd)
-	{
-		delete m_pItemWnd;
-		m_pItemWnd = nullptr;
-	}
+	m_pItemWnd->close();
+
+	m_pItemWnd.reset();
 }

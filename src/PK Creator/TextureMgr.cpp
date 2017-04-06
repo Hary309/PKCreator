@@ -14,7 +14,6 @@ TextureMgr::TextureMgr()
 
 TextureMgr::~TextureMgr()
 {
-	Reset();
 }
 
 bool TextureMgr::LoadTexture(SpriteItem *sprite)
@@ -28,21 +27,19 @@ bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSi
 {
 	printf("Loading texture \"%s\" \"%s\"... ", name.toStdString().c_str(), path.toStdString().c_str());
 
-	for (int i = 0; i < m_textures.size(); ++i)
+	for (auto tex : m_textures)
 	{
-		if (m_textures[i]->name == name)
+		if (tex->name == name)
 		{
 			printf("[EXIST]\n");
 			return false;
 		}
 	}
 
-	sf::Texture *pTex = new sf::Texture();
+	auto pTex = QSharedPointer<sf::Texture>(new sf::Texture());
 	
 	if (!pTex->create(size.width(), size.height()))
 	{
-		delete pTex;
-
 		printf("[FAIL]\n");
 
 		return false;
@@ -50,14 +47,12 @@ bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSi
 	
 	if (!pTex->loadFromFile(path.toStdString()))
 	{
-		delete pTex;
-
 		printf("[FAIL]\n");
 
 		return false;
 	}
 
-	TexInfo *pTexItem = new TexInfo();
+	auto pTexItem = QSharedPointer<TexInfo>(new TexInfo);
 
 	pTexItem->pTex = pTex;
 	pTexItem->name = name;
@@ -72,34 +67,14 @@ bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSi
 
 TextureMgr::TexInfo *TextureMgr::GetTexture(const QString &name)
 {
-	for (TexInfo *pTex : m_textures)
+	for (auto pTex : m_textures)
 	{
 		if (pTex)
 		{
 			if (pTex->name == name)
-				return pTex;
+				return pTex.data();
 		}
 	}
 
 	return nullptr; 
-}
-
-void TextureMgr::Reset()
-{
-	for (int i = 0; i < m_textures.size(); ++i)
-	{
-		if (m_textures[i])
-		{
-			if (m_textures[i]->pTex)
-			{
-				delete m_textures[i]->pTex;
-				m_textures[i]->pTex = nullptr;
-			}
-
-			delete m_textures[i];
-			m_textures[i] = nullptr;
-		}
-	}
-
-	m_textures.clear();
 }

@@ -4,6 +4,7 @@
 #include <QStandardItem>
 #include <QDataStream>
 #include <QDateTime>
+#include <QSharedPointer>
 
 class QStandardItem;
 class ItemWindow;
@@ -20,12 +21,12 @@ public:
 	};
 
 protected:
-	qint64			m_id;
-	Type			m_type;
-	QString			m_itemName;
+	qint64							m_id;
+	Type							m_type;
+	QString							m_itemName;
 
-	QStandardItem	*m_pTreeItem;
-	ItemWindow		*m_pItemWnd;
+	QStandardItem					*m_pTreeItem;
+	QSharedPointer <ItemWindow>		m_pItemWnd;
 
 public:
 	Item(QStandardItem *item, const QString &itemName)
@@ -54,7 +55,7 @@ public:
 	virtual void Show(QWidget *wndParent) = 0;
 	virtual void Close() = 0;
 
-	// to sort
-	bool operator<(const Item *item) const { return m_type < item->GetType(); }
+
+	static bool SavingComparison(const QSharedPointer<Item> &item1, const QSharedPointer<Item> &item2) { return item1->GetType() < item2->GetType(); }
 };
 

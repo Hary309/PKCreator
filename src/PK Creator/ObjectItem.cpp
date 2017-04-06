@@ -1,6 +1,6 @@
 #include "ObjectItem.h"
 
-#include <EventItem.h>
+#include <EventObjectItem.h>
 #include <SpriteItem.h>
 #include <ResourceView.h>
 #include <ObjectItemWindow.h>
@@ -19,22 +19,6 @@ ObjectItem::ObjectItem(QStandardItem *item, const QString &itemName)
 
 ObjectItem::~ObjectItem()
 {
-	for (int i = 0; i < m_events.size(); ++i)
-	{
-		if (m_events[i])
-		{
-			delete m_events[i];
-			m_events[i] = nullptr;
-		}
-	}
-
-	m_events.clear();
-
-	if (m_pItemWnd)
-	{
-		delete m_pItemWnd;
-		m_pItemWnd = nullptr;
-	}
 }
 
 void ObjectItem::SetName(const QString &name)
@@ -43,23 +27,25 @@ void ObjectItem::SetName(const QString &name)
 	m_pTreeItem->setText(name);
 }
 
-EventItem *ObjectItem::GetEvent(int eventType)
+EventObjectItem *ObjectItem::GetEvent(int eventType)
 {
-	for (int i = 0; i < m_events.size(); ++i)
+	return nullptr;
+
+	/*for (int i = 0; i < m_events.size(); ++i)
 	{
 		if (m_events[i]->GetType() == eventType)
 			return m_events[i];
 	}
 
-	return nullptr;
+	return nullptr;*/
 }
 
-EventItem * ObjectItem::GetEvent(QStandardItem *item)
+EventObjectItem *ObjectItem::GetEvent(QStandardItem *item)
 {
-	for (int i = 0; i < m_events.size(); ++i)
+	for (auto e : m_events)
 	{
-		if (m_events[i]->GetItem() == item)
-			return m_events[i];
+		if (e->GetItem() == item)
+			return e.data();
 	}
 
 	return nullptr;
@@ -83,7 +69,7 @@ void ObjectItem::Load(QDataStream *const dataStream)
 
 		*dataStream >> type;
 
-		EventItem *eventItem = new EventItem(EventItem::Type(type), nullptr);
+		auto eventItem = QSharedPointer<EventObjectItem>(new EventObjectItem(EventObjectItem::Type(type), nullptr));
 		eventItem->Load(dataStream);
 
 		m_events.push_back(eventItem);
@@ -96,21 +82,24 @@ void ObjectItem::Save(QDataStream *const dataStream)
 
 	*dataStream << (m_pCurrSpr ? m_pCurrSpr->GetID() : static_cast<long long>(-1)) << m_events.size();
 
-	for (int i = 0; i < m_events.size(); ++i)
+	for (auto e : m_events)
 	{
-		if (m_events[i])
+		if (e)
 		{
-			m_events[i]->Save(dataStream);
+			e->Save(dataStream);
 		}
 	}
 }
 
-void ObjectItem::Show(QWidget * wndParent)
+void ObjectItem::Show(QWidget *wndParent)
 {
 	if (!m_pItemWnd)
 	{
-		m_pItemWnd = new ObjectItemWindow(wndParent);
-		m_pItemWnd->FillData(this);
+		m_pItemWnd = QSharedPointer<ObjectItemWindow>(new ObjectItemWindow(wndParent));
+
+		if (!m_pItemWnd->FillData(this))
+			m_pItemWnd.reset();
+
 		m_pItemWnd->show();
 	}
 }
@@ -119,9 +108,5 @@ void ObjectItem::Close()
 {
 	m_pItemWnd->close();
 
-	if (m_pItemWnd)
-	{
-		delete m_pItemWnd;
-		m_pItemWnd = nullptr;
-	}
+	m_pItemWnd.reset();
 }

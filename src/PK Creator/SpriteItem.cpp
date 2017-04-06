@@ -21,11 +21,6 @@ SpriteItem::SpriteItem( QStandardItem *item, const QString &itemName)
 
 SpriteItem::~SpriteItem()
 {
-	if (m_pItemWnd)
-	{
-		delete m_pItemWnd;
-		m_pItemWnd = nullptr;
-	}
 }
 
 void SpriteItem::SetName(const QString &name)
@@ -52,14 +47,11 @@ void SpriteItem::Show(QWidget *wndParent)
 {
 	if (!m_pItemWnd)
 	{
-		m_pItemWnd = new SpriteItemWindow(wndParent);
-		if (!m_pItemWnd->FillData(this))
-		{
-			delete m_pItemWnd;
-			m_pItemWnd = nullptr;
+		m_pItemWnd = QSharedPointer<SpriteItemWindow>(new SpriteItemWindow(wndParent));
 
-			return;
-		}
+		if (!m_pItemWnd->FillData(this))
+			m_pItemWnd.reset();
+
 		m_pItemWnd->show();
 	}
 }
@@ -68,9 +60,5 @@ void SpriteItem::Close()
 {
 	m_pItemWnd->close();
 
-	if (m_pItemWnd)
-	{
-		delete m_pItemWnd;
-		m_pItemWnd = nullptr;
-	}
+	m_pItemWnd.reset();
 }

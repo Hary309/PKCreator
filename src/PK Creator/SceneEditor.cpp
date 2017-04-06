@@ -33,11 +33,11 @@ SceneEditor::SceneEditor(QWidget *parent)
 	setAttribute(Qt::WA_PaintOnScreen);
 	setAttribute(Qt::WA_NoSystemBackground);
 
-	m_pRenderer = new sf::RenderWindow(HWND(winId()));
-	m_pTexMgr = new TextureMgr();
+	m_pRenderer = QSharedPointer<sf::RenderWindow>(new sf::RenderWindow(HWND(winId())));
+	m_pTexMgr = QSharedPointer<TextureMgr>(new TextureMgr());
 
-	m_hLine = new sf::RectangleShape(sf::Vector2f(1, m_windowSize.height()));
-	m_vLine = new sf::RectangleShape(sf::Vector2f(m_windowSize.width(), 1));
+	m_hLine = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(1, m_windowSize.height())));
+	m_vLine = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_windowSize.width(), 1)));
 
 	m_hLine->setFillColor(sf::Color(0, 0, 0));
 	m_vLine->setFillColor(sf::Color(0, 0, 0));
@@ -47,47 +47,12 @@ SceneEditor::SceneEditor(QWidget *parent)
 
 SceneEditor::~SceneEditor()
 {
-	if (m_pRenderer)
-	{
-		delete m_pRenderer;
-		m_pRenderer = nullptr;
-	}
-
-	if (m_hLine)
-	{
-		delete m_hLine;
-		m_hLine = nullptr;
-	}
-
-	if (m_vLine)
-	{
-		delete m_vLine;
-		m_vLine = nullptr;
-	}
-
-	if (m_pTexMgr)
-	{
-		delete m_pTexMgr;
-		m_pTexMgr = nullptr;
-	}
-
-	for (SceneObject *obj : *m_pObjects)
-	{
-		if (obj)
-		{
-			if (obj->pSpr)
-			{
-				delete obj->pSpr;
-				obj->pSpr = nullptr;
-			}
-		}
-	}
 }
 
 void SceneEditor::SetSource(SceneItem *sceneItem)
 {
 	m_pSceneItem = sceneItem;
-	m_pObjects = &sceneItem->m_objects;
+	m_pObjects =  &sceneItem->m_objects;
 
 	for (auto obj : *m_pObjects)
 	{
@@ -98,7 +63,7 @@ void SceneEditor::SetSource(SceneItem *sceneItem)
 		if (!texInfo)
 			continue;
 
-		obj->pSpr = new sf::Sprite(*texInfo->pTex);
+		obj->pSpr = QSharedPointer<sf::Sprite>(new sf::Sprite(*texInfo->pTex));
 		obj->pSpr->setOrigin(texInfo->center.x(), texInfo->center.y());
 		obj->pSpr->setPosition(obj->pos.x(), obj->pos.y());
 	}
@@ -112,8 +77,7 @@ void SceneEditor::Render()
 
 		if (m_pCurrObj)
 		{
-			sf::Sprite *spr = m_pCurrObj->pSpr;
-
+			sf::Sprite *spr = m_pCurrObj->pSpr.data();
 			if (spr)
 			{
 				sf::IntRect rect = spr->getTextureRect();
@@ -146,7 +110,7 @@ void SceneEditor::Render()
 			}
 		}
 
-		for (SceneObject *sObj : *m_pObjects)
+		for (auto sObj : *m_pObjects)
 		{
 			if (sObj && sObj->pSpr)
 			{
@@ -198,11 +162,11 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 {
 	for (int i = 0; i < m_pObjects->size(); ++i)
 	{
-		SceneObject *obj = m_pObjects->at(i);
+		auto obj = m_pObjects->at(i);
 
 		if (obj)
 		{
-			sf::Sprite *spr = obj->pSpr;
+			auto spr = obj->pSpr;
 
 			if (spr)
 			{
@@ -215,12 +179,9 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 					e->pos().y() <= int(pos.y + rect.height))
 				{
 					if (e->button() == Qt::MouseButton::LeftButton)
-						m_pCurrObj = obj;
+						m_pCurrObj = obj.data();
 					else if (e->button() == Qt::MouseButton::RightButton)
 					{
-						delete spr;
-						delete obj;
-
 						m_pObjects->removeAt(i);
 						m_pCurrObj = nullptr;
 					}
@@ -245,10 +206,10 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 	if (!texInfo)
 		return;
 
-	SceneObject *sObj = new SceneObject();
+	auto sObj = QSharedPointer<SceneObject>(new SceneObject());
 
 	sObj->pObj = m_pSelectedObj;
-	sObj->pSpr = new sf::Sprite(*texInfo->pTex);
+	sObj->pSpr = QSharedPointer<sf::Sprite>(new sf::Sprite(*texInfo->pTex));
 	sObj->pSpr->setOrigin(texInfo->center.x(), texInfo->center.y());
 
 	QPoint pos;
@@ -260,7 +221,7 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 
 	m_pObjects->push_back(sObj);
 
-	m_pCurrObj = sObj;
+	m_pCurrObj = sObj.data();
 }
 
 void SceneEditor::mouseReleaseEvent(QMouseEvent *e)

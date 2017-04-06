@@ -3,7 +3,11 @@
 #include <ui_WelcomeWindow.h>
 
 #include <QDialog>
-#include <QList>
+#include <QVector>
+
+#include <QSharedPointer>
+
+#include <Windows.h>
 
 class QWidget;
 
@@ -23,12 +27,15 @@ class WelcomeWindow : public QDialog
 	Q_OBJECT
 
 private:
-	Ui::WelcomeWindow		m_ui;
-	QList<Project*>			m_projectList;
+	Ui::WelcomeWindow					m_ui;
+	QVector<QSharedPointer<Project>>	m_projectList;
 
-	MainWindow				*m_pMainWnd;
+	QSharedPointer<MainWindow>			m_pMainWnd;
 
-	static WelcomeWindow	*s_pInst;
+	static WelcomeWindow				*s_pInst;
+
+protected:
+	virtual void showEvent(QShowEvent *e) override;
 
 public:
 	explicit WelcomeWindow(QWidget *parent = nullptr);

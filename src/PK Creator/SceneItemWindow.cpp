@@ -19,15 +19,15 @@
 SceneItemWindow::SceneItemWindow(QWidget* parent)
 	: ItemWindow(parent)
 {
-	ui.setupUi(this);
-	ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
+	m_ui.setupUi(this);
+	m_ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
 
 	m_pItemParent = nullptr;
 
-	m_pEditor = new SceneEditor(this);
+	m_pEditor = QSharedPointer<SceneEditor>(new SceneEditor(this));
 	m_pEditor->setObjectName(QStringLiteral("widget"));
 
-	ui.gridLayout_3->addWidget(m_pEditor);
+	m_ui.gridLayout_3->addWidget(m_pEditor.data());
 
 	QSize size = ResourceView::Get()->GetConfig()->GetWndSize();
 
@@ -35,22 +35,17 @@ SceneItemWindow::SceneItemWindow(QWidget* parent)
 
 	resize(size.height() + menuViewWidth + margin * 2, size.height() + statusBarHeight + margin * 2);
 
-	connect(ui.okButton, &QPushButton::clicked, this, &SceneItemWindow::OkButton_clicked);
-	connect(ui.bgColorButton, &QPushButton::clicked, this, &SceneItemWindow::BgColorButton_clicked);
-	connect(ui.objectList, &QListWidget::itemClicked, this, &SceneItemWindow::ObjectList_ItemClicked);
+	connect(m_ui.okButton, &QPushButton::clicked, this, &SceneItemWindow::OkButton_clicked);
+	connect(m_ui.bgColorButton, &QPushButton::clicked, this, &SceneItemWindow::BgColorButton_clicked);
+	connect(m_ui.objectList, &QListWidget::itemClicked, this, &SceneItemWindow::ObjectList_ItemClicked);
 
-	connect(ui.snapXBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SceneItemWindow::snapXBox_valueChanged);
-	connect(ui.snapYBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SceneItemWindow::snapYBox_valueChanged);
-	connect(ui.drawGrid, &QCheckBox::stateChanged, this, &SceneItemWindow::DrawGrid_stateChanged);
+	connect(m_ui.snapXBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SceneItemWindow::snapXBox_valueChanged);
+	connect(m_ui.snapYBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SceneItemWindow::snapYBox_valueChanged);
+	connect(m_ui.drawGrid, &QCheckBox::stateChanged, this, &SceneItemWindow::DrawGrid_stateChanged);
 }
 
 SceneItemWindow::~SceneItemWindow()
 {
-	if (m_pEditor)
-	{
-		delete m_pEditor;
-		m_pEditor = nullptr;
-	}
 }
 
 bool SceneItemWindow::FillData(Item *item)
@@ -59,7 +54,7 @@ bool SceneItemWindow::FillData(Item *item)
 
 	setWindowTitle(item->GetName());
 
-	ui.nameEdit->setText(item->GetName());
+	m_ui.nameEdit->setText(item->GetName());
 
 	RefreshObjectList();
 
@@ -69,7 +64,7 @@ bool SceneItemWindow::FillData(Item *item)
 	QColor color(m_pItemParent->m_bgColor >> 8);
 
 	QString newColor = QString::asprintf("background-color: rgb(%d, %d, %d);", color.red(), color.green(), color.blue());
-	ui.bgColorButton->setStyleSheet(newColor);
+	m_ui.bgColorButton->setStyleSheet(newColor);
 
 	return true;
 }
@@ -82,34 +77,33 @@ void SceneItemWindow::RefreshObjectList()
 	if (!m_pEditor->GetTexMgr())
 		return;
 
-	ui.objectList->clear();
+	m_ui.objectList->clear();
 
-	qDeleteAll(m_objectsList);
 	m_objectsList.clear();
 
 	QVector<Item*> items = ResourceView::Get()->GetItemsByType(Item::OBJECT);
 
-	for (int i = 0; i < items.size(); ++i)
+	for (auto item : items)
 	{
-		ObjectItem *obj = reinterpret_cast<ObjectItem*>(items[i]);
-		QListWidgetItem *item = new QListWidgetItem();
+		ObjectItem *obj = reinterpret_cast<ObjectItem*>(item);
+		QListWidgetItem *listWidgetItem = new QListWidgetItem();
 
-		item->setText(obj->GetName());
+		listWidgetItem->setText(obj->GetName());
 
 		SpriteItem *spr = obj->GetSprite();
 
-		ObjectListItem *listItem = new ObjectListItem;
+		auto listItem = QSharedPointer<ObjectListItem>(new ObjectListItem);
 
-		listItem->listItem = item;
+		listItem->listItem = listWidgetItem;
 		listItem->id = obj->GetID();
 
 		m_objectsList.push_back(listItem);
 
 		if (spr)
 		{
-			item->setIcon(QIcon(ResourceView::Get()->GetMainDir() + spr->GetTexPath()));
+			listWidgetItem->setIcon(QIcon(ResourceView::Get()->GetMainDir() + spr->GetTexPath()));
 
-			ui.objectList->addItem(item);
+			m_ui.objectList->addItem(listWidgetItem);
 		}
 	}
 }
@@ -119,7 +113,7 @@ SceneItemWindow::ObjectListItem *SceneItemWindow::GetObjectListItem(QListWidgetI
 	for (int i = 0; i < m_objectsList.size(); ++i)
 	{
 		if (m_objectsList[i]->listItem == item)
-			return m_objectsList[i];
+			return m_objectsList[i].data();
 	}
 
 	return nullptr;
@@ -144,7 +138,7 @@ void SceneItemWindow::showEvent(QShowEvent *e)
 
 void SceneItemWindow::OkButton_clicked()
 {
-	QString name = ui.nameEdit->text();
+	QString name = m_ui.nameEdit->text();
 
 	if (ResourceView::Get()->IsNameExists(name) && name != m_pItemParent->m_itemName)
 	{
@@ -163,13 +157,12 @@ void SceneItemWindow::BgColorButton_clicked()
 	colorDialog.setCurrentColor(m_pItemParent->m_bgColor >> 8);
 	colorDialog.setWindowTitle("Choose background color");
 
-
 	connect(&colorDialog, &QColorDialog::colorSelected, this, [this](const QColor &color)
 	{
 		// Bit shift deletes alpha
 		m_pItemParent->m_bgColor = (color.rgb() << 8);
 		QString newColor = QString::asprintf("background-color: rgb(%d, %d, %d);", color.red(), color.green(), color.blue());
-		ui.bgColorButton->setStyleSheet(newColor);
+		m_ui.bgColorButton->setStyleSheet(newColor);
 	}
 	);
 

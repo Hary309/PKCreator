@@ -13,6 +13,8 @@
 
 #include <QMessageBox>
 
+#include <Windows.h>
+
 ResourceView *ResourceView::s_pInst;
 
 ResourceView::ResourceView(QWidget * parent)
@@ -27,7 +29,7 @@ ResourceView::ResourceView(QWidget * parent)
 	m_lastObjectID = 0;
 	m_lastSceneID = 0;
 
-	m_pProConfig = new Config(this);
+	m_pProConfig = QSharedPointer<Config>(new Config(this));
 
 	s_pInst = this;
 
@@ -37,43 +39,21 @@ ResourceView::ResourceView(QWidget * parent)
 
 ResourceView::~ResourceView()
 {
-	if (m_pTreeModel)
-	{
-		delete m_pTreeModel;
-		m_pTreeModel = nullptr;
-	}
-
-	for (int i = 0; i < m_items.size(); ++i)
-	{
-		if (m_items[i])
-		{
-			delete m_items[i];
-			m_items[i] = nullptr;
-		}
-	}
-
-	m_items.clear();
-
-	if (m_pProConfig)
-	{
-		delete m_pProConfig;
-		m_pProConfig = nullptr;
-	}
 }
 
 void ResourceView::Setup()
 {
-	m_pTreeModel = new QStandardItemModel();
+	m_pTreeModel = QSharedPointer<QStandardItemModel>(new QStandardItemModel());
 
-	setModel(m_pTreeModel);
+	setModel(m_pTreeModel.data());
 	setHeaderHidden(true);
 	setAnimated(true);
 
 	setMouseTracking(true);
-
-	for (int i = 0; i < m_defaultModel.size(); ++i)
+	
+	for (auto name : m_defaultModel)
 	{
-		QStandardItem *item = new QStandardItem(m_defaultModel.at(i));
+		QStandardItem *item = new QStandardItem(name);
 
 		QIcon icon;
 		icon.addFile(":/ResourceView/res/folderCloseIcon.png");
@@ -192,7 +172,7 @@ void ResourceView::ActionAdd_triggered()
 			}
 			treeItem = InsertRow(treeItem, name);
 
-			Item *item = new SpriteItem(treeItem, name);
+			auto item = QSharedPointer<SpriteItem>(new SpriteItem(treeItem, name));
 			item->Show(this);
 			m_items.push_back(item);
 		} break;
@@ -211,7 +191,7 @@ void ResourceView::ActionAdd_triggered()
 			}
 			treeItem = InsertRow(treeItem, name);
 
-			Item *item = new ObjectItem(treeItem, name);
+			auto item = QSharedPointer<ObjectItem>(new ObjectItem(treeItem, name));
 			item->Show(this);
 			m_items.push_back(item);
 		} break;
@@ -226,7 +206,7 @@ void ResourceView::ActionAdd_triggered()
 			}
 			treeItem = InsertRow(treeItem, name);
 
-			Item *item = new SceneItem(treeItem, name);
+			auto item = QSharedPointer<SceneItem>(new SceneItem(treeItem, name));
 			item->Show(this);
 			m_items.push_back(item);
 		} break;
@@ -265,11 +245,7 @@ void ResourceView::ActionRemove_triggered()
 	for (int i = 0; i < m_items.size(); ++i)
 	{
 		if (m_items[i]->GetTreeItem() == treeItem)
-		{
-			delete m_items[i];
-			m_items[i] = nullptr;
 			m_items.removeAt(i);
-		}
 	}
 }
 
@@ -299,7 +275,9 @@ void ResourceView::InsertItem(Item *item)
 	if (!item)
 		return;
 
-	m_items.push_back(item);
+	QSharedPointer<Item> ptr(item);
+
+	m_items.push_back(ptr);
 }
 
 bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
@@ -363,7 +341,10 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 			return false;
 
 		item->Load(dataStream);
-		m_items.push_back(item);
+
+		QSharedPointer<Item> sharedItem(item);
+
+		m_items.push_back(sharedItem);
 	}
 
 	return true;
@@ -375,24 +356,22 @@ void ResourceView::Save(QDataStream *const dataStream)
 
 	*dataStream << m_lastSpriteID << m_lastObjectID << m_lastSceneID;
 
-	qSort(m_items.begin(), m_items.end(), ItemsSort);
+	qSort(m_items.begin(), m_items.end(), Item::SavingComparison);
 
 	*dataStream << m_items.size();
 
-	for (int i = 0; i < m_items.size(); ++i)
+	for (auto item : m_items)
 	{
-		if (m_items[i])
-		{
-			m_items[i]->Save(dataStream);
-		}
+		if (item)
+			item->Save(dataStream);
 	}
 }
 
 bool ResourceView::IsNameExists(const QString &name)
 {
-	for (int i = 0; i < m_items.size(); ++i)
+	for (auto item : m_items)
 	{
-		if (m_items[i]->GetName() == name)
+		if (item->GetName() == name)
 			return true;
 	}
 
@@ -401,23 +380,21 @@ bool ResourceView::IsNameExists(const QString &name)
 
 Item *ResourceView::GetItem(const QStandardItem *treeItem)
 {
-	for (int i = 0; i < m_items.size(); ++i)
+	for (auto item : m_items)
 	{
-		if (m_items[i]->GetTreeItem() == treeItem)
-		{
-			return m_items[i];
-		}
+		if (item->GetTreeItem() == treeItem)
+			return item.data();
 	}
 
 	return nullptr;
 }
 
-Item * ResourceView::GetItem(long long id)
+Item *ResourceView::GetItem(long long id)
 {
-	for (int i = 0; i < m_items.size() ; ++i)
+	for (auto item : m_items)
 	{
-		if (m_items[i]->GetID() == id)
-			return m_items[i];
+		if (item->GetID() == id)
+			return item.data();
 	}
 
 	return nullptr;
@@ -427,14 +404,12 @@ QVector<Item*> ResourceView::GetItemsByType(int type)
 {
 	QVector<Item*> items;
 
-	for (int i = 0; i < m_items.size(); ++i)
+	for (auto item : m_items)
 	{
-		if (m_items[i])
+		if (item)
 		{
-			if (m_items[i]->GetType() == type)
-			{
-				items.push_back(m_items[i]);
-			}
+			if (item->GetType() == type)
+				items.push_back(item.data());
 		}
 	}
 

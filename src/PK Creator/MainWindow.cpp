@@ -12,39 +12,33 @@ MainWindow *MainWindow::s_pInst;
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
-	ui.setupUi(this);
+	m_ui.setupUi(this);
 
-	m_pResView = new ResourceView(ui.centralWidget);
+	m_pResView = new ResourceView(m_ui.centralWidget);
 	m_pResView->setObjectName(QStringLiteral("resourceView"));
 	m_pResView->setEnabled(true);
 	m_pResView->setMouseTracking(true);
 	m_pResView->setMaximumSize(QSize(200, 16777215));
 	m_pResView->setMinimumSize(QSize(200, 400));
 	m_pResView->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
-	ui.verticalLayout->addWidget(m_pResView);
+	m_ui.verticalLayout->addWidget(m_pResView);
 
 	setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::Dialog);
 
-	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(ActionExit_triggered()));
-	connect(ui.actionNewProject, SIGNAL(triggered()), this, SLOT(ActionOpenProject_triggered()));
-	connect(ui.actionOpenProject, SIGNAL(triggered()), this, SLOT(ActionOpenProject_triggered()));
-	connect(ui.actionSaveProject, SIGNAL(triggered()), this, SLOT(ActionSaveProject_triggered()));
+	connect(m_ui.actionExit, &QAction::triggered, this, &MainWindow::ActionExit_triggered);
+	connect(m_ui.actionNewProject, &QAction::triggered, this, &MainWindow::ActionOpenProject_triggered);
+	connect(m_ui.actionOpenProject, &QAction::triggered, this, &MainWindow::ActionOpenProject_triggered);
+	connect(m_ui.actionSaveProject, &QAction::triggered, this, &MainWindow::ActionSaveProject_triggered);
 
 	s_pInst = this;
 }
 
 MainWindow::~MainWindow()
 {
-	if (m_pResView)
-	{
-		delete m_pResView;
-		m_pResView = nullptr;
-	}
-
 	s_pInst = nullptr;
 }
 
-bool MainWindow::Load(Project * project)
+bool MainWindow::Load(Project *project)
 {
 	m_proInfo = project;
 
@@ -122,7 +116,7 @@ void MainWindow::ActionSaveProject_triggered() const
 
 void MainWindow::ActionOpenProject_triggered()
 {
-	hide();
+	close();
 	WelcomeWindow::Get()->show();
 }
 

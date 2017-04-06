@@ -16,20 +16,20 @@ namespace sf
 
 struct SceneObject
 {
-	const ObjectItem	*pObj;
-	sf::Sprite			*pSpr;
-	QPoint				pos;
+	const ObjectItem			*pObj;
+	QSharedPointer<sf::Sprite>	pSpr;
+	QPoint						pos;
 };
 
 class SceneItem : public Item
 {
 protected:
-	QList<SceneObject*>		m_objects;
+	QVector<QSharedPointer<SceneObject>>	m_objects;
 
-	unsigned				m_bgColor;
+	unsigned								m_bgColor;
 
-	friend					SceneItemWindow;
-	friend					SceneEditor;
+	friend									SceneItemWindow;
+	friend									SceneEditor;
 
 public:
 	SceneItem(QStandardItem *item, const QString &itemName);

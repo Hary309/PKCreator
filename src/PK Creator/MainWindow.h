@@ -13,12 +13,12 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 private:
-	Ui::MainWindowClass		ui;
-	ResourceView			*m_pResView;
+	Ui::MainWindowClass				m_ui;
+	ResourceView					*m_pResView;
 
-	Project					*m_proInfo;
+	Project							*m_proInfo;
 
-	static MainWindow		*s_pInst;
+	static MainWindow				*s_pInst;
 
 public:
 	explicit MainWindow(QWidget *parent = nullptr);

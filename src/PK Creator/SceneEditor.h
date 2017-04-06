@@ -2,7 +2,8 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <QList>
+#include <QVector>
+#include <QSharedPointer>
 
 namespace sf
 {
@@ -21,29 +22,29 @@ class SceneEditor : public QWidget
 	Q_OBJECT
 
 private:
-	sf::RenderWindow		*m_pRenderer;
+	QSharedPointer<sf::RenderWindow>		m_pRenderer;
 
-	QList<SceneObject*>		*m_pObjects;
-	SceneItem				*m_pSceneItem;
+	QVector<QSharedPointer<SceneObject>>	*m_pObjects;
+	SceneItem								*m_pSceneItem;
 
-	const ObjectItem		*m_pSelectedObj;
+	const ObjectItem						*m_pSelectedObj;
 
-	SceneObject				*m_pCurrObj;
+	SceneObject								*m_pCurrObj;
 
-	TextureMgr				*m_pTexMgr;
+	QSharedPointer<TextureMgr>				m_pTexMgr;
 
-	bool					m_drawGrid;
-	int						m_snapX;
-	int						m_snapY;
+	bool									m_drawGrid;
+	int										m_snapX;
+	int										m_snapY;
 
-	QSize					m_windowSize;
+	QSize									m_windowSize;
 
-	sf::RectangleShape		*m_hLine; // horizontal
-	sf::RectangleShape		*m_vLine; // vertical
+	QSharedPointer<sf::RectangleShape>		m_hLine; // horizontal
+	QSharedPointer<sf::RectangleShape>		m_vLine; // vertical
 
-	QTimer					m_timer;
+	QTimer									m_timer;
 
-	friend					SceneItemWindow;
+	friend									SceneItemWindow;
 
 protected:
 	void mouseMoveEvent(QMouseEvent *e)		override;
@@ -59,7 +60,7 @@ public:
 
 	void SetCurrObject(const ObjectItem *obj) { m_pSelectedObj = obj; }
 
-	TextureMgr *GetTexMgr() const { return m_pTexMgr; }
+	TextureMgr *GetTexMgr() const { return m_pTexMgr.data(); }
 
 public slots:
 	void Render();

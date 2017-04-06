@@ -5,6 +5,7 @@
 #include <ItemWindow.h>
 
 #include <QVector>
+#include <QSharedPointer>
 
 class SpriteItem;
 class ObjectItem;
@@ -21,18 +22,18 @@ class ObjectItemWindow : public ItemWindow
 	Q_OBJECT
 
 private:
-	Ui::ObjectWindow		m_ui;
+	Ui::ObjectWindow						m_ui;
 
-	ObjectItem				*m_pItemParent;
+	ObjectItem								*m_pItemParent;
 
-	QStandardItemModel		*m_pModel;
+	QSharedPointer<QStandardItemModel>		m_pModel;
 
-	QMenu					*m_pContextMenu;
-	QList<QAction*>			m_actionList;
+	QSharedPointer<QMenu>					m_pContextMenu;
+	QVector<QSharedPointer<QAction>>		m_actionList;
 
-	QVector<ComboBoxItem*>	m_sprites;
+	QVector<QSharedPointer<ComboBoxItem>>	m_sprites;
 
-	bool					m_inited;
+	bool									m_inited;
 
 private:
 	void CreateContextMenu();

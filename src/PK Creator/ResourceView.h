@@ -3,6 +3,8 @@
 #include <QTreeView>
 #include <QVector>
 
+#include <QSharedPointer>
+
 class QStandardItemModel;
 class QStandardItem;
 
@@ -15,22 +17,22 @@ class ResourceView : public QTreeView
 	Q_OBJECT
 
 private:
-	QStringList			m_defaultModel;
+	QStringList							m_defaultModel;
 
-	QString				m_mainDir;
+	QString								m_mainDir;
 
 	// to save
-	QStandardItemModel	*m_pTreeModel;
+	QSharedPointer<QStandardItemModel>  m_pTreeModel;
 	
-	QVector<Item*>		m_items;
+	QVector<QSharedPointer<Item>>		m_items;
 	
-	Config				*m_pProConfig;
+	QSharedPointer<Config>				m_pProConfig;
 
-	int					m_lastSpriteID;
-	int					m_lastObjectID;
-	int					m_lastSceneID;
+	int									m_lastSpriteID;
+	int									m_lastObjectID;
+	int									m_lastSceneID;
 	
-	static ResourceView *s_pInst;
+	static ResourceView					*s_pInst;
 
 private:
 	void mousePressEvent(QMouseEvent * mouseEvent) override;
@@ -64,9 +66,9 @@ public:
 	const QString &GetMainDir() const { return m_mainDir; }
 
 	// @type - Item::Type
-	QVector <Item*> GetItemsByType(int type);
+	QVector <Item*>					GetItemsByType(int type);
 
-	Config		*GetConfig()		const { return m_pProConfig; }
+	Config		*GetConfig()		const { return m_pProConfig.data(); }
 
 	static ResourceView *Get() { return s_pInst; }
 

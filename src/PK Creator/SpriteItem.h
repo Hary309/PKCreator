@@ -24,8 +24,8 @@ public:
 
 	void SetName(const QString &name)			override;
 
-	void Load(QDataStream * const dataStream)	override;
-	void Save(QDataStream * const dataStream)	override;
+	void Load(QDataStream *const dataStream)	override;
+	void Save(QDataStream *const dataStream)	override;
 
 	void Show(QWidget *wndParent)				override;
 	void Close()								override;

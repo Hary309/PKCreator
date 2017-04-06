@@ -8,7 +8,8 @@ class Item;
 
 #include <ItemWindow.h>
 
-#include <QList>
+#include <QVector>
+#include <QSharedPointer>
 
 class SceneItemWindow : public ItemWindow
 {
@@ -21,11 +22,11 @@ class SceneItemWindow : public ItemWindow
 	};
 
 private:
-	Ui::SceneWindow			ui;
-	SceneItem				*m_pItemParent;
-	SceneEditor				*m_pEditor;
+	Ui::SceneWindow								m_ui;
+	SceneItem									*m_pItemParent;
+	QSharedPointer<SceneEditor>					m_pEditor;
 
-	QList<ObjectListItem*>  m_objectsList;
+	QVector<QSharedPointer<ObjectListItem>>		m_objectsList;
 
 protected:
 	void enterEvent(QEvent *event) override;

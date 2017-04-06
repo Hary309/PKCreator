@@ -37,15 +37,6 @@ WelcomeWindow::WelcomeWindow(QWidget *parent)
 WelcomeWindow::~WelcomeWindow()
 {
 	SaveList();
-
-	qDeleteAll(m_projectList);
-	m_projectList.clear();
-
-	if (m_pMainWnd)
-	{
-		delete m_pMainWnd;
-		m_pMainWnd = nullptr;
-	}
 }
 
 void WelcomeWindow::SaveList()
@@ -59,9 +50,9 @@ void WelcomeWindow::SaveList()
 
 	stream << m_projectList.size();
 
-	for (int i = 0; i < m_projectList.size(); ++i)
+	for (auto projectListItem : m_projectList)
 	{
-		stream << m_projectList[i]->name << m_projectList[i]->timestamp << m_projectList[i]->path;
+		stream << projectListItem->name << projectListItem->timestamp << projectListItem->path;
 	}
 
 	file.close();
@@ -103,7 +94,7 @@ void WelcomeWindow::LoadList()
 		treeItem->setText(1, time.toString("h:mm:ss dd.MM.yy"));
 		treeItem->setText(2, path);
 
-		Project *pro = new Project;
+		auto pro = QSharedPointer<Project>(new Project);
 		pro->name = name;
 		pro->timestamp = timestamp;
 		pro->path = path;
@@ -111,10 +102,14 @@ void WelcomeWindow::LoadList()
 		m_projectList.push_back(pro);
 
 		m_ui.projectView->insertTopLevelItem(m_ui.projectView->topLevelItemCount(), treeItem);
-
 	}
 
 	file.close();
+}
+
+void WelcomeWindow::showEvent(QShowEvent *e)
+{
+
 }
 
 void WelcomeWindow::CreateButton_clicked()
@@ -170,7 +165,8 @@ void WelcomeWindow::CreateButton_clicked()
 	treeItem->setText(1, currDateTime.toString("h:mm:ss dd.MM.yy"));
 	treeItem->setText(2, folderPath);
 
-	Project *pro = new Project;
+	auto pro = QSharedPointer<Project>(new Project);
+
 	pro->name = projectName;
 	pro->timestamp = currDateTime.toSecsSinceEpoch();
 	pro->path = folderPath;
@@ -196,30 +192,21 @@ void WelcomeWindow::OpenButton_clicked()
 
 	QTreeWidgetItem *treeItem = m_ui.projectView->selectedItems().first();
 
-	for (int i = 0; i < m_projectList.size(); ++i)
+	for (auto projectListItem : m_projectList)
 	{
-		if (m_projectList[i])
+		if (projectListItem)
 		{
-			if (m_projectList[i]->item == treeItem)
+			if (projectListItem->item == treeItem)
 			{
-				if (m_pMainWnd)
-				{
-					delete m_pMainWnd;
-					m_pMainWnd = nullptr;
-				}
+				m_pMainWnd.reset(new MainWindow);
 
-				m_pMainWnd = new MainWindow();
-
-				if (!m_pMainWnd->Load(m_projectList[i]))
+				if (!m_pMainWnd->Load(projectListItem.data()))
 				{
 					QMessageBox::critical(this, "Error", "Cannot open project!");
 					
-					delete m_pMainWnd;
-					m_pMainWnd = nullptr;
-
+					m_pMainWnd.reset();
 					return;
 				}
-
 				m_pMainWnd->show();
 				this->hide();
 			}
@@ -252,9 +239,6 @@ void WelcomeWindow::DeleteButton_clicked()
 				QFile file(m_projectList[i]->path + m_projectList[i]->name + ".pkp");
 				file.remove();
 
-				delete m_projectList[i];
-				m_projectList[i] = nullptr;
-
 				m_projectList.removeAt(i);
 			
 				delete treeItem;
@@ -276,13 +260,13 @@ void WelcomeWindow::OpenFolderButton_clicked()
 
 	QTreeWidgetItem *treeItem = m_ui.projectView->selectedItems().first();
 
-	for (int i = 0; i < m_projectList.size(); ++i)
+	for (auto projectListItem : m_projectList)
 	{
-		if (m_projectList[i])
+		if (projectListItem)
 		{
-			if (m_projectList[i]->item == treeItem)
+			if (projectListItem->item == treeItem)
 			{
-				ShellExecuteA(nullptr, "open", m_projectList[i]->path.toStdString().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
+				ShellExecuteA(nullptr, "open", projectListItem->path.toStdString().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
 			}
 		}
 	}

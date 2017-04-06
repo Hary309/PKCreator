@@ -3,22 +3,20 @@
 Config::Config(QWidget *parent)
 	: QDialog(parent)
 {
-	ui.setupUi(this);
+	m_ui.setupUi(this);
 
 	if (parent)
-	{
-		ui.titleEdit->setText("Game");
-	}
+		m_ui.titleEdit->setText("Game");
 
-	ui.widthEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{2,4}")));
-	ui.heightEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{2,4}")));
+	m_ui.widthEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{2,4}")));
+	m_ui.heightEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{2,4}")));
 
-	ui.widthEdit->setText("800");
-	ui.heightEdit->setText("600");
+	m_ui.widthEdit->setText("800");
+	m_ui.heightEdit->setText("600");
 
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-	connect(ui.okButton, &QPushButton::clicked, this, [this] { this->hide(); });
+	connect(m_ui.okButton, &QPushButton::clicked, this, [this] { this->hide(); });
 }
 
 Config::~Config()
@@ -34,21 +32,21 @@ void Config::Load(QDataStream *const dataStream) const
 
 	printf("\"%s\" %dx%d\n", title.toStdString().c_str(), width.toInt(), height.toInt());
 
-	ui.titleEdit->setText(title);
-	ui.widthEdit->setText(width);
-	ui.heightEdit->setText(height);
+	m_ui.titleEdit->setText(title);
+	m_ui.widthEdit->setText(width);
+	m_ui.heightEdit->setText(height);
 }
 
 void Config::Save(QDataStream *const dataStream) const
 {
-	*dataStream << ui.titleEdit->text() << ui.widthEdit->text() << ui.heightEdit->text();
+	*dataStream << m_ui.titleEdit->text() << m_ui.widthEdit->text() << m_ui.heightEdit->text();
 }
 
 QSize Config::GetWndSize() const
 {
 	QSize size;
-	size.setWidth(ui.widthEdit->text().toInt());
-	size.setHeight(ui.heightEdit->text().toInt());
+	size.setWidth(m_ui.widthEdit->text().toInt());
+	size.setHeight(m_ui.heightEdit->text().toInt());
 
 	return size;
 }

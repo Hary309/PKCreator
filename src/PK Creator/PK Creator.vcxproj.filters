@@ -51,6 +51,12 @@
     <Filter Include="Header Files\Items\Windows">
       <UniqueIdentifier>{769aee32-4be3-4fca-8669-21509d813dec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Blueprint">
+      <UniqueIdentifier>{1d98c642-4c0d-4162-8790-f8b494502228}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Blueprint">
+      <UniqueIdentifier>{8c233feb-2e46-4df1-93e4-069785928999}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -67,9 +73,6 @@
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_MainWindow.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="EventItem.cpp">
-      <Filter>Source Files\Items</Filter>
     </ClCompile>
     <ClCompile Include="WelcomeWindow.cpp">
       <Filter>Source Files</Filter>
@@ -119,15 +122,6 @@
     <ClCompile Include="ObjectItemWindow.cpp">
       <Filter>Source Files\Items\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="EventItemWindow.cpp">
-      <Filter>Source Files\Items\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Debug\moc_EventItemWindow.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Release\moc_EventItemWindow.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectItem.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
@@ -155,13 +149,25 @@
     <ClCompile Include="SceneEditor.cpp">
       <Filter>Source Files\SceneEditor</Filter>
     </ClCompile>
+    <ClCompile Include="EventObjectItem.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_EventObjectItemWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_EventObjectItemWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="EventObjectItemWindow.cpp">
+      <Filter>Source Files\Items\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files\Blueprint</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="EventItem.h">
-      <Filter>Header Files\Items</Filter>
     </CustomBuild>
     <CustomBuild Include="WelcomeWindow.h">
       <Filter>Header Files</Filter>
@@ -171,9 +177,6 @@
     </CustomBuild>
     <CustomBuild Include="Resources.qrc">
       <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="CodeWindow.ui">
-      <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="ConfigWindow.ui">
       <Filter>Form Files</Filter>
@@ -205,9 +208,6 @@
     <CustomBuild Include="ObjectItemWindow.h">
       <Filter>Header Files\Items\Windows</Filter>
     </CustomBuild>
-    <CustomBuild Include="EventItemWindow.h">
-      <Filter>Header Files\Items\Windows</Filter>
-    </CustomBuild>
     <CustomBuild Include="ObjectItem.h">
       <Filter>Header Files\Items</Filter>
     </CustomBuild>
@@ -223,15 +223,18 @@
     <CustomBuild Include="SceneEditor.h">
       <Filter>Header Files\SceneEditor</Filter>
     </CustomBuild>
+    <CustomBuild Include="EventObjectItem.h">
+      <Filter>Header Files\Items</Filter>
+    </CustomBuild>
+    <CustomBuild Include="EventObjectItemWindow.h">
+      <Filter>Header Files\Items\Windows</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_ObjectWindow.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\QtFiles\ui_CodeWindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
@@ -251,6 +254,9 @@
     </ClInclude>
     <ClInclude Include="TextureMgr.h">
       <Filter>Header Files\SceneEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files\Blueprint</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

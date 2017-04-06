@@ -7,7 +7,7 @@ class Config : public QDialog
 	Q_OBJECT
 
 private:
-	Ui::Config ui;
+	Ui::Config m_ui;
 
 public:
 	explicit Config(QWidget *parent = Q_NULLPTR);
