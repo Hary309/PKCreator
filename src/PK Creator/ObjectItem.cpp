@@ -29,15 +29,13 @@ void ObjectItem::SetName(const QString &name)
 
 EventObjectItem *ObjectItem::GetEvent(int eventType)
 {
-	return nullptr;
-
-	/*for (int i = 0; i < m_events.size(); ++i)
+	for (int i = 0; i < m_events.size(); ++i)
 	{
 		if (m_events[i]->GetType() == eventType)
-			return m_events[i];
+			return m_events[i].data();
 	}
 
-	return nullptr;*/
+	return nullptr;
 }
 
 EventObjectItem *ObjectItem::GetEvent(QStandardItem *item)
@@ -98,7 +96,10 @@ void ObjectItem::Show(QWidget *wndParent)
 		m_pItemWnd = QSharedPointer<ObjectItemWindow>(new ObjectItemWindow(wndParent));
 
 		if (!m_pItemWnd->FillData(this))
+		{
 			m_pItemWnd.reset();
+			return;
+		}
 
 		m_pItemWnd->show();
 	}
@@ -107,6 +108,11 @@ void ObjectItem::Show(QWidget *wndParent)
 void ObjectItem::Close()
 {
 	m_pItemWnd->close();
+
+	for (auto e : m_events)
+	{
+		e->Close();
+	}
 
 	m_pItemWnd.reset();
 }

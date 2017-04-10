@@ -140,7 +140,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="InputWidget.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="NodeMgr.cpp" />
+    <ClCompile Include="OutputWidget.cpp" />
     <ClCompile Include="SceneEditor.cpp" />
     <ClCompile Include="EventObjectItem.cpp" />
     <ClCompile Include="EventObjectItemWindow.cpp" />
@@ -154,7 +157,11 @@
     <ClCompile Include="SpriteItem.cpp" />
     <ClCompile Include="SpriteItemWindow.cpp" />
     <ClCompile Include="TextureMgr.cpp" />
+    <ClCompile Include="VisualNode.cpp" />
+    <ClCompile Include="VisualWidget.cpp" />
     <ClCompile Include="WelcomeWindow.cpp" />
+    <ClCompile Include="Widget.cpp" />
+    <ClCompile Include="WireMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -175,6 +182,13 @@
     <ClInclude Include="..\..\QtFiles\ui_SceneWindow.h" />
     <ClInclude Include="..\..\QtFiles\ui_SpriteWindow.h" />
     <ClInclude Include="..\..\QtFiles\ui_WelcomeWindow.h" />
+    <ClInclude Include="InputWidget.h" />
+    <ClInclude Include="NodeMgr.h" />
+    <ClInclude Include="OutputWidget.h" />
+    <ClInclude Include="VisualNode.h" />
+    <ClInclude Include="VisualWidget.h" />
+    <ClInclude Include="Widget.h" />
+    <ClInclude Include="WireMgr.h" />
     <CustomBuild Include="SpriteItemWindow.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing SpriteItemWindow.h...</Message>

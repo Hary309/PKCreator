@@ -69,14 +69,18 @@ bool ObjectItemWindow::FillData(Item* item)
 	if (!set)
 		m_ui.spriteBox->setCurrentIndex(0);
 
-	/*for (auto eventItem : m_pItemParent->m_events)
+	for (auto eventItem : m_pItemParent->m_events)
 	{
-		QStandardItem *item = new QStandardItem(m_pItemParent->m_eventName[eventItem->GetType()]);
+		int type = eventItem->GetType();
+
+		printf("Type: %d\n", type);
+
+		auto item = new QStandardItem(m_pItemParent->m_eventName[type]);
 
 		eventItem->SetItem(item);
 
 		m_pModel->appendRow(item);
-	}*/
+	}
 
 	CreateContextMenu();
 

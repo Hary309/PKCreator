@@ -57,6 +57,12 @@
     <Filter Include="Source Files\Blueprint">
       <UniqueIdentifier>{8c233feb-2e46-4df1-93e4-069785928999}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Blueprint\Editor">
+      <UniqueIdentifier>{9eb5863a-a999-42ff-a36a-8000a9fc5540}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Blueprint\Editor">
+      <UniqueIdentifier>{890cd958-9f65-4c21-b190-df7232b85d32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -164,6 +170,27 @@
     <ClCompile Include="Node.cpp">
       <Filter>Source Files\Blueprint</Filter>
     </ClCompile>
+    <ClCompile Include="Widget.cpp">
+      <Filter>Source Files\Blueprint</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualNode.cpp">
+      <Filter>Source Files\Blueprint\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeMgr.cpp">
+      <Filter>Source Files\Blueprint\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWidget.cpp">
+      <Filter>Source Files\Blueprint\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualWidget.cpp">
+      <Filter>Source Files\Blueprint\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="InputWidget.cpp">
+      <Filter>Source Files\Blueprint\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="WireMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -257,6 +284,27 @@
     </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>Header Files\Blueprint</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget.h">
+      <Filter>Header Files\Blueprint</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualNode.h">
+      <Filter>Header Files\Blueprint\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeMgr.h">
+      <Filter>Header Files\Blueprint\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWidget.h">
+      <Filter>Header Files\Blueprint\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualWidget.h">
+      <Filter>Header Files\Blueprint\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="InputWidget.h">
+      <Filter>Header Files\Blueprint\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="WireMgr.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
