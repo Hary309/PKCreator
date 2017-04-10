@@ -38,7 +38,10 @@ void EventObjectItem::Show(QWidget *parent)
 
 void EventObjectItem::Close()
 {
-	m_pItemWnd->close();
-	
-	m_pItemWnd.reset();
+	if (m_pItemWnd)
+	{
+		m_pItemWnd->close();
+
+		m_pItemWnd.reset(nullptr);
+	}
 }
