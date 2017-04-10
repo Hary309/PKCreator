@@ -3,7 +3,7 @@
 #include <EventObjectItemWindow.h>
 
 EventObjectItem::EventObjectItem(Type type, QStandardItem *item)
-	: m_item(item)
+	: m_eventType(type), m_item(item)
 {
 	m_pItemWnd = nullptr;
 }

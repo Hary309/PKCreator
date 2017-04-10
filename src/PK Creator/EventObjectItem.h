@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSharedPointer>
+#include <QVector>
 
 class QStandardItem;
 class QCloseEvent;
@@ -8,12 +9,14 @@ class QWidget;
 
 class EventObjectItemWindow;
 
+class Node;
+
 class EventObjectItem
 {
 public:
 	enum Type
 	{
-		CREATE,
+		CREATE = 0,
 		DESTROY,
 		PULSE,
 		RENDER
@@ -21,6 +24,10 @@ public:
 
 protected:
 	QStandardItem							*m_item;
+
+	Type									m_eventType;
+
+	QVector<QSharedPointer<Node>>			m_nodes;
 
 	QSharedPointer<EventObjectItemWindow>	m_pItemWnd;
 
@@ -38,5 +45,7 @@ public:
 
 	void Show(QWidget *parent);
 	void Close();
+
+	Type GetType() const { return m_eventType; }
 };
 
