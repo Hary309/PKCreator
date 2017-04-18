@@ -1,49 +1,44 @@
+/*
+*********************************************************************
+* File          : EventObjectItemWindow.h
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #pragma once
 
-#include <QDialog>
+#include <QMainWindow>
 #include <QTimer>
 
 #include <QSharedPointer>
 
-class QStandardItem;
 class QCloseEvent;
 
 class EventObjectItem;
+class BlueprintEditor;
 
-class NodeMgr;
-
-namespace sf
-{
-	class RenderWindow;
-	class RectangleShape;
-	class Event;
-}
-
-class EventObjectItemWindow : public QDialog
+class EventObjectItemWindow : public QMainWindow
 {
 	Q_OBJECT
 
 private:
-	QSharedPointer<sf::RenderWindow>		m_pRenderer;
-	EventObjectItem							*m_pItemParent;
+	EventObjectItem		*m_pItemParent;
 
-	QSharedPointer<NodeMgr>					m_pNodeMgr;
-
-	QTimer									m_timer;
+	BlueprintEditor		*m_pBpEditor;
 
 protected:
 	void closeEvent(QCloseEvent *e) override;
-	void mouseMoveEvent(QMouseEvent *e) override;
-	void mousePressEvent(QMouseEvent *e) override;
-	void mouseReleaseEvent(QMouseEvent *e) override;
+	void resizeEvent(QResizeEvent *e) override;
+
 
 public:
 	explicit EventObjectItemWindow(QWidget *parent);
 	~EventObjectItemWindow();
 
+
+
 	bool FillData(EventObjectItem *item);
 
-	void Render();
-	void Event(sf::Event *e);
 };
 

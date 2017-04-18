@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : SceneItemWindow.cpp
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #include "SceneItemWindow.h"
 
 #include <QVector>

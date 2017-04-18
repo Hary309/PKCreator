@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : EventObjectItem.h
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #pragma once
 
 #include <QSharedPointer>
@@ -9,6 +17,7 @@ class QWidget;
 
 class EventObjectItemWindow;
 
+class BlueprintEditor;
 class Node;
 
 class EventObjectItem
@@ -31,7 +40,7 @@ protected:
 
 	QSharedPointer<EventObjectItemWindow>	m_pItemWnd;
 
-	friend									EventObjectItemWindow;
+	friend									BlueprintEditor;
 
 public:
 	EventObjectItem(Type type, QStandardItem *item);

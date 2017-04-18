@@ -1,7 +1,13 @@
+/*
+*********************************************************************
+* File          : main.cpp
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #include "WelcomeWindow.h"
 #include <QtWidgets/QApplication>
-
-#include <Windows.h>
 
 int main(int argc, char **argv)
 {

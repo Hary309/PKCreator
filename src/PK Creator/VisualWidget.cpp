@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : VisualWidget.cpp
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #include "VisualWidget.h"
 
 #include <SFML/Graphics.hpp>
@@ -29,4 +37,12 @@ VisualWidget::VisualWidget(VisualNode *parent, Widget *data, sf::Vector2f offset
 
 VisualWidget::~VisualWidget()
 {
+}
+
+void VisualWidget::SetPin(bool pin) const
+{
+	if (pin)
+		m_pPin->setFillColor(m_pPin->getOutlineColor());
+	else
+		m_pPin->setFillColor(sf::Color::Transparent);
 }

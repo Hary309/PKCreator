@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : VisualNode.h
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #pragma once
 
 #include <QSharedPointer>
@@ -18,12 +26,21 @@ namespace sf
 class NodeMgr;
 class Node;
 
+class WireExec;
+
 class QEvent;
 
 class VisualWidget;
 
 class VisualNode
 {
+public:
+	enum ExecType
+	{
+		ExecFrom,	// left
+		ExecTo		// right
+	};
+
 private:
 	NodeMgr									*m_pNodeMgr;
 
@@ -41,6 +58,12 @@ private:
 	QSharedPointer<sf::RectangleShape>		m_pBody;
 	QSharedPointer<sf::Text>				m_pTitle;
 
+	QSharedPointer<sf::CircleShape>			m_pShapeExecFrom;
+	QSharedPointer<sf::CircleShape>			m_pShapeExecTo;
+
+	WireExec								*m_pWireExecFrom;
+	WireExec								*m_pWireExecTo;
+
 	sf::Vector2f							m_mouseOffset;
 
 	bool									m_moving;
@@ -52,9 +75,23 @@ public:
 	void Render(sf::RenderWindow *renderer);
 	void Event(sf::Event *e);
 
+	void ConnectAllWires();
+
 	void MoveTo(sf::Vector2f pos) const;
 
+	void AddExecFrom();
+	void AddExecTo();
+
+	void ConnectedWith(VisualNode *node, ExecType execType);
+	void Connect(ExecType execType);
+	void Disconnect(WireExec *wire);
+
+	void SetPin(bool pin, ExecType pinType);
+
 	int GetWidth() const { return m_boxWidth; }
+
+	auto GetAllInputs() const { return &m_visualInputs; }
+	auto GetAllOutputs() const { return &m_visualOutputs; }
 
 	Node *GetData() const { return m_pData; }
 	NodeMgr *GetNodeMgr() const { return m_pNodeMgr; }

@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : Config.cpp
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #include "Config.h"
 
 Config::Config(QWidget *parent)

@@ -40,6 +40,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>..\..\obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
@@ -50,7 +51,7 @@
       <PreprocessorDefinitions>SFML_STATIC;UNICODE;WIN32;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;.\..\..\QtFiles\$(ConfigurationName);.\..\..\QtFiles;$(DXSDK_DIR)\Include\;..\Vendor\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
@@ -60,6 +61,7 @@
       <AdditionalLibraryDirectories>$(QTDIR)\lib;..\Vendor\SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -79,6 +81,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_BlueprintEditor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\QtFiles\Debug\moc_Config.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -112,6 +117,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_BlueprintEditor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_Config.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -139,6 +147,7 @@
     <ClCompile Include="..\..\QtFiles\Release\moc_WelcomeWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="BlueprintEditor.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="InputWidget.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -161,6 +170,7 @@
     <ClCompile Include="VisualWidget.cpp" />
     <ClCompile Include="WelcomeWindow.cpp" />
     <ClCompile Include="Widget.cpp" />
+    <ClCompile Include="Wire.cpp" />
     <ClCompile Include="WireMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -182,12 +192,25 @@
     <ClInclude Include="..\..\QtFiles\ui_SceneWindow.h" />
     <ClInclude Include="..\..\QtFiles\ui_SpriteWindow.h" />
     <ClInclude Include="..\..\QtFiles\ui_WelcomeWindow.h" />
+    <CustomBuild Include="BlueprintEditor.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing BlueprintEditor.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\..\..\QtFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\..\..\QtFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DSFML_STATIC -DUNICODE -DWIN32 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I.\..\..\QtFiles\$(ConfigurationName)\." "-I.\..\..\QtFiles" "-I$(DXSDK_DIR)\Include" "-I.\..\Vendor\SFML\include"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing BlueprintEditor.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\..\..\QtFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\..\..\QtFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DSFML_STATIC -DUNICODE -DWIN32 -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I.\..\..\QtFiles\$(ConfigurationName)\." "-I.\..\..\QtFiles" "-I$(DXSDK_DIR)\Include" "-I.\..\Vendor\SFML\include"</Command>
+    </CustomBuild>
     <ClInclude Include="InputWidget.h" />
     <ClInclude Include="NodeMgr.h" />
     <ClInclude Include="OutputWidget.h" />
     <ClInclude Include="VisualNode.h" />
     <ClInclude Include="VisualWidget.h" />
     <ClInclude Include="Widget.h" />
+    <ClInclude Include="Wire.h" />
+    <ClInclude Include="WireData.h" />
+    <ClInclude Include="WireExec.h" />
     <ClInclude Include="WireMgr.h" />
     <CustomBuild Include="SpriteItemWindow.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

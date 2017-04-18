@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : TextureMgr.cpp
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #include "TextureMgr.h"
 
 #include <SFML/Graphics/Texture.hpp>

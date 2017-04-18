@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : ObjectItem.h
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #pragma once
 #include <Item.h>
 

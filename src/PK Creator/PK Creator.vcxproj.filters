@@ -63,6 +63,18 @@
     <Filter Include="Source Files\Blueprint\Editor">
       <UniqueIdentifier>{890cd958-9f65-4c21-b190-df7232b85d32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Blueprint\Editor\Widgets">
+      <UniqueIdentifier>{8dc2cc9d-b616-4074-af01-fce6db8d6d75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Blueprint\Editor\Widgets">
+      <UniqueIdentifier>{5fdac0b3-d77e-4fdd-b9ff-5938ae0d9b40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Blueprint\Editor\Wires">
+      <UniqueIdentifier>{2ca783aa-df0c-4311-8522-339b8aa837a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Blueprint\Editor\Wires">
+      <UniqueIdentifier>{5111cc39-65e1-4601-8b21-e641a9590920}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -179,17 +191,29 @@
     <ClCompile Include="NodeMgr.cpp">
       <Filter>Source Files\Blueprint\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="OutputWidget.cpp">
-      <Filter>Source Files\Blueprint\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="VisualWidget.cpp">
-      <Filter>Source Files\Blueprint\Editor</Filter>
+      <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWidget.cpp">
+      <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="InputWidget.cpp">
-      <Filter>Source Files\Blueprint\Editor</Filter>
+      <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="WireMgr.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Blueprint\Editor\Wires</Filter>
+    </ClCompile>
+    <ClCompile Include="Wire.cpp">
+      <Filter>Source Files\Blueprint\Editor\Wires</Filter>
+    </ClCompile>
+    <ClCompile Include="BlueprintEditor.cpp">
+      <Filter>Source Files\Blueprint\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_BlueprintEditor.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_BlueprintEditor.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +280,9 @@
     <CustomBuild Include="EventObjectItemWindow.h">
       <Filter>Header Files\Items\Windows</Filter>
     </CustomBuild>
+    <CustomBuild Include="BlueprintEditor.h">
+      <Filter>Header Files\Blueprint\Editor</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
@@ -294,17 +321,26 @@
     <ClInclude Include="NodeMgr.h">
       <Filter>Header Files\Blueprint\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="InputWidget.h">
+      <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
+    </ClInclude>
     <ClInclude Include="OutputWidget.h">
-      <Filter>Header Files\Blueprint\Editor</Filter>
+      <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="VisualWidget.h">
-      <Filter>Header Files\Blueprint\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="InputWidget.h">
-      <Filter>Header Files\Blueprint\Editor</Filter>
+      <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="WireMgr.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Blueprint\Editor\Wires</Filter>
+    </ClInclude>
+    <ClInclude Include="Wire.h">
+      <Filter>Header Files\Blueprint\Editor\Wires</Filter>
+    </ClInclude>
+    <ClInclude Include="WireData.h">
+      <Filter>Header Files\Blueprint\Editor\Wires</Filter>
+    </ClInclude>
+    <ClInclude Include="WireExec.h">
+      <Filter>Header Files\Blueprint\Editor\Wires</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

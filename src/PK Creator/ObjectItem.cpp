@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : ObjectItem.cpp
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #include "ObjectItem.h"
 
 #include <EventObjectItem.h>
@@ -53,6 +61,7 @@ void ObjectItem::Load(QDataStream *const dataStream)
 {
 	Item::Load(dataStream);
 
+	// Sprite
 	long long id;
 	int size;
 

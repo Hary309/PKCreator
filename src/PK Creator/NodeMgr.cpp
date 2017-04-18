@@ -1,7 +1,18 @@
+/*
+*********************************************************************
+* File          : NodeMgr.cpp
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #include "NodeMgr.h"
+
+#include <conio.h>
 
 #include <Node.h>
 #include <VisualNode.h>
+#include <WireMgr.h>
 
 #include <SFML/Graphics/Font.hpp>
 
@@ -11,10 +22,21 @@ NodeMgr::NodeMgr(QVector<QSharedPointer<Node>> *nodes)
 	m_pFont = QSharedPointer<sf::Font>(new sf::Font());
 	m_pFont->loadFromFile("calibri.ttf");
 
+	m_pWireMgr = QSharedPointer<WireMgr>(new WireMgr(this));
+
 	for (auto node : *m_pNodes)
 	{
-		auto sharedVisualNode = QSharedPointer<VisualNode>(new VisualNode(this, node.data()));
-		m_visualNodes.push_back(sharedVisualNode);
+		if (node)
+		{
+			auto sharedVisualNode = QSharedPointer<VisualNode>(new VisualNode(this, node.data()));
+			m_visualNodes.push_back(sharedVisualNode);
+		}
+	}
+
+	for (auto visualNode : m_visualNodes)
+	{
+		if (visualNode)
+			visualNode->ConnectAllWires();
 	}
 }
 
@@ -24,8 +46,8 @@ NodeMgr::~NodeMgr()
 
 VisualNode *NodeMgr::AddNode(Node *node)
 {
-	//if (!m_pNodes->empty())
-	//	return nullptr;
+	if (m_pNodes->size() == 2)
+		return nullptr;
 
 	if (!node)
 		return nullptr;
@@ -87,6 +109,20 @@ bool NodeMgr::RemoveNode(VisualNode *visualNode)
 	return false;
 }
 
+VisualNode *NodeMgr::GetNode(Node *node)
+{
+	for (auto visualNode : m_visualNodes)
+	{
+		if (visualNode)
+		{
+			if (visualNode->GetData() == node)
+				return visualNode.data();
+		}
+	}
+	
+	return nullptr;
+}
+
 void NodeMgr::Render(sf::RenderWindow *renderer)
 {
 	for (auto node : m_visualNodes)
@@ -94,6 +130,8 @@ void NodeMgr::Render(sf::RenderWindow *renderer)
 		if (node)
 			node->Render(renderer);
 	}
+
+	m_pWireMgr->Render(renderer);
 }
 
 void NodeMgr::Event(sf::Event *e)
@@ -103,4 +141,6 @@ void NodeMgr::Event(sf::Event *e)
 		if (node)
 			node->Event(e);
 	}
+
+	m_pWireMgr->Event(e);
 }

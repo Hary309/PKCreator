@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : TreeModel.cpp
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #include "TreeModel.h"
 
 #include <QStringList>
