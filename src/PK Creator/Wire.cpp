@@ -28,6 +28,9 @@ void Wire::Render(sf::RenderWindow *renderer)
 	const float maxLen = 120.f;
 	constexpr float minOffset = 60.f;
 
+	QVector<sf::Vector2f> points;
+
+
 	if (offset.x < minOffset)
 	{
 		float offsetAbs = abs(offset.x - minOffset - len);
@@ -38,22 +41,31 @@ void Wire::Render(sf::RenderWindow *renderer)
 		len = offsetAbs;
 	}
 
-	QVector<sf::Vector2f> points;
-	points.push_back(sf::Vector2f(m_startPos));
-	points.push_back(sf::Vector2f(m_startPos.x + len, m_startPos.y));
-	points.push_back(sf::Vector2f(m_startPos.x + len, m_startPos.y + offset.y / 2));
-	points.push_back(sf::Vector2f(m_endPos.x - len, m_startPos.y + offset.y / 2));
-	points.push_back(sf::Vector2f(m_endPos.x - len, m_endPos.y));
-	points.push_back(sf::Vector2f(m_endPos));
+	if ((m_startPos.x + len) - (m_endPos.x - len) < 0.f)
+	{
+		len = offset.x / 2;
 
-	/*{
+		points.push_back(sf::Vector2f(m_startPos));
+		points.push_back(sf::Vector2f(m_startPos.x + len, m_startPos.y));
+		points.push_back(sf::Vector2f(m_endPos.x - len, m_endPos.y));
+		points.push_back(sf::Vector2f(m_endPos.x, m_endPos.y));
+	}
+	else
+	{
+		points.push_back(sf::Vector2f(m_startPos));
+		points.push_back(sf::Vector2f(m_startPos.x + len, m_startPos.y));
+		points.push_back(sf::Vector2f(m_startPos.x + len, m_startPos.y + offset.y / 2));
+		points.push_back(sf::Vector2f(m_endPos.x - len, m_startPos.y + offset.y / 2));
+		points.push_back(sf::Vector2f(m_endPos.x - len, m_endPos.y));
+		points.push_back(sf::Vector2f(m_endPos));
+	}
+
+	/*{ // debug line
 		QVector<sf::Vertex> line;
-
-		sf::Color lineColor = sf::Color::Red;
 
 		for (int i = 0 ; i < points.size() ; ++i)
 		{
-			line.push_back(sf::Vertex(points[i], lineColor));
+			line.push_back(sf::Vertex(points[i], sf::Color::Red));
 		}
 
 		renderer->draw(&line[0], line.size(), sf::PrimitiveType::LineStrip);
@@ -62,16 +74,17 @@ void Wire::Render(sf::RenderWindow *renderer)
 	{
 		QVector<sf::Vertex> line;
 
-		for (int i = 0; i <= 100; i+=5)
+		for (int i = 0; i <= 100; i += 5)
 		{
 			float perc = i / 100.f;
 
 			line.push_back(sf::Vertex(CalcBezierCurve(points, perc)[0], m_wireColor));
-		
 		}
 
 		renderer->draw(&line[0], line.size(), sf::PrimitiveType::LineStrip);
 	}
+
+
 }
 
 QVector<sf::Vector2f> Wire::CalcBezierCurve(QVector<sf::Vector2f>& points, float perc)
