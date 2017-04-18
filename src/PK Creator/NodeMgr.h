@@ -22,10 +22,13 @@ class Node;
 class VisualNode;
 class QEvent;
 class WireMgr;
+class BlueprintEditor;
 
 class NodeMgr
 {
 private:
+	BlueprintEditor							*m_pParent;
+
 	QVector<QSharedPointer<VisualNode>>		m_visualNodes;
 
 	QVector<QSharedPointer<Node>>			*m_pNodes;
@@ -35,7 +38,7 @@ private:
 	QSharedPointer<WireMgr>					m_pWireMgr;
 
 public:
-	NodeMgr(QVector<QSharedPointer<Node>> *nodes);
+	NodeMgr(BlueprintEditor *parent, QVector<QSharedPointer<Node>> *nodes);
 	~NodeMgr();
 
 	VisualNode *AddNode(Node *node);
@@ -50,6 +53,7 @@ public:
 	void Event(sf::Event *e);
 
 	sf::Font *GetFont() const { return m_pFont.data(); }
-	WireMgr *GetWireMgr() { return m_pWireMgr.data(); }
+	WireMgr *GetWireMgr() const { return m_pWireMgr.data(); }
+	BlueprintEditor *GetBpEditor() const { return m_pParent; }
 };
 

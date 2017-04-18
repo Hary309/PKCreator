@@ -8,6 +8,8 @@
 
 #include "VisualNode.h"
 
+#include <BlueprintEditor.h>
+
 #include <NodeMgr.h>
 #include <Node.h>
 
@@ -121,6 +123,9 @@ void VisualNode::Render(sf::RenderWindow *renderer)
 
 void VisualNode::Event(sf::Event *e)
 {
+	sf::Vector2f viewOffset = m_pNodeMgr->GetBpEditor()->GetViewOffset();
+	float scale = m_pNodeMgr->GetBpEditor()->GetScale();
+
 	switch (e->type)
 	{
 		case sf::Event::MouseButtonPressed:
@@ -129,7 +134,7 @@ void VisualNode::Event(sf::Event *e)
 			{
 				sf::Vector2f nodePos = m_pData->m_pos;
 				sf::Vector2f size = m_pHeader->getSize();
-				sf::Vector2f mousePos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y);
+				sf::Vector2f mousePos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y) * scale - viewOffset;
 
 
 				if (mousePos.x > nodePos.x &&
@@ -164,7 +169,7 @@ void VisualNode::Event(sf::Event *e)
 		case sf::Event::MouseMoved:
 		{
 			if (m_moving)
-				MoveTo(sf::Vector2f(e->mouseMove.x, e->mouseMove.y) - m_mouseOffset);
+				MoveTo(sf::Vector2f(e->mouseMove.x, e->mouseMove.y) * scale - m_mouseOffset - viewOffset);
 		} break;
 	default: ;
 	}

@@ -12,6 +12,7 @@
 
 #include <Widget.h>
 #include <NodeMgr.h>
+#include <BlueprintEditor.h>
 #include <VisualNode.h>
 #include <WireMgr.h>
 #include <Wire.h>
@@ -94,7 +95,10 @@ void OutputWidget::Event(sf::Event *e)
 {
 	if (e->type == sf::Event::MouseButtonPressed && e->mouseButton.button == sf::Mouse::Left)
 	{
-		auto cursorPos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y);
+		sf::Vector2f viewOffset = m_pParent->GetNodeMgr()->GetBpEditor()->GetViewOffset();
+		float scale = m_pParent->GetNodeMgr()->GetBpEditor()->GetScale();
+
+		auto cursorPos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y) * scale - viewOffset;
 		auto spacePos = m_pSpace->getPosition();
 		auto spaceSize = m_pSpace->getSize();
 

@@ -12,6 +12,9 @@
 
 #include <Widget.h>
 
+#include <NodeMgr.h>
+#include <BlueprintEditor.h>
+
 #include <Wire.h>
 #include <WireData.h>
 #include <WireExec.h>
@@ -236,7 +239,10 @@ void WireMgr::Event(sf::Event *e)
 {
 	if (e->type == sf::Event::MouseMoved)
 	{
-		m_cursorPos = sf::Vector2f(e->mouseMove.x, e->mouseMove.y);
+		sf::Vector2f viewOffset = m_pNodeMgr->GetBpEditor()->GetViewOffset();
+		float scale = m_pNodeMgr->GetBpEditor()->GetScale();
+
+		m_cursorPos = sf::Vector2f(e->mouseMove.x, e->mouseMove.y) * scale - viewOffset;
 
 		if (m_pCurrentLine)
 		{

@@ -16,8 +16,8 @@
 
 #include <SFML/Graphics/Font.hpp>
 
-NodeMgr::NodeMgr(QVector<QSharedPointer<Node>> *nodes)
-	: m_pNodes(nodes)
+NodeMgr::NodeMgr(BlueprintEditor *parent, QVector<QSharedPointer<Node>> *nodes)
+	: m_pParent(parent), m_pNodes(nodes)
 {
 	m_pFont = QSharedPointer<sf::Font>(new sf::Font());
 	m_pFont->loadFromFile("calibri.ttf");

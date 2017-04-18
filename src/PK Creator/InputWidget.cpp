@@ -11,6 +11,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <Widget.h>
+#include <BlueprintEditor.h>
 #include <NodeMgr.h>
 #include <VisualNode.h>
 #include <WireMgr.h>
@@ -78,7 +79,10 @@ void InputWidget::Event(sf::Event *e)
 {
 	if (e->type == sf::Event::MouseButtonPressed && (e->mouseButton.button == sf::Mouse::Left || e->mouseButton.button == sf::Mouse::Right))
 	{
-		auto cursorPos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y);
+		sf::Vector2f viewOffset = m_pParent->GetNodeMgr()->GetBpEditor()->GetViewOffset();
+		float scale = m_pParent->GetNodeMgr()->GetBpEditor()->GetScale();
+
+		auto cursorPos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y) * scale - viewOffset;
 		auto spacePos = m_pSpace->getPosition();
 		auto spaceSize = m_pSpace->getSize();
 

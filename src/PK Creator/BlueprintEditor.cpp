@@ -26,11 +26,16 @@ BlueprintEditor::BlueprintEditor(QWidget *parent)
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
 	m_pRenderer = QSharedPointer<sf::RenderWindow>(new sf::RenderWindow(HWND(winId()), settings));
+	m_basicViewPos = m_pRenderer->getView().getCenter();
+	m_basicViewSize = m_pRenderer->getView().getSize();
+	m_scale = 1.f;
 
 	m_timer.setInterval(24); // ~30 fps
 	m_timer.start();
 
 	m_pNodeMgr = nullptr;
+
+	m_viewMoving = false;
 
 	setMouseTracking(true);
 
@@ -43,13 +48,18 @@ BlueprintEditor::~BlueprintEditor()
 
 void BlueprintEditor::Resize(QSize size)
 {
+	// prevent deformation
 	m_pRenderer->setSize(sf::Vector2u(size.width(), size.height()));
 	m_pRenderer->setView(sf::View(sf::FloatRect(0.f, 0.f, size.width(), size.height())));
+
+	m_basicViewPos = m_pRenderer->getView().getCenter();
+	m_basicViewSize = m_pRenderer->getView().getSize();
+	m_scale = 1.f;
 }
 
 void BlueprintEditor::FillData(EventObjectItem *item)
 {
-	m_pNodeMgr = QSharedPointer<NodeMgr>(new NodeMgr(&item->m_nodes));
+	m_pNodeMgr = QSharedPointer<NodeMgr>(new NodeMgr(this, &item->m_nodes));
 
 	auto node = new Node("Object in box", sf::Vector2f(16.f, 16.f));
 	node->AddWidget(new Widget(node, "Width", Widget::INPUT));
@@ -66,7 +76,7 @@ void BlueprintEditor::FillData(EventObjectItem *item)
 	m_pNodeMgr->AddNode(node);
 }
 
-void BlueprintEditor::Render()
+void BlueprintEditor::Render() const
 {
 	if (m_pRenderer)
 	{
@@ -83,6 +93,51 @@ void BlueprintEditor::Event(sf::Event *e)
 {
 	if (m_pNodeMgr)
 		m_pNodeMgr->Event(e);
+
+	switch (e->type)
+	{
+		case sf::Event::MouseButtonPressed:
+		{
+			if (e->mouseButton.button == sf::Mouse::Right)
+			{
+				m_startViewPos = m_pRenderer->getView().getCenter();
+				m_cursorStartPos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y) * m_scale;
+				m_viewMoving = true;
+			}
+		} break;
+		case sf::Event::MouseButtonReleased:
+		{
+			m_viewMoving = false;
+		} break;
+		case sf::Event::MouseMoved:
+		{
+			if (m_viewMoving)
+			{
+				sf::View view = m_pRenderer->getView();
+
+				view.setCenter((m_startViewPos + m_cursorStartPos) - sf::Vector2f(e->mouseMove.x, e->mouseMove.y) * m_scale);
+
+				m_pRenderer->setView(view);
+			}
+		} break;
+		case sf::Event::MouseWheelMoved:
+		{
+			sf::View view = m_pRenderer->getView();
+
+			if (e->mouseWheel.delta > 0 && m_scale > 1.f)
+				view.zoom(0.9f);
+			else if (e->mouseWheel.delta < 0 && m_scale < 2.f)
+				view.zoom(1.1f);
+
+			m_scale = view.getSize().x / m_basicViewSize.x;
+
+			m_pRenderer->setView(view);
+		} break;
+	}
+}
+sf::Vector2f BlueprintEditor::GetViewOffset() const
+{
+	return m_basicViewPos - m_pRenderer->getView().getCenter() + (m_pRenderer->getView().getSize() - m_basicViewSize) / 2.f;
 }
 
 void BlueprintEditor::mouseMoveEvent(QMouseEvent *e)
@@ -127,6 +182,16 @@ void BlueprintEditor::mouseReleaseEvent(QMouseEvent *e)
 
 	if (e->button() == Qt::RightButton)
 		sfEvent.mouseButton.button = sf::Mouse::Right;
+
+	Event(&sfEvent);
+}
+
+void BlueprintEditor::wheelEvent(QWheelEvent *e)
+{
+	sf::Event sfEvent;
+
+	sfEvent.type = sf::Event::MouseWheelMoved;
+	sfEvent.mouseWheel.delta = e->delta();
 
 	Event(&sfEvent);
 }
