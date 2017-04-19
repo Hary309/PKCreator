@@ -12,6 +12,9 @@
 
 #include <QMouseEvent>
 
+#include <NodesWindow.h>
+#include <ResourceView.h>
+
 #include <EventObjectItem.h>
 
 #include <NodeMgr.h>
@@ -19,6 +22,7 @@
 #include <Widget.h>
 
 #include <Windows.h>
+#include <QMenu>
 
 BlueprintEditor::BlueprintEditor(QWidget *parent)
 	: QWidget(parent)
@@ -36,6 +40,7 @@ BlueprintEditor::BlueprintEditor(QWidget *parent)
 	m_pNodeMgr = nullptr;
 
 	m_viewMoving = false;
+	m_viewMoved = false;
 
 	setMouseTracking(true);
 
@@ -103,16 +108,24 @@ void BlueprintEditor::Event(sf::Event *e)
 				m_startViewPos = m_pRenderer->getView().getCenter();
 				m_cursorStartPos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y) * m_scale;
 				m_viewMoving = true;
+				m_viewMoved = false;
 			}
 		} break;
 		case sf::Event::MouseButtonReleased:
 		{
 			m_viewMoving = false;
+
+			if (m_viewMoved == false && e->mouseButton.button == sf::Mouse::Right)
+			{
+				ShowNodesWindow();
+			}
 		} break;
 		case sf::Event::MouseMoved:
 		{
 			if (m_viewMoving)
 			{
+				m_viewMoved = true;
+
 				sf::View view = m_pRenderer->getView();
 
 				view.setCenter((m_startViewPos + m_cursorStartPos) - sf::Vector2f(e->mouseMove.x, e->mouseMove.y) * m_scale);
@@ -135,6 +148,14 @@ void BlueprintEditor::Event(sf::Event *e)
 		} break;
 	}
 }
+
+void BlueprintEditor::ShowNodesWindow()
+{
+	NodesWindow *nodeWnd = ResourceView::Get()->GetNodesWindow();
+
+	nodeWnd->show();
+}
+
 sf::Vector2f BlueprintEditor::GetViewOffset() const
 {
 	return m_basicViewPos - m_pRenderer->getView().getCenter() + (m_pRenderer->getView().getSize() - m_basicViewSize) / 2.f;

@@ -18,6 +18,8 @@ class QStandardItem;
 
 class Item;
 
+class NodesWindow;
+
 class Config;
 
 class ResourceView : public QTreeView
@@ -28,6 +30,8 @@ private:
 	QStringList							m_defaultModel;
 
 	QString								m_mainDir;
+
+	QSharedPointer<NodesWindow>			m_pNodesWindow;
 
 	// to save
 	QSharedPointer<QStandardItemModel>  m_pTreeModel;
@@ -77,6 +81,8 @@ public:
 	QVector <Item*>					GetItemsByType(int type);
 
 	Config		*GetConfig()		const { return m_pProConfig.data(); }
+
+	NodesWindow *GetNodesWindow() { return m_pNodesWindow.data(); }
 
 	static ResourceView *Get() { return s_pInst; }
 

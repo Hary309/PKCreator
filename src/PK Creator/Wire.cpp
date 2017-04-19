@@ -83,8 +83,6 @@ void Wire::Render(sf::RenderWindow *renderer)
 
 		renderer->draw(&line[0], line.size(), sf::PrimitiveType::LineStrip);
 	}
-
-
 }
 
 QVector<sf::Vector2f> Wire::CalcBezierCurve(QVector<sf::Vector2f>& points, float perc)

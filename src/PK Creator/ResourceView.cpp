@@ -14,6 +14,8 @@
 #include <QMenu>
 #include <QCursor>
 
+#include <NodesWindow.h>
+
 #include <SpriteItem.h>
 #include <ObjectItem.h>
 #include <SceneItem.h>
@@ -40,6 +42,8 @@ ResourceView::ResourceView(QWidget * parent)
 	m_pProConfig = QSharedPointer<Config>(new Config(this));
 
 	s_pInst = this;
+
+	m_pNodesWindow = QSharedPointer<NodesWindow>(new NodesWindow(this));
 
 	connect(this, &QTreeView::expanded, this, &ResourceView::ResourceView_expanded);
 	connect(this, &QTreeView::collapsed, this, &ResourceView::ResourceView_collapsed);

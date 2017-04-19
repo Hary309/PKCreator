@@ -36,6 +36,7 @@ private:
 	sf::Vector2f							m_basicViewPos;
 	sf::Vector2f							m_basicViewSize;
 
+	bool									m_viewMoved;
 	bool									m_viewMoving;
 	sf::Vector2f							m_startViewPos;
 	sf::Vector2f							m_cursorStartPos;
@@ -59,6 +60,8 @@ public:
 
 	void Render() const;
 	void Event(sf::Event *e);
+
+	void ShowNodesWindow();
 
 	sf::Vector2f GetViewOffset() const;
 	float GetScale() const { return m_scale; }

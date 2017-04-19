@@ -179,9 +179,6 @@
     <ClCompile Include="EventObjectItemWindow.cpp">
       <Filter>Source Files\Items\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
-      <Filter>Source Files\Blueprint</Filter>
-    </ClCompile>
     <ClCompile Include="Widget.cpp">
       <Filter>Source Files\Blueprint</Filter>
     </ClCompile>
@@ -214,6 +211,18 @@
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_BlueprintEditor.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files\Blueprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_NodesWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_NodesWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="NodesWindow.cpp">
+      <Filter>Source Files\Blueprint\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +292,12 @@
     <CustomBuild Include="BlueprintEditor.h">
       <Filter>Header Files\Blueprint\Editor</Filter>
     </CustomBuild>
+    <CustomBuild Include="NodesWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="NodesWindow.h">
+      <Filter>Header Files\Blueprint\Editor</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
@@ -341,6 +356,9 @@
     </ClInclude>
     <ClInclude Include="WireExec.h">
       <Filter>Header Files\Blueprint\Editor\Wires</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_NodesWindow.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
