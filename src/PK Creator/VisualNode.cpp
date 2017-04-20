@@ -86,8 +86,11 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 	m_pWireExecTo = nullptr;
 	m_pWireExecFrom = nullptr;
 
-	AddExecFrom();
-	AddExecTo();
+	if (m_pData->m_execFrom)
+		AddExecFrom();
+
+	if (m_pData->m_execTo)
+		AddExecTo();
 
 	MoveTo(data->m_pos);
 }

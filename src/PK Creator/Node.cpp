@@ -8,7 +8,6 @@
 
 #include "Node.h"
 
-#include <QDateTime>
 #include <QDataStream>
 
 #include <Widget.h>
@@ -20,6 +19,9 @@ Node::Node(const QString &name, sf::Vector2f pos)
 	m_idExecFrom = m_idExecTo = 0;
 
 	m_id = qint64(this);
+
+	m_execFrom = false;
+	m_execTo = false;
 
 }
 
@@ -56,7 +58,7 @@ void Node::Load(QDataStream *const dataStream)
 
 	int nInputs = 0, nOutputs = 0;
 
-	*dataStream >> m_id >> x >> y >> m_name >> m_idExecFrom >> m_idExecTo;
+	*dataStream >> m_id >> x >> y >> m_name >> m_execFrom >> m_idExecFrom >> m_execTo >> m_idExecTo;
 	m_pos = sf::Vector2f(x, y);
 
 	*dataStream >> nInputs;
@@ -82,7 +84,7 @@ void Node::Load(QDataStream *const dataStream)
 
 void Node::Save(QDataStream *const dataStream)
 {
-	*dataStream << m_id << m_pos.x << m_pos.y << m_name << m_idExecFrom << m_idExecTo;
+	*dataStream << m_id << m_pos.x << m_pos.y << m_name << m_execFrom << m_idExecFrom << m_execTo << m_idExecTo;
 	*dataStream << m_inputs.size();
 
 	for (auto widget : m_inputs)

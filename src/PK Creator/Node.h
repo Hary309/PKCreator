@@ -26,7 +26,9 @@ protected:
 
 	QString								m_name;
 
+	bool								m_execFrom;
 	qint64								m_idExecFrom;
+	bool								m_execTo;
 	qint64								m_idExecTo;
 
 	QVector<QSharedPointer<Widget>>		m_inputs;
