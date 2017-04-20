@@ -9,9 +9,11 @@
 #pragma once
 
 #include <QVector>
+#include <SFML/Graphics/Color.hpp>
 
 class VisualNode;
 class Node;
+class VisualWidget;
 class InputWidget;
 class OutputWidget;
 
@@ -35,6 +37,8 @@ public:
 private:
 	qint64				m_id;
 
+	sf::Color			m_color;
+
 	Node				*m_pParent;
 
 	QString				m_name;
@@ -43,12 +47,13 @@ private:
 
 	QVector<qint64>		m_connected;
 
+	friend VisualWidget;
 	friend InputWidget;
 	friend OutputWidget;
 	friend VisualNode;
 
 public:
-	Widget(Node *parent, const QString &name, ConnectionType connType);
+	Widget(Node *parent, const QString &name, ConnectionType connType, sf::Color color = sf::Color::White);
 	~Widget();
 
 	void Load(QDataStream *const dataStream);

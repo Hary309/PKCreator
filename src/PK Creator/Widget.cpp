@@ -10,10 +10,12 @@
 
 #include <QDataStream>
 
-Widget::Widget(Node *parent, const QString &name, ConnectionType connType)
-	: m_pParent(parent), m_name(name), m_connType(connType)
+Widget::Widget(Node *parent, const QString &name, ConnectionType connType, sf::Color color)
+	: m_pParent(parent), m_name(name), m_connType(connType), m_color(color)
 {
 	m_id = qint64(this);
+
+	
 }
 
 Widget::~Widget()

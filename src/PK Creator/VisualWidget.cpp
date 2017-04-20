@@ -29,6 +29,7 @@ VisualWidget::VisualWidget(VisualNode *parent, Widget *data, sf::Vector2f offset
 	m_pName->setOrigin(0.f, m_pName->getCharacterSize() / 1.5f);
 
 	m_pPin = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(8.f, 8.f)));
+	m_pPin->setOutlineColor(m_pData->m_color);
 	m_pPin->setOutlineThickness(1.f);
 	m_pPin->setFillColor(sf::Color::Transparent);
 	m_pPin->setOrigin(m_pPin->getSize().x, m_pPin->getSize().y / 2);
