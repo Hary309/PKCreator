@@ -38,6 +38,7 @@ WireData *WireMgr::ConnectData(sf::Vector2f startPos, ConnectTo type, VisualWidg
 		m_type = type;
 
 		auto wire = QSharedPointer<WireData>(new WireData());
+		wire->SetWireColor(widget->GetData()->GetColor());
 
 		if (type == START)
 		{
@@ -77,7 +78,7 @@ WireData *WireMgr::ConnectData(sf::Vector2f startPos, ConnectTo type, VisualWidg
 
 		if (wire->m_pEndWidget)
 		{
-			if (wire->m_pEndWidget->GetParent() == widgetParent)
+			if (wire->m_pEndWidget->GetParent() == widgetParent || wire->m_pEndWidget->GetData()->GetDataType() != widget->GetData()->GetDataType())
 			{
 				Disconnect(m_pCurrentLine);
 				m_pCurrentLine = nullptr;
@@ -87,7 +88,7 @@ WireData *WireMgr::ConnectData(sf::Vector2f startPos, ConnectTo type, VisualWidg
 		}
 		else if (wire->m_pStartWidget)
 		{
-			if (wire->m_pStartWidget->GetParent() == widgetParent)
+			if (wire->m_pStartWidget->GetParent() == widgetParent || wire->m_pStartWidget->GetData()->GetDataType() != widget->GetData()->GetDataType())
 			{
 				Disconnect(m_pCurrentLine);
 				m_pCurrentLine = nullptr;

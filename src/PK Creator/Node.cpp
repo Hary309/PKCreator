@@ -65,7 +65,7 @@ void Node::Load(QDataStream *const dataStream)
 
 	for (int i = 0; i < nInputs; ++i)
 	{
-		auto widget = new Widget(this, QString(), Widget::INPUT);
+		auto widget = new Widget(this, QString(), Widget::INPUT, Widget::BOOLEAN);
 		widget->Load(dataStream);
 
 		AddWidget(widget);
@@ -75,7 +75,7 @@ void Node::Load(QDataStream *const dataStream)
 
 	for (int i = 0; i < nOutputs; ++i)
 	{
-		auto widget = new Widget(this, QString(), Widget::OUTPUT);
+		auto widget = new Widget(this, QString(), Widget::OUTPUT, Widget::BOOLEAN);
 		widget->Load(dataStream);
 
 		AddWidget(widget);

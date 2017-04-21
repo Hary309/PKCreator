@@ -14,6 +14,8 @@
 Wire::Wire()
 {
 	m_wireColor = sf::Color::White;
+
+
 }
 
 Wire::~Wire()

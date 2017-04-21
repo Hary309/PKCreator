@@ -26,12 +26,14 @@ public:
 		OUTPUT
 	};
 
-	enum ValueType
+	enum DataType
 	{
 		INTEGER = 0,
 		NUMBER,
 		STRING,
-		BOOLEAN
+		BOOLEAN,
+		OBJECT,
+		VECTOR2
 	};
 
 private:
@@ -45,6 +47,8 @@ private:
 
 	ConnectionType		m_connType;
 
+	DataType			m_dataType;
+
 	QVector<qint64>		m_connected;
 
 	friend VisualWidget;
@@ -53,7 +57,7 @@ private:
 	friend VisualNode;
 
 public:
-	Widget(Node *parent, const QString &name, ConnectionType connType, sf::Color color = sf::Color::White);
+	Widget(Node *parent, const QString &name, ConnectionType connType, DataType color);
 	~Widget();
 
 	void Load(QDataStream *const dataStream);
@@ -62,5 +66,7 @@ public:
 	ConnectionType GetConnType() const { return m_connType; }
 	const QString &GetName() const { return m_name; }
 	qint64 GetID() const { return m_id; }
+	DataType GetDataType() const { return m_dataType; }
+	sf::Color GetColor() const { return m_color; }
 };
 		

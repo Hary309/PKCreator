@@ -44,6 +44,7 @@ public:
 
 	void SetStartPos(sf::Vector2f startPos) { m_startPos = startPos; }
 	void SetEndPos(sf::Vector2f endPos) { m_endPos = endPos; }
+	void SetWireColor(sf::Color color) { m_wireColor = color; }
 
 	// @return: QVector with one point
 	static QVector<sf::Vector2f> CalcBezierCurve(QVector<sf::Vector2f> &points, float perc);
