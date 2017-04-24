@@ -59,6 +59,11 @@ QSize Config::GetWndSize() const
 	return size;
 }
 
+QString Config::GetWndTitle()
+{
+	return m_ui.titleEdit->text();
+}
+
 void Config::OkButton_clicked()
 {
 	hide();

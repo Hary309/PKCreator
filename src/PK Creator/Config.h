@@ -25,6 +25,7 @@ public:
 	void Save(QDataStream *const dataStream) const;
 
 	QSize GetWndSize() const;
+	QString GetWndTitle();
 
 private slots:
 	void OkButton_clicked();
