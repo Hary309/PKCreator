@@ -42,9 +42,20 @@
     <addaction name="actionOpenProject"/>
     <addaction name="actionSaveProject"/>
     <addaction name="separator"/>
+    <addaction name="actionOpenContainingFolder"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuCode">
+    <property name="title">
+     <string>Project</string>
+    </property>
+    <addaction name="actionGenerateCode"/>
+    <addaction name="separator"/>
+    <addaction name="actionConfig"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuCode"/>
   </widget>
   <action name="actionNewProject">
    <property name="text">
@@ -66,10 +77,25 @@
     <string>Exit</string>
    </property>
   </action>
+  <action name="actionOpenContainingFolder">
+   <property name="text">
+    <string>Open containing folder</string>
+   </property>
+  </action>
+  <action name="actionGenerateCode">
+   <property name="text">
+    <string>Generate code</string>
+   </property>
+  </action>
+  <action name="actionConfig">
+   <property name="text">
+    <string>Config</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="MainWindow.qrc"/>
+  <include location="Resources.qrc"/>
  </resources>
  <connections/>
 </ui>

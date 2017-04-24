@@ -33,10 +33,13 @@ MainWindow::MainWindow(QWidget *parent)
 
 	setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::Dialog);
 
-	connect(m_ui.actionExit, &QAction::triggered, this, &MainWindow::ActionExit_triggered);
 	connect(m_ui.actionNewProject, &QAction::triggered, this, &MainWindow::ActionOpenProject_triggered);
 	connect(m_ui.actionOpenProject, &QAction::triggered, this, &MainWindow::ActionOpenProject_triggered);
-	connect(m_ui.actionSaveProject, &QAction::triggered, this, &MainWindow::ActionSaveProject_triggered);
+	connect(m_ui.actionSaveProject, &QAction::triggered, this, [this] { Save(); });
+	connect(m_ui.actionExit, &QAction::triggered, this, [this] { close(); });
+	connect(m_ui.actionOpenContainingFolder, &QAction::triggered, this, &MainWindow::ActionOpenContainingFolder_triggered);
+	connect(m_ui.actionGenerateCode, &QAction::triggered, this, [this] { GenerateCode(); });
+	connect(m_ui.actionConfig, &QAction::triggered, this, &MainWindow::ActionConfig_triggered);
 
 	s_pInst = this;
 }
@@ -117,9 +120,8 @@ void MainWindow::Save() const
 	printf("Saved in: %d ms\n", timer.elapsed());
 }
 
-void MainWindow::ActionSaveProject_triggered() const
+void MainWindow::GenerateCode()
 {
-	Save();
 }
 
 void MainWindow::ActionOpenProject_triggered()
@@ -128,7 +130,17 @@ void MainWindow::ActionOpenProject_triggered()
 	WelcomeWindow::Get()->show();
 }
 
-void MainWindow::ActionExit_triggered()
+void MainWindow::ActionOpenContainingFolder_triggered()
 {
-	this->close();
+	if (m_proInfo)
+		ShellExecuteA(nullptr, "open", m_proInfo->path.toStdString().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
+}
+
+void MainWindow::ActionConfig_triggered()
+{
+	if (m_pResView)
+	{
+		if (m_pResView->GetConfig())
+			m_pResView->GetConfig()->show();
+	}
 }

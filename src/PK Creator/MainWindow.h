@@ -35,10 +35,12 @@ public:
 	bool Load(Project *project);
 	void Save() const;
 
+	void GenerateCode();
+
 	static MainWindow *Get() { return s_pInst; }
 
 private slots:
-	void ActionExit_triggered();
-	void ActionSaveProject_triggered() const;
 	void ActionOpenProject_triggered();
+	void ActionOpenContainingFolder_triggered();
+	void ActionConfig_triggered();
 };
