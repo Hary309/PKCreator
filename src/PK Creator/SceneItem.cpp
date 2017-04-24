@@ -17,6 +17,7 @@
 #include <ObjectItem.h>
 #include <ResourceView.h>
 
+#include <CodeGenerator.h>
 
 SceneItem::SceneItem(QStandardItem *item, const QString &itemName)
 	: Item(item, itemName)
@@ -33,6 +34,14 @@ SceneItem::SceneItem(QStandardItem *item, const QString &itemName)
 
 SceneItem::~SceneItem()
 {
+}
+
+void SceneItem::GenerateCode(CodeGenerator *codeGenerator)
+{
+	for (auto obj : m_objects)
+	{
+		codeGenerator->GenerateSceneObject(obj.data());
+	}
 }
 
 void SceneItem::SetName(const QString &name)
@@ -66,6 +75,8 @@ void SceneItem::Load(QDataStream *const dataStream)
 		sObj->pSpr = nullptr;
 		sObj->pos = pos;
 
+		printf("Pos(%d, %d)\n", pos.x(), pos.y());
+
 		m_objects.push_back(sObj);
 	}
 }
@@ -82,6 +93,8 @@ void SceneItem::Save(QDataStream *const dataStream)
 	{
 		*dataStream << obj->pObj->GetID();
 		*dataStream << obj->pos;
+
+		printf("Pos(%d, %d)\n", obj->pos.x(), obj->pos.y());
 	}
 }
 

@@ -13,7 +13,11 @@
 
 #include <ResourceView.h>
 #include <WelcomeWindow.h>
+#include <Config.h>
+#include <CodeGenerator.h>
 
+#include <Windows.h>
+#include <shellapi.h>
 
 MainWindow *MainWindow::s_pInst;
 
@@ -122,6 +126,23 @@ void MainWindow::Save() const
 
 void MainWindow::GenerateCode()
 {
+	printf("Generating code...\n");
+
+	if (m_pResView && m_proInfo)
+	{
+		printf("Creating folder...\n");
+		CodeGenerator codeGenerator(m_proInfo->path + "\\Generated\\HTML5");
+		m_pResView->GenerateCode(&codeGenerator);
+
+		printf("Saving HTML...\n");
+		codeGenerator.SaveHTML();
+		printf("Saving js...\n");
+		codeGenerator.SaveJS();
+	}
+	else
+	{
+		printf("Fail!\n");
+	}
 }
 
 void MainWindow::ActionOpenProject_triggered()

@@ -29,6 +29,8 @@ struct SceneObject
 	QPoint						pos;
 };
 
+class CodeGenerator;
+
 class SceneItem : public Item
 {
 protected:
@@ -42,6 +44,8 @@ protected:
 public:
 	SceneItem(QStandardItem *item, const QString &itemName);
 	~SceneItem();
+
+	void GenerateCode(CodeGenerator *codeGenerator);
 
 	void SetName(const QString &name) override;
 

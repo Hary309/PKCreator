@@ -21,13 +21,15 @@
 #include <SceneItem.h>
 #include <Config.h>
 
+#include <CodeGenerator.h>
+
 #include <QMessageBox>
 
 #include <Windows.h>
 
 ResourceView *ResourceView::s_pInst;
 
-ResourceView::ResourceView(QWidget * parent)
+ResourceView::ResourceView(QWidget *parent)
 	: QTreeView(parent)
 {
 	m_defaultModel << QString("Sprites") << QString("Backgrounds") 
@@ -85,7 +87,7 @@ void ResourceView::Setup()
 	m_pTreeModel->appendRow(item);
 }
 
-void ResourceView::mousePressEvent(QMouseEvent * mouseEvent)
+void ResourceView::mousePressEvent(QMouseEvent *mouseEvent)
 {
 	QTreeView::mousePressEvent(mouseEvent);
 
@@ -376,6 +378,30 @@ void ResourceView::Save(QDataStream *const dataStream)
 	{
 		if (item)
 			item->Save(dataStream);
+	}
+}
+
+void ResourceView::GenerateCode(CodeGenerator *codeGenerator)
+{
+	printf("Generating HTML...\n");
+	codeGenerator->GenerateHTML(m_pProConfig->GetWndTitle(), m_pProConfig->GetWndSize().width(), m_pProConfig->GetWndSize().height());
+
+
+
+	printf("Generating objects: \n");
+	auto items = GetItemsByType(Item::Type::OBJECT);
+	for (auto item : items)
+	{
+		printf("\t%s...\n", item->GetName().toStdString().c_str());
+		codeGenerator->GenerateObject(static_cast<ObjectItem*>(item));
+	}
+
+	printf("Generating scene objects...\n");
+
+	auto scenes = GetItemsByType(Item::Type::SCENE);
+	for (auto scene : scenes)
+	{
+		static_cast<SceneItem*>(scene)->GenerateCode(codeGenerator);
 	}
 }
 

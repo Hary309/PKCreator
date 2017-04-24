@@ -75,6 +75,12 @@
     <Filter Include="Header Files\Blueprint\Editor\Wires">
       <UniqueIdentifier>{5111cc39-65e1-4601-8b21-e641a9590920}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\CodeGenerator">
+      <UniqueIdentifier>{e2609fd3-87b4-4d8f-9e0a-018e4c45fcd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CodeGenerator">
+      <UniqueIdentifier>{064eba37-1823-422a-bc99-aa7755e840a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -224,6 +230,9 @@
     <ClCompile Include="NodesWindow.cpp">
       <Filter>Source Files\Blueprint\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="CodeGenerator.cpp">
+      <Filter>Source Files\CodeGenerator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -359,6 +368,9 @@
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_NodesWindow.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeGenerator.h">
+      <Filter>Header Files\CodeGenerator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -20,6 +20,8 @@ class Item;
 
 class NodesWindow;
 
+class CodeGenerator;
+
 class Config;
 
 class ResourceView : public QTreeView
@@ -69,6 +71,8 @@ public:
 
 	bool Load(QDataStream *const dataStream, const QString &currPath);
 	void Save(QDataStream *const dataStream);
+
+	void GenerateCode(CodeGenerator *codeGenerator);
 
 	bool IsNameExists(const QString &name);
 
