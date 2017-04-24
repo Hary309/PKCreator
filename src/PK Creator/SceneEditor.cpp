@@ -214,22 +214,23 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 	if (!texInfo)
 		return;
 
-	auto sObj = QSharedPointer<SceneObject>(new SceneObject());
+	auto sharedObj = QSharedPointer<SceneObject>(new SceneObject());
 
-	sObj->pObj = m_pSelectedObj;
-	sObj->pSpr = QSharedPointer<sf::Sprite>(new sf::Sprite(*texInfo->pTex));
-	sObj->pSpr->setOrigin(texInfo->center.x(), texInfo->center.y());
+	sharedObj->pObj = m_pSelectedObj;
+	sharedObj->pSpr = QSharedPointer<sf::Sprite>(new sf::Sprite(*texInfo->pTex));
+	sharedObj->pSpr->setOrigin(texInfo->center.x(), texInfo->center.y());
 
 	QPoint pos;
 
 	pos.setX(e->pos().x() / m_snapX * m_snapX);
 	pos.setY(e->pos().y() / m_snapY * m_snapY);
 
-	sObj->pSpr->setPosition(pos.x(), pos.y());
+	sharedObj->pos = pos;
+	sharedObj->pSpr->setPosition(pos.x(), pos.y());
 
-	m_pObjects->push_back(sObj);
+	m_pObjects->push_back(sharedObj);
 
-	m_pCurrObj = sObj.data();
+	m_pCurrObj = sharedObj.data();
 }
 
 void SceneEditor::mouseReleaseEvent(QMouseEvent *e)
