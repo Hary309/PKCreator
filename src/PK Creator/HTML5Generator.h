@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : HTML5Generator.h
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #pragma once
 
 #include <CodeGenerator.h>

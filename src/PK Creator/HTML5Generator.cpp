@@ -1,3 +1,11 @@
+/*
+*********************************************************************
+* File          : HTML5Generator.cpp
+* Project		: PK Creator
+* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
+*********************************************************************
+*/
+
 #include "HTML5Generator.h"
 
 #include <QFile>
