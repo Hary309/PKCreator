@@ -9,31 +9,25 @@
 #pragma once
 
 #include <QString>
+#include <QSize>
 
 class ObjectItem;
 class SceneObject;
 
 class CodeGenerator
 {
-private:
-	QString m_finalHTMLCode;
-
-	QString m_globalVars;
-	QString m_init;
-	QString m_render;
-
+protected:
 	QString m_path;
 
 public:
-	CodeGenerator(const QString &path);
-	~CodeGenerator();
+	CodeGenerator() { }
+	virtual ~CodeGenerator() { }
 
-	void GenerateHTML(const QString &title, int width, int height);
+	virtual void GenerateCanvas(const QString &title, const QSize &windowSize) = 0;
 
-	void GenerateObject(ObjectItem *obj);
-	void GenerateSceneObject(SceneObject *obj);
+	virtual void GenerateObject(ObjectItem *obj) = 0;
+	virtual void GenerateSceneObject(SceneObject *obj) = 0;
 
-	void SaveHTML();
-	void SaveJS();
+	virtual void Save() = 0;
 };
 

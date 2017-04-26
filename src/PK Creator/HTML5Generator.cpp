@@ -1,13 +1,6 @@
-/*
-*********************************************************************
-* File          : CodeGenerator.cpp
-* Project		: PK Creator
-* Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
-*********************************************************************
-*/
+#include "HTML5Generator.h"
 
-#include "CodeGenerator.h"
-
+#include <QFile>
 #include <QDir>
 #include <QTextStream>
 
@@ -16,9 +9,11 @@
 #include <SpriteItem.h>
 #include <SceneItem.h>
 
-CodeGenerator::CodeGenerator(const QString &path)
-	: m_path(path)
+HTML5Generator::HTML5Generator(const QString &path)
+	: CodeGenerator()
 {
+	m_path = path + "\\HTML5";
+
 	QDir dir(m_path);
 	dir.mkpath(m_path);
 
@@ -26,23 +21,24 @@ CodeGenerator::CodeGenerator(const QString &path)
 	m_globalVars += "var ctx = canvas.getContext(\"2d\");\n\n";;
 }
 
-CodeGenerator::~CodeGenerator()
+
+HTML5Generator::~HTML5Generator()
 {
 }
 
-void CodeGenerator::GenerateHTML(const QString &title, int width, int height)
+void HTML5Generator::GenerateCanvas(const QString & title, const QSize &windowSize)
 {
 	// head
-	m_finalHTMLCode = "<!DOCTYPE html>\r<html>\r<head>\r<title>" + title + "</title>\r</head>\r<body>\r";
+	m_htmlCode = "<!DOCTYPE html>\r<html>\r<head>\r<title>" + title + "</title>\r</head>\r<body>\r";
 
 	// body
-	m_finalHTMLCode += "<canvas id =\"canvas\" width=\"" + QString::number(width) + "\" height=\"" + QString::number(height) + "\" style=\"border:1px solid black;\"></canvas>\r";
+	m_htmlCode += "<canvas id =\"canvas\" width=\"" + QString::number(windowSize.width()) + "\" height=\"" + QString::number(windowSize.height()) + "\" style=\"border:1px solid black;\"></canvas>\r";
 
 	// scripts
-	m_finalHTMLCode += "<script src=\"lib.js\"></script>\r<script src=\"script.js\"></script>\r</body>\r</html>";
+	m_htmlCode += "<script src=\"lib.js\"></script>\r<script src=\"script.js\"></script>\r</body>\r</html>";
 }
 
-void CodeGenerator::GenerateObject(ObjectItem *obj)
+void HTML5Generator::GenerateObject(ObjectItem *obj)
 {
 	if (!obj)
 		return;
@@ -62,7 +58,7 @@ void CodeGenerator::GenerateObject(ObjectItem *obj)
 	m_init += objName + ".origin = new Vector(" + QString::number(obj->GetSprite()->GetCenter().x()) + "," + QString::number(obj->GetSprite()->GetCenter().y()) + ");\n";
 }
 
-void CodeGenerator::GenerateSceneObject(SceneObject *obj)
+void HTML5Generator::GenerateSceneObject(SceneObject * obj)
 {
 	if (!obj)
 		return;
@@ -74,27 +70,22 @@ void CodeGenerator::GenerateSceneObject(SceneObject *obj)
 
 	QString vector = "new Vector(" + QString::number(obj->pos.x()) + "," + QString::number(obj->pos.y()) + ")";
 
-	m_init += "sceneObjects.push(new SceneObject(" + objName + ", "+vector+"));\n";
+	m_init += "sceneObjects.push(new SceneObject(" + objName + ", " + vector + "));\n";
 }
 
-void CodeGenerator::SaveHTML()
+void HTML5Generator::Save()
 {
-	QFile file(m_path + "\\index.html");
-	file.open(QFile::WriteOnly);
+	QFile htmlFile(m_path + "\\index.html");
+	htmlFile.open(QFile::WriteOnly);
 
-	QTextStream stream(&file);
-	stream << m_finalHTMLCode;
+	QTextStream stream(&htmlFile);
+	stream << m_htmlCode;
+	htmlFile.close();
 
-	QFile lib("libs\\js\\lib.js");
-	lib.copy(m_path + "\\lib.js");
-}
+	QFile jsFile(m_path + "\\script.js");
+	jsFile.open(QFile::WriteOnly);
 
-void CodeGenerator::SaveJS()
-{
-	QFile file(m_path + "\\script.js");
-	file.open(QFile::WriteOnly);
-
-	QTextStream stream(&file);
+	stream.setDevice(&jsFile);
 
 	// global var
 	stream << m_globalVars << "\nvar sceneObjects = [];\n";
@@ -106,4 +97,9 @@ void CodeGenerator::SaveJS()
 	stream << "\n\nfunction render()\n{\nctx.fillStyle=\"#9E9E9E\";\nctx.fillRect(0, 0, 800, 600);\nfor (i = 0; i < sceneObjects.length; i++)\nsceneObjects[i].draw();\n setTimeout(render, 10);\n}";
 
 	stream << "\ninit();\nrender();\n";
+
+
+	// copy lib
+	QFile lib("libs\\js\\lib.js");
+	lib.copy(m_path + "\\lib.js");
 }

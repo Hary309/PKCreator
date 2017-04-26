@@ -12,6 +12,7 @@
 #include <SpriteItem.h>
 #include <ResourceView.h>
 #include <ObjectItemWindow.h>
+#include <CodeGenerator.h>
 
 ObjectItem::ObjectItem(QStandardItem *item, const QString &itemName)
 	: Item(item, itemName)
@@ -27,6 +28,11 @@ ObjectItem::ObjectItem(QStandardItem *item, const QString &itemName)
 
 ObjectItem::~ObjectItem()
 {
+}
+
+void ObjectItem::GenerateCode(CodeGenerator *codeGenerator)
+{
+	codeGenerator->GenerateObject(this);
 }
 
 void ObjectItem::SetName(const QString &name)

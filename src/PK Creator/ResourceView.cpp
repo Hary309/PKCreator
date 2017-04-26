@@ -383,21 +383,19 @@ void ResourceView::Save(QDataStream *const dataStream)
 
 void ResourceView::GenerateCode(CodeGenerator *codeGenerator)
 {
-	printf("Generating HTML...\n");
-	codeGenerator->GenerateHTML(m_pProConfig->GetWndTitle(), m_pProConfig->GetWndSize().width(), m_pProConfig->GetWndSize().height());
-
-
+	printf("Generating Canvas...\n");
+	codeGenerator->GenerateCanvas(m_pProConfig->GetWndTitle(), m_pProConfig->GetWndSize());
 
 	printf("Generating objects: \n");
-	auto items = GetItemsByType(Item::Type::OBJECT);
-	for (auto item : items)
+	auto objects = GetItemsByType(Item::Type::OBJECT);
+	for (auto object : objects)
 	{
-		printf("\t%s...\n", item->GetName().toStdString().c_str());
-		codeGenerator->GenerateObject(static_cast<ObjectItem*>(item));
+		printf("\t%s...\n", object->GetName().toStdString().c_str());
+		
+		static_cast<ObjectItem*>(object)->GenerateCode(codeGenerator);
 	}
 
 	printf("Generating scene objects...\n");
-
 	auto scenes = GetItemsByType(Item::Type::SCENE);
 	for (auto scene : scenes)
 	{

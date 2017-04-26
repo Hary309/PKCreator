@@ -230,7 +230,7 @@
     <ClCompile Include="NodesWindow.cpp">
       <Filter>Source Files\Blueprint\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="CodeGenerator.cpp">
+    <ClCompile Include="HTML5Generator.cpp">
       <Filter>Source Files\CodeGenerator</Filter>
     </ClCompile>
   </ItemGroup>
@@ -370,6 +370,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="CodeGenerator.h">
+      <Filter>Header Files\CodeGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="HTML5Generator.h">
       <Filter>Header Files\CodeGenerator</Filter>
     </ClInclude>
   </ItemGroup>

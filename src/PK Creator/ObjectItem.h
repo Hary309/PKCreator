@@ -14,6 +14,7 @@
 class EventObjectItem;
 class SpriteItem;
 class ObjectItemWindow;
+class CodeGenerator;
 
 class ObjectItem : public Item
 {
@@ -28,6 +29,8 @@ protected:
 public:
 	ObjectItem(QStandardItem *item, const QString &itemName);
 	virtual ~ObjectItem();
+
+	void GenerateCode(CodeGenerator *codeGenerator);
 
 	void SetName(const QString &name) override;
 

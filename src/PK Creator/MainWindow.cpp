@@ -10,11 +10,12 @@
 
 #include <QResizeEvent>
 #include <QTime>
+#include <QMessageBox>
 
 #include <ResourceView.h>
 #include <WelcomeWindow.h>
 #include <Config.h>
-#include <CodeGenerator.h>
+#include <HTML5Generator.h>
 
 #include <Windows.h>
 #include <shellapi.h>
@@ -126,23 +127,28 @@ void MainWindow::Save() const
 
 void MainWindow::GenerateCode()
 {
+	QTime timer;
+	timer.start();
+
 	printf("Generating code...\n");
 
 	if (m_pResView && m_proInfo)
 	{
 		printf("Creating folder...\n");
-		CodeGenerator codeGenerator(m_proInfo->path + "\\Generated\\HTML5");
+		HTML5Generator codeGenerator(m_proInfo->path + "\\Generated");
 		m_pResView->GenerateCode(&codeGenerator);
 
-		printf("Saving HTML...\n");
-		codeGenerator.SaveHTML();
-		printf("Saving js...\n");
-		codeGenerator.SaveJS();
+		printf("Saving...\n");
+		codeGenerator.Save();
 	}
 	else
 	{
 		printf("Fail!\n");
 	}
+
+	printf("Generated in: %d ms\n", timer.elapsed());
+
+	QMessageBox::information(this, "Code generator", "Code successfully generated!");
 }
 
 void MainWindow::ActionOpenProject_triggered()
