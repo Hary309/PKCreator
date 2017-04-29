@@ -375,5 +375,8 @@
     <ClInclude Include="HTML5Generator.h">
       <Filter>Header Files\CodeGenerator</Filter>
     </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

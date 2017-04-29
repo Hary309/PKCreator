@@ -10,6 +10,7 @@
 
 #include <QVector>
 #include <SFML/Graphics/Color.hpp>
+#include <Common.h>
 
 class VisualNode;
 class Node;
@@ -24,16 +25,6 @@ public:
 	{
 		INPUT = 0,
 		OUTPUT
-	};
-
-	enum DataType
-	{
-		INTEGER = 0,
-		NUMBER,
-		STRING,
-		BOOLEAN,
-		OBJECT,
-		VECTOR2
 	};
 
 private:

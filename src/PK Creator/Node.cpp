@@ -12,6 +12,8 @@
 
 #include <Widget.h>
 
+#include <Common.h>
+
 
 Node::Node(const QString &name, sf::Vector2f pos)
 	: m_name(name), m_pos(pos)
@@ -65,7 +67,7 @@ void Node::Load(QDataStream *const dataStream)
 
 	for (int i = 0; i < nInputs; ++i)
 	{
-		auto widget = new Widget(this, QString(), Widget::INPUT, Widget::BOOLEAN);
+		auto widget = new Widget(this, QString(), Widget::INPUT, DataType::BOOLEAN);
 		widget->Load(dataStream);
 
 		AddWidget(widget);
@@ -75,7 +77,7 @@ void Node::Load(QDataStream *const dataStream)
 
 	for (int i = 0; i < nOutputs; ++i)
 	{
-		auto widget = new Widget(this, QString(), Widget::OUTPUT, Widget::BOOLEAN);
+		auto widget = new Widget(this, QString(), Widget::OUTPUT, DataType::BOOLEAN);
 		widget->Load(dataStream);
 
 		AddWidget(widget);

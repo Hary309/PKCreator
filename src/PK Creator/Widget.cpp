@@ -8,6 +8,8 @@
 
 #include "Widget.h"
 
+#include <Common.h>
+
 #include <QDataStream>
 
 Widget::Widget(Node *parent, const QString &name, ConnectionType connType, DataType dataType)
@@ -18,7 +20,7 @@ Widget::Widget(Node *parent, const QString &name, ConnectionType connType, DataT
 	// colors source: https://material.io/guidelines/style/color.html
 	switch (m_dataType)
 	{
-		case OBJECT:
+		case OBJECTID:
 			m_color = sf::Color(0xF44336FF);
 			break;
 		case BOOLEAN:

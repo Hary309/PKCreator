@@ -17,9 +17,6 @@
 #include <Config.h>
 #include <HTML5Generator.h>
 
-#include <Windows.h>
-#include <shellapi.h>
-
 MainWindow *MainWindow::s_pInst;
 
 MainWindow::MainWindow(QWidget *parent)
