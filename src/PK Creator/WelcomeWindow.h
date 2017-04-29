@@ -24,8 +24,8 @@ class MainWindow;
 struct Project
 {
 	QString name;
-	qint64 timestamp;
 	QString path;
+	qint64 timestamp;
 
 	QTreeWidgetItem *item;
 };

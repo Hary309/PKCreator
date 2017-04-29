@@ -15,9 +15,6 @@
 
 #include <MainWindow.h>
 
-#include <Windows.h>
-#include <shellapi.h>
-
 WelcomeWindow *WelcomeWindow::s_pInst;
 
 WelcomeWindow::WelcomeWindow(QWidget *parent)
