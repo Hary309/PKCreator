@@ -18,6 +18,8 @@
 #include <SpriteItem.h>
 #include <ObjectItem.h>
 
+#include <VariablesWindow.h>
+
 ObjectItemWindow::ObjectItemWindow(QWidget *parent)
 	: ItemWindow(parent)
 {
@@ -32,6 +34,8 @@ ObjectItemWindow::ObjectItemWindow(QWidget *parent)
 
 	m_ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
 
+	m_varsWindow = nullptr;
+
 	connect(m_ui.okButton, &QPushButton::clicked, this, &ObjectItemWindow::OkButton_clicked);
 	connect(m_ui.addButton, &QPushButton::clicked, this, &ObjectItemWindow::AddEventButton_clicked);
 	connect(m_ui.removeButton, &QPushButton::clicked, this, &ObjectItemWindow::RemoveEventButton_clicked);
@@ -40,6 +44,7 @@ ObjectItemWindow::ObjectItemWindow(QWidget *parent)
 	connect(m_ui.addSprButton, &QPushButton::clicked, this, &ObjectItemWindow::AddSprButton_clicked);
 	connect(m_ui.editSprButton, &QPushButton::clicked, this, &ObjectItemWindow::EditSprButton_clicked);
 	connect(m_ui.spriteBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &ObjectItemWindow::SpriteBox_activated);
+	connect(m_ui.varsButton, &QPushButton::clicked, this, &ObjectItemWindow::VarsButton_clicked);
 }
 
 ObjectItemWindow::~ObjectItemWindow()
@@ -89,6 +94,9 @@ bool ObjectItemWindow::FillData(Item* item)
 
 		m_pModel->appendRow(item);
 	}
+
+	m_varsWindow = QSharedPointer<VariablesWindow>(new VariablesWindow());
+	m_varsWindow->SetSource(&m_pItemParent->m_vars);
 
 	CreateContextMenu();
 
@@ -285,4 +293,9 @@ void ObjectItemWindow::SpriteBox_activated(int index)
 	}
 
 	m_pItemParent->m_pCurrSpr = nullptr;
+}
+
+void ObjectItemWindow::VarsButton_clicked()
+{
+	m_varsWindow->exec();
 }

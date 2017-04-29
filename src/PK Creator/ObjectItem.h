@@ -15,12 +15,14 @@ class EventObjectItem;
 class SpriteItem;
 class ObjectItemWindow;
 class CodeGenerator;
+class Var; // in VariablesWindow.h
 
 class ObjectItem : public Item
 {
 protected:
 	SpriteItem									*m_pCurrSpr;
 	QVector<QSharedPointer<EventObjectItem>>	m_events;
+	QVector<QSharedPointer<Var>>				m_vars;
 
 	QStringList									m_eventName;
 
@@ -42,6 +44,6 @@ public:
 	void Load(QDataStream *const dataStream) override;
 	void Save(QDataStream *const dataStream) override;
 
-	void Show(QWidget *wndParent)				override;
-	void Close()								override;
+	void Show(QWidget *wndParent)	override;
+	void Close()				 	override;
 };

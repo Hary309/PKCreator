@@ -18,6 +18,8 @@
 class SpriteItem;
 class ObjectItem;
 class QStandardItemModel;
+class VariablesWindow;
+
 
 class ObjectItemWindow : public ItemWindow
 {
@@ -38,6 +40,8 @@ private:
 
 	QSharedPointer<QMenu>					m_pContextMenu;
 	QVector<QSharedPointer<QAction>>		m_actionList;
+
+	QSharedPointer<VariablesWindow>			m_varsWindow;
 
 	QVector<QSharedPointer<ComboBoxItem>>	m_sprites;
 
@@ -66,6 +70,7 @@ private slots:
 	void AddSprButton_clicked();
 	void EditSprButton_clicked() const;
 	void SpriteBox_activated(int index);
+	void VarsButton_clicked();
 
 };
 

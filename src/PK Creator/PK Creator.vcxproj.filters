@@ -81,6 +81,12 @@
     <Filter Include="Source Files\CodeGenerator">
       <UniqueIdentifier>{064eba37-1823-422a-bc99-aa7755e840a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Variable">
+      <UniqueIdentifier>{f27f86eb-eefd-4ddb-9471-56480eb62ab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Variable">
+      <UniqueIdentifier>{d2586266-2dae-44f0-b39f-d2eec60cb9aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -233,6 +239,24 @@
     <ClCompile Include="HTML5Generator.cpp">
       <Filter>Source Files\CodeGenerator</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_VariablesWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_VariablesWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="VariablesWindow.cpp">
+      <Filter>Source Files\Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_VarEditWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_VarEditWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="VarEditWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -307,6 +331,18 @@
     <CustomBuild Include="NodesWindow.h">
       <Filter>Header Files\Blueprint\Editor</Filter>
     </CustomBuild>
+    <CustomBuild Include="VariablesWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="VariablesWindow.h">
+      <Filter>Header Files\Variable</Filter>
+    </CustomBuild>
+    <CustomBuild Include="VarEditWindow.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="VarEditWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
@@ -375,8 +411,14 @@
     <ClInclude Include="HTML5Generator.h">
       <Filter>Header Files\CodeGenerator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_VariablesWindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
     <ClInclude Include="Common.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_VarEditWindow.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
