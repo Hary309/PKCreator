@@ -26,6 +26,9 @@ TextureMgr::~TextureMgr()
 
 bool TextureMgr::LoadTexture(SpriteItem *sprite)
 {
+	if (!sprite)
+		return false;
+
 	QString path = ResourceView::Get()->GetMainDir() + sprite->GetTexPath();
 
 	return LoadTexture(sprite->GetName(), path, sprite->GetSize(), sprite->GetCenter());

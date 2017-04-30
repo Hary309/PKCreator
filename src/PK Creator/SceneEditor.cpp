@@ -64,6 +64,12 @@ void SceneEditor::SetSource(SceneItem *sceneItem)
 
 	for (auto obj : *m_pObjects)
 	{
+		if (!obj)
+			continue;
+
+		if (!obj->pObj)
+			continue;
+
 		m_pTexMgr->LoadTexture(obj->pObj->GetSprite());
 
 		TextureMgr::TexInfo *texInfo = m_pTexMgr->GetTexture(obj->pObj->GetSprite()->GetName());
