@@ -10,12 +10,14 @@
 #include <Item.h>
 
 #include <QVector>
+#include <Common.h>
 
 class EventObjectItem;
 class SpriteItem;
 class ObjectItemWindow;
 class CodeGenerator;
-class Var; // in VariablesWindow.h
+class QTreeWidgetItem;
+class Var;
 
 class ObjectItem : public Item
 {

@@ -13,6 +13,9 @@
 #include <ResourceView.h>
 #include <ObjectItemWindow.h>
 #include <CodeGenerator.h>
+#include <Var.h>
+
+#include <QString>
 
 ObjectItem::ObjectItem(QStandardItem *item, const QString &itemName)
 	: Item(item, itemName)
@@ -69,6 +72,7 @@ void ObjectItem::Load(QDataStream *const dataStream)
 
 	// Sprite
 	long long id;
+
 	int size;
 
 	*dataStream >> id >> size;
@@ -87,6 +91,45 @@ void ObjectItem::Load(QDataStream *const dataStream)
 
 		m_events.push_back(eventItem);
 	}
+
+	*dataStream >> size;
+
+	for (int i = 0; i < size; ++i)
+	{
+		QString name;
+		qint64 id;
+		int type;
+
+		*dataStream >> name >> id >> type;
+
+		auto var = new Var();
+		var->m_name = name;
+		var->m_id = id;
+		var->m_type = static_cast<DataType>(type);
+
+		switch (var->m_type)
+		{
+		case DATA_INTEGER:
+			*dataStream >> var->m_data.integer;
+			break;
+		case DATA_NUMBER:
+			*dataStream >> var->m_data.number;
+			break;
+		case DATA_STRING:
+		{		
+			QString str;
+
+			*dataStream >> str;
+
+			var->m_data.string = new QString(str);
+		} break;
+		case DATA_BOOLEAN:
+			*dataStream >> var->m_data.boolean;
+			break;
+		}
+
+		m_vars.push_back(QSharedPointer<Var>(var));
+	}
 }
 
 void ObjectItem::Save(QDataStream *const dataStream)
@@ -100,6 +143,29 @@ void ObjectItem::Save(QDataStream *const dataStream)
 		if (e)
 		{
 			e->Save(dataStream);
+		}
+	}
+
+	*dataStream << m_vars.size();
+
+	for (auto var : m_vars)
+	{
+		*dataStream << var->m_name << var->m_id << var->m_type;
+
+		switch (var->m_type)
+		{
+		case DATA_INTEGER: 
+			*dataStream << var->m_data.integer;
+			break;
+		case DATA_NUMBER: 
+			*dataStream << var->m_data.number;
+			break;
+		case DATA_STRING: 
+			*dataStream << *var->m_data.string;
+			break;
+		case DATA_BOOLEAN: 
+			*dataStream << var->m_data.boolean;
+			break;
 		}
 	}
 }

@@ -11,6 +11,8 @@
 #include <QTreeWidgetItem>
 #include <QMessageBox>
 
+#include <Var.h>
+
 #include <VarEditWindow.h>
 
 VariablesWindow::VariablesWindow(QWidget *parent)
@@ -30,11 +32,11 @@ VariablesWindow::~VariablesWindow()
 {
 }
 
-void VariablesWindow::SetSource(void *vars)
+void VariablesWindow::SetSource(QVector<QSharedPointer<Var>> *vars)
 {
 	if (vars)
 	{
-		m_pVars = reinterpret_cast<QVector<QSharedPointer<Var>>*>(vars);
+		m_pVars = vars;
 	
 		for (auto var : *m_pVars)
 		{
@@ -130,18 +132,48 @@ void VariablesWindow::EditVarButton_clicked()
 			if (!newVar)
 				return;
 
-			for (auto newVar : *m_pVars)
+			if (var->m_name != newVar->m_name)
 			{
-				if (newVar->m_name == var->m_name)
+				for (auto newVar_ : *m_pVars)
 				{
-					QMessageBox::information(this, "Info", "This variable arleady exists!");
-					return;
+					if (newVar_->m_name == newVar->m_name)
+					{
+						QMessageBox::information(this, "Info", "This variable arleady exists!");
+						return;
+					}
 				}
 			}
 
 			var->m_name = newVar->m_name;
 			var->m_type = newVar->m_type;
 			var->m_data = newVar->m_data;
+		
+			if (var->m_pItem)
+			{
+				auto treeItem = var->m_pItem;
+
+				treeItem->setText(0, var->m_name);
+				treeItem->setText(1, dataNames[var->m_type]);
+
+				var->m_pItem = treeItem;
+
+				switch (var->m_type)
+				{
+				case DATA_INTEGER:
+					treeItem->setText(2, QString::number(var->m_data.integer));
+					break;
+				case DATA_NUMBER:
+					treeItem->setText(2, QString::number(var->m_data.number));
+					break;
+				case DATA_STRING:
+					treeItem->setText(2, *var->m_data.string);
+					break;
+				case DATA_BOOLEAN:
+					treeItem->setText(2, var->m_data.boolean ? "true" : "false");
+					break;
+				default:;
+				}
+			}
 		}
 	}
 }

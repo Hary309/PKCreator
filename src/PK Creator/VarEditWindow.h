@@ -13,6 +13,8 @@
 
 #include <VariablesWindow.h>
 
+class Var;
+
 class VarEditWindow : public QDialog
 {
 	Q_OBJECT
@@ -26,8 +28,8 @@ public:
 	VarEditWindow(QWidget *parent = Q_NULLPTR);
 	~VarEditWindow();
 
-	void SetVar(VariablesWindow::Var *var);
-	VariablesWindow::Var *GetVar();
+	void SetVar(Var *var);
+	Var *GetVar();
 
 private slots:
 	void OkButton_clicked();

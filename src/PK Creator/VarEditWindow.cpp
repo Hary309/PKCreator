@@ -12,6 +12,8 @@
 
 #include <Common.h>
 
+#include <Var.h>
+
 VarEditWindow::VarEditWindow(QWidget *parent)
 	: QDialog(parent)
 {

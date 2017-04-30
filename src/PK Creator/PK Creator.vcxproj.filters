@@ -255,7 +255,7 @@
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="VarEditWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Variable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,11 +337,11 @@
     <CustomBuild Include="VariablesWindow.h">
       <Filter>Header Files\Variable</Filter>
     </CustomBuild>
-    <CustomBuild Include="VarEditWindow.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="VarEditWindow.ui">
       <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="VarEditWindow.h">
+      <Filter>Header Files\Variable</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -419,6 +419,9 @@
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_VarEditWindow.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Var.h">
+      <Filter>Header Files\Variable</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
