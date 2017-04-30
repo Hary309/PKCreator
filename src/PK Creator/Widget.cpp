@@ -20,22 +20,22 @@ Widget::Widget(Node *parent, const QString &name, ConnectionType connType, DataT
 	// colors source: https://material.io/guidelines/style/color.html
 	switch (m_dataType)
 	{
-		case OBJECTID:
+		case DATA_OBJECTID:
 			m_color = sf::Color(0xF44336FF);
 			break;
-		case BOOLEAN:
+		case DATA_BOOLEAN:
 			m_color = sf::Color(0xE0E0E0FF);
 			break;
-		case INTEGER:
+		case DATA_INTEGER:
 			m_color = sf::Color(0x2196F3FF);
 			break;
-		case NUMBER:
+		case DATA_NUMBER:
 			m_color = sf::Color(0x0D47A1FF);
 			break;
-		case STRING:
+		case DATA_STRING:
 			m_color = sf::Color(0xFF9800FF);
 			break;
-		case VECTOR2:
+		case DATA_VECTOR2:
 			m_color = sf::Color(0x9575CDFF);
 			break;
 	}

@@ -73,16 +73,16 @@ void VariablesWindow::AddToVisualList(Var *var)
 
 	switch (var->m_type)
 	{
-		case INTEGER:
+		case DATA_INTEGER:
 			treeItem->setText(2, QString::number(var->m_data.integer));
 			break;
-		case NUMBER:
+		case DATA_NUMBER:
 			treeItem->setText(2, QString::number(var->m_data.number));
 			break;
-		case STRING:
+		case DATA_STRING:
 			treeItem->setText(2, *var->m_data.string);
 			break;
-		case BOOLEAN:
+		case DATA_BOOLEAN:
 			treeItem->setText(2, var->m_data.boolean ? "true" : "false");
 			break;
 		default:;

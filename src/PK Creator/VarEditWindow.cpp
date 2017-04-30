@@ -37,50 +37,50 @@ VarEditWindow::~VarEditWindow()
 
 }
 
-void VarEditWindow::SetVar(VariablesWindow::Var *var)
+void VarEditWindow::SetVar(Var *var)
 {
 	m_ui.nameEdit->setText(var->m_name);
 	m_ui.typeComboBox->setCurrentIndex(var->m_type);
 
 	switch (var->m_type)
 	{
-	case INTEGER:
+	case DATA_INTEGER:
 		 m_ui.valueEdit->setText(QString::number(var->m_data.integer));
 		break;
-	case NUMBER:
+	case DATA_NUMBER:
 		m_ui.valueEdit->setText(QString::number(var->m_data.number));
 		break;
-	case STRING:
+	case DATA_STRING:
 		m_ui.valueEdit->setText(*var->m_data.string);
 		break;
-	case BOOLEAN:
+	case DATA_BOOLEAN:
 		m_ui.valueEdit->setText(QString::number(var->m_data.boolean));
 		break;
 	default:;
 	}
 }
 
-VariablesWindow::Var *VarEditWindow::GetVar()
+Var *VarEditWindow::GetVar()
 {
 	if (!m_accepted)
 		return nullptr;
 
-	auto var = new VariablesWindow::Var;
+	auto var = new Var;
 	var->m_name = m_ui.nameEdit->text();
 	var->m_type = GetDataType(m_ui.typeComboBox->currentText());
 
 	switch (var->m_type)
 	{
-	case INTEGER:
+	case DATA_INTEGER:
 		var->m_data.integer = m_ui.valueEdit->text().toInt();
 		break;
-	case NUMBER:
+	case DATA_NUMBER:
 		var->m_data.number = m_ui.valueEdit->text().toFloat();
 		break;
-	case STRING:
+	case DATA_STRING:
 		var->m_data.string = new QString(m_ui.valueEdit->text());
 		break;
-	case BOOLEAN:
+	case DATA_BOOLEAN:
 		var->m_data.boolean = static_cast<bool>(m_ui.valueEdit->text().toInt());
 		break;
 	default:;
@@ -93,18 +93,18 @@ void VarEditWindow::TypeComboBox_currentIndexChanged(int index)
 {
 	m_ui.valueEdit->setText("");
 
-	if (index == INTEGER)
+	if (index == DATA_INTEGER)
 		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,9}")));
-	else if (index == NUMBER)
+	else if (index == DATA_NUMBER)
 		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9.]{0,9}")));
-	else if (index == STRING)
+	else if (index == DATA_STRING)
 	{
 		auto validator = new QRegExpValidator;
 		validator->setLocale(QLocale::English);
 
 		m_ui.valueEdit->setValidator(validator);
 	}
-	else if (index == BOOLEAN)
+	else if (index == DATA_BOOLEAN)
 		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[0-1]{0,1}")));
 }
 
@@ -122,7 +122,7 @@ void VarEditWindow::OkButton_clicked()
 		return;
 	}
 
-	if (GetDataType(m_ui.typeComboBox->currentText()) == BOOLEAN)
+	if (GetDataType(m_ui.typeComboBox->currentText()) == DATA_BOOLEAN)
 	{
 		if (m_ui.valueEdit->text() != QString("1"))
 		{

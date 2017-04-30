@@ -12,12 +12,12 @@
 
 enum DataType
 {
-	INTEGER = 0,
-	NUMBER,
-	STRING,
-	BOOLEAN,
-	OBJECTID,
-	VECTOR2
+	DATA_INTEGER = 0,
+	DATA_NUMBER,
+	DATA_STRING,
+	DATA_BOOLEAN,
+	DATA_OBJECTID,
+	DATA_VECTOR2
 };
 
 static const QStringList dataNames = { "Integer", "Number", "String", "Boolean", "ObjectID", "Vector2" };
