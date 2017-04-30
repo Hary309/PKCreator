@@ -27,8 +27,6 @@ void EventObjectItem::Load(QDataStream *const dataStream)
 
 	*dataStream >> n;
 
-	printf("number of nodes: %d\n", n);
-
 	for (int i = 0; i < n; ++i)
 	{
 		auto node = QSharedPointer<Node>(new Node(QString(), sf::Vector2f()));

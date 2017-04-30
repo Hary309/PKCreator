@@ -27,7 +27,7 @@ public:
 	void GenerateCanvas(const QString &title, const QSize &windowSize) override;
 
 	void GenerateObject(ObjectItem *obj) override;
-	void GenerateSceneObject(SceneObject *obj) override;
+	void GenerateScene(const QString &name, unsigned bgColor, QVector<SceneObject*> *objects) override;
 
 	void Save() override;
 };

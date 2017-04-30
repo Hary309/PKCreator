@@ -26,7 +26,7 @@ public:
 	virtual void GenerateCanvas(const QString &title, const QSize &windowSize) = 0;
 
 	virtual void GenerateObject(ObjectItem *obj) = 0;
-	virtual void GenerateSceneObject(SceneObject *obj) = 0;
+	virtual void GenerateScene(const QString &name, unsigned bgColor, QVector<SceneObject*> *objects) = 0;
 
 	virtual void Save() = 0;
 };

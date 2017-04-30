@@ -86,8 +86,6 @@ bool ObjectItemWindow::FillData(Item* item)
 	{
 		int type = eventItem->GetType();
 
-		printf("Type: %d\n", type);
-
 		auto item = new QStandardItem(m_pItemParent->m_eventName[type]);
 
 		eventItem->SetItem(item);

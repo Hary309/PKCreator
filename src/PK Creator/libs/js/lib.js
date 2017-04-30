@@ -9,8 +9,6 @@ function Object(imagePath)
 	this.img.src = imagePath;
 
 	this.origin = new Vector(0, 0);
-
-	
 }
 
 function SceneObject(object, pos)
@@ -28,6 +26,13 @@ function SceneObject(object, pos)
 		ctx.drawImage(this.object.img,-this.object.origin.x * 2, -this.object.origin.y * 2, this.object.img.width, this.object.img.height);
 		ctx.restore();
 	}
+}
+
+function Scene(bgColor)
+{
+	this.bgColor = bgColor;
+
+	this.objects = [];
 }
 
 function Vector(x, y)

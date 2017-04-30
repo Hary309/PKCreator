@@ -107,7 +107,7 @@ void SceneEditor::Render()
 				sf::Vector2f pos = spr->getPosition() - spr->getOrigin();
 
 				// Top
-				verLine.setPosition(pos);
+				verLine.setPosition(pos - sf::Vector2f(0.f, lineWidth));
 				m_pRenderer->draw(verLine);
 
 				// Bottom
@@ -115,7 +115,7 @@ void SceneEditor::Render()
 				m_pRenderer->draw(verLine);
 
 				// Left
-				horLine.setPosition(pos);
+				horLine.setPosition(pos - sf::Vector2f(lineWidth, 0.f));
 				m_pRenderer->draw(horLine);
 
 				// Right

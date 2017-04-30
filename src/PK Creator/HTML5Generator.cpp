@@ -16,6 +16,7 @@
 #include <ObjectItem.h>
 #include <SpriteItem.h>
 #include <SceneItem.h>
+#include <SFML/Graphics/Color.hpp>
 
 HTML5Generator::HTML5Generator(const QString &path)
 	: CodeGenerator()
@@ -66,19 +67,28 @@ void HTML5Generator::GenerateObject(ObjectItem *obj)
 	m_init += objName + ".origin = new Vector(" + QString::number(obj->GetSprite()->GetCenter().x()) + "," + QString::number(obj->GetSprite()->GetCenter().y()) + ");\n";
 }
 
-void HTML5Generator::GenerateSceneObject(SceneObject * obj)
+void HTML5Generator::GenerateScene(const QString &name, unsigned bgColor, QVector<SceneObject*> *bbjects)
 {
-	if (!obj)
+	if (!bbjects)
 		return;
+	
+	QString sceneName = "gameScene" + name;
 
-	if (!obj->pObj)
-		return;
+	sf::Color color = sf::Color(bgColor);
 
-	QString objName = "gameObj" + obj->pObj->GetName();
+	m_globalVars += "var " + sceneName + " = new Scene(\"rgb(" + QString::number(color.r) + "," + QString::number(color.g) + "," +QString::number(color.b) + ")\");\n";
 
-	QString vector = "new Vector(" + QString::number(obj->pos.x()) + "," + QString::number(obj->pos.y()) + ")";
+	for (auto sceneObject : *bbjects)
+	{
+		QString objName = "gameObj" + sceneObject->pObj->GetName();
 
-	m_init += "sceneObjects.push(new SceneObject(" + objName + ", " + vector + "));\n";
+		QString vector = "new Vector(" + QString::number(sceneObject->pos.x()) + "," + QString::number(sceneObject->pos.y()) + ")";
+
+		m_init += sceneName + ".objects.push(new SceneObject(" + objName + ", " + vector + "));\n";
+	}
+
+	// only for debug
+	m_init += "currentScene = " + sceneName + ";\n";
 }
 
 void HTML5Generator::Save()
@@ -96,13 +106,21 @@ void HTML5Generator::Save()
 	stream.setDevice(&jsFile);
 
 	// global var
-	stream << m_globalVars << "\nvar sceneObjects = [];\n";
+	stream << m_globalVars << "var currentScene;";
 
 	// init
 	stream << "\nfunction init()\n{\n" << m_init << "}";
 
 	// render
-	stream << "\n\nfunction render()\n{\nctx.fillStyle=\"#9E9E9E\";\nctx.fillRect(0, 0, 800, 600);\nfor (i = 0; i < sceneObjects.length; i++)\nsceneObjects[i].draw();\n setTimeout(render, 10);\n}";
+	stream << 
+		"\n\nfunction render()\n"
+		"{\n"
+		"ctx.fillStyle=currentScene.bgColor;\n"
+		"ctx.fillRect(0, 0, 800, 600);\n"
+		"for (i = 0; i < currentScene.objects.length; i++)\n"
+			"currentScene.objects[i].draw();\n"
+		"setTimeout(render, 10);\n"
+		"}";
 
 	stream << "\ninit();\nrender();\n";
 
