@@ -26,7 +26,7 @@ VarEditWindow::VarEditWindow(QWidget *parent)
 
 	m_accepted = false;
 
-	m_ui.typeComboBox->setCurrentIndex(0);
+	TypeComboBox_currentIndexChanged(0);
 
 	m_ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
 
@@ -96,9 +96,11 @@ void VarEditWindow::TypeComboBox_currentIndexChanged(int index)
 	m_ui.valueEdit->setText("");
 
 	if (index == DATA_INTEGER)
-		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,9}")));
+		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,10}")));
 	else if (index == DATA_NUMBER)
-		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9.]{0,9}")));
+	{
+		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,6}[.]{0,1}[0-9]{0,5}")));
+	}
 	else if (index == DATA_STRING)
 	{
 		auto validator = new QRegExpValidator;
