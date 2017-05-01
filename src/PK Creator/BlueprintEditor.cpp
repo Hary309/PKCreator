@@ -67,15 +67,19 @@ void BlueprintEditor::FillData(EventObjectItem *item)
 	m_pNodeMgr = QSharedPointer<NodeMgr>(new NodeMgr(this, &item->m_nodes));
 
 	auto node = new Node("Object in box", sf::Vector2f(16.f, 16.f));
-	node->AddWidget(new Widget(node, "Size", Widget::INPUT, DataType::DATA_VECTOR2));
-	node->AddWidget(new Widget(node, "Pos", Widget::INPUT, DataType::DATA_VECTOR2));
+	node->AddWidget(new Widget(node, "Width", Widget::INPUT, DataType::DATA_INTEGER));
+	node->AddWidget(new Widget(node, "Height", Widget::INPUT, DataType::DATA_INTEGER));
+	node->AddWidget(new Widget(node, "X", Widget::INPUT, DataType::DATA_NUMBER));
+	node->AddWidget(new Widget(node, "Y", Widget::INPUT, DataType::DATA_NUMBER));
 	node->AddWidget(new Widget(node, "Return", Widget::OUTPUT, DataType::DATA_BOOLEAN));
 	m_pNodeMgr->AddNode(node);
 
 	node = new Node("Player", sf::Vector2f(200.f, 16.f));
 	node->AddWidget(new Widget(node, "Object", Widget::INPUT, DataType::DATA_OBJECTID));
-	node->AddWidget(new Widget(node, "Size", Widget::OUTPUT, DataType::DATA_VECTOR2));
-	node->AddWidget(new Widget(node, "Pos", Widget::OUTPUT, DataType::DATA_VECTOR2));
+	node->AddWidget(new Widget(node, "Width", Widget::OUTPUT, DataType::DATA_INTEGER));
+	node->AddWidget(new Widget(node, "Height", Widget::OUTPUT, DataType::DATA_INTEGER));
+	node->AddWidget(new Widget(node, "X", Widget::OUTPUT, DataType::DATA_NUMBER));
+	node->AddWidget(new Widget(node, "Y", Widget::OUTPUT, DataType::DATA_NUMBER));
 	m_pNodeMgr->AddNode(node);
 }
 

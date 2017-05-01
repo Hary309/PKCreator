@@ -35,9 +35,6 @@ Widget::Widget(Node *parent, const QString &name, ConnectionType connType, DataT
 		case DATA_STRING:
 			m_color = sf::Color(0xFF9800FF);
 			break;
-		case DATA_VECTOR2:
-			m_color = sf::Color(0x9575CDFF);
-			break;
 	}
 	
 }
