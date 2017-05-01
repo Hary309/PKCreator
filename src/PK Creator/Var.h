@@ -17,7 +17,7 @@ public:
 	union
 	{
 		int integer;
-		float number;
+		double number;
 		QString *string;
 		bool boolean;
 	} m_data;

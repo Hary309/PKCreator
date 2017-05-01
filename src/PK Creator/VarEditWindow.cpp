@@ -77,7 +77,7 @@ Var *VarEditWindow::GetVar()
 		var->m_data.integer = m_ui.valueEdit->text().toInt();
 		break;
 	case DATA_NUMBER:
-		var->m_data.number = m_ui.valueEdit->text().toFloat();
+		var->m_data.number = m_ui.valueEdit->text().toDouble();
 		break;
 	case DATA_STRING:
 		var->m_data.string = new QString(m_ui.valueEdit->text());
