@@ -80,7 +80,7 @@ void VariablesWindow::AddToVisualList(Var *var)
 			treeItem->setText(2, QString::number(var->m_data.integer));
 			break;
 		case DATA_NUMBER:
-			treeItem->setText(2, QString::number(var->m_data.number));
+			treeItem->setText(2, QString::number(var->m_data.number, 'f', 10));
 			break;
 		case DATA_STRING:
 			treeItem->setText(2, *var->m_data.string);
@@ -119,6 +119,9 @@ void VariablesWindow::AddVarButton_clicked()
 void VariablesWindow::EditVarButton_clicked()
 {
 	auto currItem = m_ui.varsWidget->currentItem();
+
+	if (!currItem)
+		return;
 
 	for (auto var : *m_pVars)
 	{
