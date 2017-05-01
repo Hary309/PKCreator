@@ -26,6 +26,7 @@ VariablesWindow::VariablesWindow(QWidget *parent)
 	connect(m_ui.editButton, &QPushButton::clicked, this, &VariablesWindow::EditVarButton_clicked);
 	connect(m_ui.removeButton, &QPushButton::clicked, this, &VariablesWindow::RemoveVarButton_clicked);
 	connect(m_ui.okButton, &QPushButton::clicked, this, [this] { this->close(); });
+	connect(m_ui.varsWidget, &QTreeWidget::doubleClicked, this, [this] { EditVarButton_clicked(); });
 }
 
 VariablesWindow::~VariablesWindow()
