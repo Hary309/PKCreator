@@ -34,12 +34,12 @@ public:
 	ObjectItem(QStandardItem *item, const QString &itemName);
 	virtual ~ObjectItem();
 
-	void GenerateCode(CodeGenerator *codeGenerator);
-
 	void SetName(const QString &name) override;
 
 	EventObjectItem *GetEvent(int eventType);
 	EventObjectItem *GetEvent(QStandardItem *item);
+
+	auto GetVars() const { return &m_vars; }
 
 	SpriteItem *GetSprite() const { return m_pCurrSpr; }
 

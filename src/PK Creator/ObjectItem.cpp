@@ -33,10 +33,6 @@ ObjectItem::~ObjectItem()
 {
 }
 
-void ObjectItem::GenerateCode(CodeGenerator *codeGenerator)
-{
-	codeGenerator->GenerateObject(this);
-}
 
 void ObjectItem::SetName(const QString &name)
 {

@@ -386,20 +386,22 @@ void ResourceView::GenerateCode(CodeGenerator *codeGenerator)
 	printf("Generating Canvas...\n");
 	codeGenerator->GenerateCanvas(m_pProConfig->GetWndTitle(), m_pProConfig->GetWndSize());
 
-	printf("Generating objects: \n");
-	auto objects = GetItemsByType(Item::Type::OBJECT);
-	for (auto object : objects)
+	printf("Generating sprites:\n");
+	auto sprites = GetItemsByType(Item::Type::SPRITE);
+	for (auto sprite : sprites)
 	{
-		printf("\t%s...\n", object->GetName().toStdString().c_str());
+		printf("\t%s...\n", sprite->GetName().toStdString().c_str());
 		
-		static_cast<ObjectItem*>(object)->GenerateCode(codeGenerator);
+		codeGenerator->GenerateSprite(static_cast<SpriteItem*>(sprite));
 	}
 
-	printf("Generating scene objects...\n");
+	printf("Generating scenes:\n");
 	auto scenes = GetItemsByType(Item::Type::SCENE);
 	for (auto scene : scenes)
 	{
-		static_cast<SceneItem*>(scene)->GenerateCode(codeGenerator);
+		printf("\t%s...\n", scene->GetName().toStdString().c_str());
+
+		codeGenerator->GenerateScene(static_cast<SceneItem*>(scene));
 	}
 }
 

@@ -51,7 +51,7 @@ ObjectItemWindow::~ObjectItemWindow()
 {
 }
 
-bool ObjectItemWindow::FillData(Item* item)
+bool ObjectItemWindow::FillData(Item *item)
 {
 	m_pItemParent = static_cast<ObjectItem*>(item);
 

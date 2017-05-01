@@ -45,12 +45,13 @@ public:
 	SceneItem(QStandardItem *item, const QString &itemName);
 	~SceneItem();
 
-	void GenerateCode(CodeGenerator *codeGenerator);
-
 	void SetName(const QString &name) override;
 
 	void Load(QDataStream *const dataStream) override;
 	void Save(QDataStream *const dataStream) override;
+
+	unsigned GetBgColor() const { return m_bgColor; }
+	auto GetObjects() const { return &m_objects; }
 
 	void Show(QWidget *wndParent) override;
 	void Close() override;

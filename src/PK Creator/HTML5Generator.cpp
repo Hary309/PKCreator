@@ -16,7 +16,9 @@
 #include <ObjectItem.h>
 #include <SpriteItem.h>
 #include <SceneItem.h>
-#include <SFML/Graphics/Color.hpp>
+#include <Var.h>
+
+#include <SFML/Graphics.hpp>
 
 HTML5Generator::HTML5Generator(const QString &path)
 	: CodeGenerator()
@@ -26,8 +28,8 @@ HTML5Generator::HTML5Generator(const QString &path)
 	QDir dir(m_path);
 	dir.mkpath(m_path);
 
-	m_globalVars += "var canvas = document.getElementById(\"canvas\");\n";
-	m_globalVars += "var ctx = canvas.getContext(\"2d\");\n\n";;
+	m_global += "var canvas = document.getElementById('canvas');\n";
+	m_global += "var ctx = canvas.getContext('2d');\n\n";;
 }
 
 
@@ -38,53 +40,75 @@ HTML5Generator::~HTML5Generator()
 void HTML5Generator::GenerateCanvas(const QString & title, const QSize &windowSize)
 {
 	// head
-	m_htmlCode = "<!DOCTYPE html>\r<html>\r<head>\r<title>" + title + "</title>\r</head>\r<body>\r";
+	m_htmlCode = "<!DOCTYPE html>\r<html>\r<head>\r<title>" + title + "</title>\r</head>\r<body style='margin:0;padding:0;'>\r";
 
 	// body
-	m_htmlCode += "<canvas id =\"canvas\" width=\"" + QString::number(windowSize.width()) + "\" height=\"" + QString::number(windowSize.height()) + "\" style=\"border:1px solid black;\"></canvas>\r";
+	m_htmlCode += "<canvas id ='canvas' width='" + QString::number(windowSize.width()) + "' height='" + QString::number(windowSize.height()) + "' style='border:1px solid black;'></canvas>\r";
 
 	// scripts
-	m_htmlCode += "<script src=\"lib.js\"></script>\r<script src=\"script.js\"></script>\r</body>\r</html>";
+	m_htmlCode += "<script src='lib.js'></script>\r<script src='script.js'></script>\r</body>\r</html>";
 }
 
-void HTML5Generator::GenerateObject(ObjectItem *obj)
+void HTML5Generator::GenerateSprite(SpriteItem *sprite)
 {
-	if (!obj)
+	if (!sprite)
 		return;
 
-	if (!obj->GetSprite())
-		return;
+	QString spriteName = "gameSprite" + sprite->GetName();
 
-	QString objName = "gameObj" + obj->GetName();
+	QString newTexturePath = spriteName + "." + sprite->GetTexPath().split(".").last();
 
-	QString spriteName = objName + "." + obj->GetSprite()->GetTexPath().split(".").last();
+	QFile tex(ResourceView::Get()->GetMainDir() + sprite->GetTexPath());
+	tex.copy(m_path + "\\" + newTexturePath);
 
-	QFile string(ResourceView::Get()->GetMainDir() + obj->GetSprite()->GetTexPath());
-	string.copy(m_path + "\\" + spriteName);
-
-	m_globalVars += "var " + objName + ";\n";
-	m_init += objName + " = new Object(\"" + spriteName + "\");\n";
-	m_init += objName + ".origin = new Vector(" + QString::number(obj->GetSprite()->GetCenter().x()) + "," + QString::number(obj->GetSprite()->GetCenter().y()) + ");\n";
+	m_global += "var " + spriteName + ";\n";
+	m_init += spriteName + " = new Sprite('" + newTexturePath + "'," + QString::number(sprite->GetCenter().x()) + "," + QString::number(sprite->GetCenter().y()) + ");\n";
 }
 
-void HTML5Generator::GenerateScene(const QString &name, unsigned bgColor, QVector<SceneObject*> *bbjects)
+void HTML5Generator::GenerateScene(SceneItem *scene)
 {
-	if (!bbjects)
+	if (!scene)
 		return;
 	
-	QString sceneName = "gameScene" + name;
+	QString sceneName = "gameScene" + scene->GetName();
 
-	sf::Color color = sf::Color(bgColor);
+	sf::Color color = sf::Color(scene->GetBgColor());
 
-	m_globalVars += "var " + sceneName + " = new Scene(\"rgb(" + QString::number(color.r) + "," + QString::number(color.g) + "," +QString::number(color.b) + ")\");\n";
+	auto objects = scene->GetObjects();
 
-	for (auto sceneObject : *bbjects)
+	m_global += "var " + sceneName + " = new Scene('rgb(" + QString::number(color.r) + "," + QString::number(color.g) + "," +QString::number(color.b) + ")');\n";
+
+	for (auto sceneObject : *objects)
 	{
-		QString objName = "gameObj" + sceneObject->pObj->GetName();
+		QString spriteName = "gameSprite" + sceneObject->pObj->GetSprite()->GetName();
+		QString objectName = "sceneObject" + sceneObject->pObj->GetName();
 
-		QString vector = "new Vector(" + QString::number(sceneObject->pos.x()) + "," + QString::number(sceneObject->pos.y()) + ")";
+		m_init += "var " + objectName + " = new Instance(" + spriteName + ", " + QString::number(sceneObject->pos.x()) + ", " + QString::number(sceneObject->pos.y()) + ")); \n";
 
-		m_init += sceneName + ".objects.push(new SceneObject(" + objName + ", " + vector + "));\n";
+		for (auto var : *sceneObject->pObj->GetVars())
+		{
+			m_init += objectName + "." + var->m_name + " = ";
+
+			switch (var->m_type)
+			{
+			case DATA_INTEGER:
+				m_init += QString::number(var->m_data.integer);
+				break;
+			case DATA_NUMBER:
+				m_init += QString::number(var->m_data.number, 'f', 10);
+				break;
+			case DATA_STRING:
+				m_init += "'" + *var->m_data.string + "'";
+				break;
+			case DATA_BOOLEAN:
+				m_init += var->m_data.boolean ? "true" : "false";
+				break;
+			}
+
+			m_init += ";\n";
+		}
+
+		m_init += sceneName + ".objects.push('"+ objectName +"');\n";
 	}
 
 	// only for debug
@@ -127,7 +151,7 @@ void HTML5Generator::Save()
 	stream << "/*=================================================*/\n\n";
 
 	// global var
-	stream << m_globalVars << "var currentScene;";
+	stream << m_global << "var currentScene;";
 
 	// init
 	stream << "\nfunction init()\n{\n" << m_init << "}";

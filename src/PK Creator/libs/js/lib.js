@@ -3,7 +3,7 @@
 @author: Piotr Krupa
 */
 
-function Object(imagePath)
+function Sprite(imagePath, centerX, centerY)
 {
 	this.img = new Image();
 	this.img.src = imagePath;
@@ -12,9 +12,9 @@ function Object(imagePath)
 	this.centerY = centerY;
 }
 
-function SceneObject(object, pos)
+function Instance(sprite, x, y)
 {
-	this.object = object;
+	this.sprite = sprite;
 	this.x = x;
 	this.y = y;
 	this.angle = 0;

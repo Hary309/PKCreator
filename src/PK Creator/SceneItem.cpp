@@ -36,18 +36,6 @@ SceneItem::~SceneItem()
 {
 }
 
-void SceneItem::GenerateCode(CodeGenerator *codeGenerator)
-{
-	QVector<SceneObject*> sceneObj;
-
-	for (auto obj : m_objects)
-	{
-		sceneObj.push_back(obj.data());
-	}
-
-	codeGenerator->GenerateScene(m_itemName, m_bgColor, &sceneObj);
-}
-
 void SceneItem::SetName(const QString &name)
 {
 	m_itemName = name;

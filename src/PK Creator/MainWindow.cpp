@@ -141,6 +141,7 @@ void MainWindow::GenerateCode()
 	else
 	{
 		printf("Fail!\n");
+		return;
 	}
 
 	printf("Generated in: %d ms\n", timer.elapsed());
