@@ -10,6 +10,7 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <QSharedPointer>
+#include <QTime>
 
 namespace sf
 {
@@ -39,6 +40,10 @@ protected:
 	sf::Vector2f						m_pos;
 	sf::Vector2f						m_offset;
 
+	QTime								m_lastMouseEvent;
+
+	bool								m_shownTooltip;
+
 	float								m_height;
 
 public:
@@ -57,7 +62,7 @@ public:
 	virtual void Disconnect(Wire *wire) = 0;
 
 	virtual void Render(sf::RenderWindow *renderer) = 0;
-	virtual void Event(sf::Event *e) = 0;
+	virtual void Event(sf::Event *e);
 
 	virtual void MoveTo(sf::Vector2f pos) = 0;
 

@@ -93,6 +93,8 @@ void OutputWidget::Render(sf::RenderWindow *renderer)
 
 void OutputWidget::Event(sf::Event *e)
 {
+	VisualWidget::Event(e);
+
 	if (e->type == sf::Event::MouseButtonPressed && e->mouseButton.button == sf::Mouse::Left)
 	{
 		sf::Vector2f viewOffset = m_pParent->GetNodeMgr()->GetBpEditor()->GetViewOffset();

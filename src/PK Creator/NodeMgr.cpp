@@ -13,6 +13,7 @@
 #include <Node.h>
 #include <VisualNode.h>
 #include <WireMgr.h>
+#include <Tooltip.h>
 
 #include <SFML/Graphics/Font.hpp>
 
@@ -23,6 +24,8 @@ NodeMgr::NodeMgr(BlueprintEditor *parent, QVector<QSharedPointer<Node>> *nodes)
 	m_pFont->loadFromFile("calibri.ttf");
 
 	m_pWireMgr = QSharedPointer<WireMgr>(new WireMgr(this));
+
+	m_pTooltip = QSharedPointer<Tooltip>(new Tooltip(this));
 
 	for (auto node : *m_pNodes)
 	{
@@ -130,6 +133,9 @@ void NodeMgr::Render(sf::RenderWindow *renderer)
 		if (node)
 			node->Render(renderer);
 	}
+
+	if (m_pTooltip)
+		m_pTooltip->Render(renderer);
 
 	m_pWireMgr->Render(renderer);
 }

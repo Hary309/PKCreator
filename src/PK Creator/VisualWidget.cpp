@@ -13,6 +13,9 @@
 #include <Widget.h>
 #include <NodeMgr.h>
 #include <VisualNode.h>
+#include <BlueprintEditor.h>
+#include <Tooltip.h>
+#include <Common.h>
 
 VisualWidget::VisualWidget(VisualNode *parent, Widget *data, sf::Vector2f offset)
 	: m_pParent(parent), m_pData(data), m_offset(offset)
@@ -38,6 +41,45 @@ VisualWidget::VisualWidget(VisualNode *parent, Widget *data, sf::Vector2f offset
 
 VisualWidget::~VisualWidget()
 {
+}
+
+void VisualWidget::Event(sf::Event *e)
+{
+	if (!m_pData)
+		return;
+
+	if (e->type == sf::Event::MouseMoved)
+	{
+		sf::Vector2f viewOffset = m_pParent->GetNodeMgr()->GetBpEditor()->GetViewOffset();
+		float scale = m_pParent->GetNodeMgr()->GetBpEditor()->GetScale();
+
+		auto cursorPos = sf::Vector2f(e->mouseMove.x, e->mouseMove.y) * scale - viewOffset;
+		auto spacePos = m_pSpace->getPosition();
+		auto spaceSize = m_pSpace->getSize();
+
+		if (cursorPos.x > spacePos.x &&
+			cursorPos.y > spacePos.y &&
+			cursorPos.x < spacePos.x + spaceSize.x &&
+			cursorPos.y < spacePos.y + spaceSize.y)
+		{
+			QString str = "Var type: " + dataNames[m_pData->GetDataType()];
+
+			Tooltip::Get()->SetText(str);
+			Tooltip::Get()->SetPos(sf::Vector2f(e->mouseMove.x, e->mouseMove.y));
+			Tooltip::Get()->Show();
+
+			m_shownTooltip = true;
+		}
+		else
+		{
+			if (m_shownTooltip)
+			{
+				Tooltip::Get()->Hide();
+				m_shownTooltip = false;
+			}
+		}
+
+	}
 }
 
 void VisualWidget::SetPin(bool pin) const

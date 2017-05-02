@@ -257,6 +257,9 @@
     <ClCompile Include="VarEditWindow.cpp">
       <Filter>Source Files\Variable</Filter>
     </ClCompile>
+    <ClCompile Include="Tooltip.cpp">
+      <Filter>Source Files\Blueprint\Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -422,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="Var.h">
       <Filter>Header Files\Variable</Filter>
+    </ClInclude>
+    <ClInclude Include="Tooltip.h">
+      <Filter>Header Files\Blueprint\Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

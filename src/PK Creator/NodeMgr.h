@@ -23,6 +23,7 @@ class VisualNode;
 class QEvent;
 class WireMgr;
 class BlueprintEditor;
+class Tooltip;
 
 class NodeMgr
 {
@@ -36,6 +37,8 @@ private:
 	QSharedPointer<sf::Font>				m_pFont;
 
 	QSharedPointer<WireMgr>					m_pWireMgr;
+
+	QSharedPointer<Tooltip>					m_pTooltip;
 
 public:
 	NodeMgr(BlueprintEditor *parent, QVector<QSharedPointer<Node>> *nodes);
