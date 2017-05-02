@@ -21,6 +21,7 @@
 #include <NodeMgr.h>
 #include <Node.h>
 #include <Widget.h>
+#include <WireMgr.h>
 
 #include <Common.h>
 
@@ -98,9 +99,6 @@ void BlueprintEditor::Render() const
 
 void BlueprintEditor::Event(sf::Event *e)
 {
-	if (m_pNodeMgr)
-		m_pNodeMgr->Event(e);
-
 	switch (e->type)
 	{
 		case sf::Event::MouseButtonPressed:
@@ -117,7 +115,7 @@ void BlueprintEditor::Event(sf::Event *e)
 		{
 			m_viewMoving = false;
 
-			if (m_viewMoved == false && e->mouseButton.button == sf::Mouse::Right)
+			if (m_viewMoved == false && e->mouseButton.button == sf::Mouse::Right && !m_pNodeMgr->GetWireMgr()->IsWire())
 			{
 				ShowNodesWindow();
 			}
@@ -149,6 +147,9 @@ void BlueprintEditor::Event(sf::Event *e)
 			m_pRenderer->setView(view);
 		} break;
 	}
+
+	if (m_pNodeMgr)
+		m_pNodeMgr->Event(e);
 }
 
 void BlueprintEditor::ShowNodesWindow()

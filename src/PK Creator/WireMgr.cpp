@@ -253,7 +253,7 @@ void WireMgr::Event(sf::Event *e)
 				m_pCurrentLine->SetStartPos(m_cursorPos);
 		}
 	}
-	else if (e->type == sf::Event::MouseButtonPressed)
+	else if (e->type == sf::Event::MouseButtonReleased)
 	{
 		if (e->mouseButton.button == sf::Mouse::Right)
 		{

@@ -56,5 +56,7 @@ public:
 
 	void Render(sf::RenderWindow *renderer);
 	void Event(sf::Event *e);
+
+	bool IsWire() const { return m_pCurrentLine; }
 };
 
