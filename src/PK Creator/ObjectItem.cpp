@@ -22,7 +22,8 @@ ObjectItem::ObjectItem(QStandardItem *item, const QString &itemName)
 {
 	ObjectItem::SetName(itemName);
 
-	m_eventName << "Create Event" << "Destroy Event" << "Pulse Event" << "Render Event";
+	m_eventName << "Create Event" << "Destroy Event" << "Pulse Event" << "Render Event" << "Mouse Move Event"
+		<< "Mouse Pressed Event" << "Mouse Released Event" << "Mouse Moved Event" << "Key Pressed Event" << "Key Released Event";
 
 	m_type = Item::OBJECT;
 

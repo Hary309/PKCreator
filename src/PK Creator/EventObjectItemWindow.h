@@ -11,8 +11,6 @@
 #include <QMainWindow>
 #include <QTimer>
 
-#include <QSharedPointer>
-
 class QCloseEvent;
 
 class EventObjectItem;
@@ -31,12 +29,9 @@ protected:
 	void closeEvent(QCloseEvent *e) override;
 	void resizeEvent(QResizeEvent *e) override;
 
-
 public:
 	explicit EventObjectItemWindow(QWidget *parent);
 	~EventObjectItemWindow();
-
-
 
 	bool FillData(EventObjectItem *item);
 

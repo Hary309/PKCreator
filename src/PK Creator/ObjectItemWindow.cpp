@@ -86,11 +86,11 @@ bool ObjectItemWindow::FillData(Item *item)
 	{
 		int type = eventItem->GetType();
 
-		auto item = new QStandardItem(m_pItemParent->m_eventName[type]);
+		auto treeItem = new QStandardItem(m_pItemParent->m_eventName[type]);
 
-		eventItem->SetItem(item);
+		eventItem->SetItem(treeItem);
 
-		m_pModel->appendRow(item);
+		m_pModel->appendRow(treeItem);
 	}
 
 	m_varsWindow = QSharedPointer<VariablesWindow>(new VariablesWindow());
@@ -118,7 +118,13 @@ void ObjectItemWindow::CreateContextMenu()
 	connect(m_actionList[1].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(1); });
 	connect(m_actionList[2].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(2); });
 	connect(m_actionList[3].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(3); });
-
+	connect(m_actionList[4].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(4); });
+	connect(m_actionList[5].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(5); });
+	connect(m_actionList[6].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(6); });
+	connect(m_actionList[7].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(7); });
+	connect(m_actionList[8].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(8); });
+	connect(m_actionList[9].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(9); });
+	
 	for (auto actionItem : m_actionList)
 	{
 		m_pContextMenu->addAction(actionItem.data());
