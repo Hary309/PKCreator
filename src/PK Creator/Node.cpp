@@ -15,16 +15,23 @@
 #include <Common.h>
 
 
-Node::Node(const QString &name, sf::Vector2f pos)
+Node::Node(const QString &name, sf::Vector2f pos, Type type)
 	: m_name(name), m_pos(pos)
 {
 	m_idExecFrom = m_idExecTo = 0;
 
 	m_id = qint64(this);
 
-	m_execFrom = false;
-	m_execTo = false;
-
+	if (type == FUNCTION)
+	{
+		m_execFrom = true;
+		m_execTo = true;
+	}
+	else if (type == EVENT)
+	{
+		m_execFrom = false;
+		m_execTo = true;
+	}
 }
 
 Node::~Node()

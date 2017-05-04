@@ -11,6 +11,8 @@
 #include <QSharedPointer>
 #include <QVector>
 
+#include <NodeDefsMgr.h>
+
 namespace sf
 {
 	class RenderWindow;
@@ -45,6 +47,9 @@ public:
 	~NodeMgr();
 
 	VisualNode *AddNode(Node *node);
+
+	VisualNode *AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef);
+
 	bool RemoveNode(Node *node);
 	bool RemoveNode(VisualNode *visualNode);
 

@@ -66,22 +66,6 @@ void BlueprintEditor::Resize(QSize size)
 void BlueprintEditor::FillData(EventObjectItem *item)
 {
 	m_pNodeMgr = QSharedPointer<NodeMgr>(new NodeMgr(this, &item->m_nodes));
-
-	auto node = new Node("Object in box", sf::Vector2f(16.f, 16.f));
-	node->AddWidget(new Widget(node, "Width", Widget::INPUT, DataType::DATA_INTEGER));
-	node->AddWidget(new Widget(node, "Height", Widget::INPUT, DataType::DATA_INTEGER));
-	node->AddWidget(new Widget(node, "X", Widget::INPUT, DataType::DATA_NUMBER));
-	node->AddWidget(new Widget(node, "Y", Widget::INPUT, DataType::DATA_NUMBER));
-	node->AddWidget(new Widget(node, "Return", Widget::OUTPUT, DataType::DATA_BOOLEAN));
-	m_pNodeMgr->AddNode(node);
-
-	node = new Node("Player", sf::Vector2f(200.f, 16.f));
-	node->AddWidget(new Widget(node, "Object", Widget::INPUT, DataType::DATA_OBJECTID));
-	node->AddWidget(new Widget(node, "Width", Widget::OUTPUT, DataType::DATA_INTEGER));
-	node->AddWidget(new Widget(node, "Height", Widget::OUTPUT, DataType::DATA_INTEGER));
-	node->AddWidget(new Widget(node, "X", Widget::OUTPUT, DataType::DATA_NUMBER));
-	node->AddWidget(new Widget(node, "Y", Widget::OUTPUT, DataType::DATA_NUMBER));
-	m_pNodeMgr->AddNode(node);
 }
 
 void BlueprintEditor::Render() const
@@ -156,7 +140,17 @@ void BlueprintEditor::ShowNodesWindow()
 {
 	NodesWindow *nodeWnd = ResourceView::Get()->GetNodesWindow();
 
-	nodeWnd->show();
+	nodeWnd->exec();
+
+	auto res = nodeWnd->GetSelectedItem();
+
+	if (!res)
+		return;
+
+	if (!res->nodeDef)
+		return;
+
+	m_pNodeMgr->AddNodeFromDef(res->nodeDef);
 }
 
 sf::Vector2f BlueprintEditor::GetViewOffset() const

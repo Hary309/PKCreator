@@ -19,6 +19,7 @@ class QStandardItem;
 class Item;
 
 class NodesWindow;
+class NodeDefsMgr;
 
 class CodeGenerator;
 
@@ -33,6 +34,7 @@ private:
 
 	QString								m_mainDir;
 
+	QSharedPointer<NodeDefsMgr>			m_pNodeDefsMgr;
 	QSharedPointer<NodesWindow>			m_pNodesWindow;
 
 	// to save
@@ -86,7 +88,7 @@ public:
 
 	Config		*GetConfig()		const { return m_pProConfig.data(); }
 
-	NodesWindow *GetNodesWindow() { return m_pNodesWindow.data(); }
+	NodesWindow *GetNodesWindow() const { return m_pNodesWindow.data(); }
 
 	static ResourceView *Get() { return s_pInst; }
 

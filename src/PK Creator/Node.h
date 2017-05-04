@@ -19,8 +19,17 @@ class VisualNode;
 
 class Node
 {
+public:
+	enum Type
+	{
+		EVENT = 0,
+		FUNCTION
+	};
+
 protected:
 	qint64								m_id;
+
+	Type								m_type;
 
 	sf::Vector2f						m_pos;
 
@@ -37,7 +46,7 @@ protected:
 	friend VisualNode;
 
 public:
-	Node(const QString &name, sf::Vector2f pos);
+	Node(const QString &name, sf::Vector2f pos, Type type);
 	~Node();
 
 	Widget *AddWidget(Widget *widget);

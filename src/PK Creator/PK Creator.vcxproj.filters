@@ -260,6 +260,9 @@
     <ClCompile Include="Tooltip.cpp">
       <Filter>Source Files\Blueprint\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="NodeDefsMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -428,6 +431,9 @@
     </ClInclude>
     <ClInclude Include="Tooltip.h">
       <Filter>Header Files\Blueprint\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeDefsMgr.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

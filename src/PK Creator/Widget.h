@@ -48,7 +48,7 @@ private:
 	friend VisualNode;
 
 public:
-	Widget(Node *parent, const QString &name, ConnectionType connType, DataType color);
+	Widget(Node *parent, const QString &name, ConnectionType connType, DataType type);
 	~Widget();
 
 	void Load(QDataStream *const dataStream);

@@ -29,7 +29,7 @@ void EventObjectItem::Load(QDataStream *const dataStream)
 
 	for (int i = 0; i < n; ++i)
 	{
-		auto node = QSharedPointer<Node>(new Node(QString(), sf::Vector2f()));
+		auto node = QSharedPointer<Node>(new Node(QString(), sf::Vector2f(), Node::FUNCTION));
 		node->Load(dataStream);
 
 		m_nodes.push_back(node);

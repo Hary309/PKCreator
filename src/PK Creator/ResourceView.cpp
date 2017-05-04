@@ -20,6 +20,7 @@
 #include <ObjectItem.h>
 #include <SceneItem.h>
 #include <Config.h>
+#include <NodeDefsMgr.h>
 
 #include <CodeGenerator.h>
 
@@ -41,11 +42,15 @@ ResourceView::ResourceView(QWidget *parent)
 	m_lastObjectID = 0;
 	m_lastSceneID = 0;
 
+	m_pNodeDefsMgr = QSharedPointer<NodeDefsMgr>(new NodeDefsMgr());
+	m_pNodeDefsMgr->LoadDefs();
+
 	m_pProConfig = QSharedPointer<Config>(new Config(this));
 
 	s_pInst = this;
 
 	m_pNodesWindow = QSharedPointer<NodesWindow>(new NodesWindow(this));
+	m_pNodesWindow->AddDefs(m_pNodeDefsMgr->GetNodesDef());
 
 	connect(this, &QTreeView::expanded, this, &ResourceView::ResourceView_expanded);
 	connect(this, &QTreeView::collapsed, this, &ResourceView::ResourceView_collapsed);

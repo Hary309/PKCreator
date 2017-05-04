@@ -14,8 +14,10 @@
 #include <VisualNode.h>
 #include <WireMgr.h>
 #include <Tooltip.h>
+#include <Widget.h>
 
 #include <SFML/Graphics/Font.hpp>
+#include <QCursor>
 
 NodeMgr::NodeMgr(BlueprintEditor *parent, QVector<QSharedPointer<Node>> *nodes)
 	: m_pParent(parent), m_pNodes(nodes)
@@ -49,9 +51,6 @@ NodeMgr::~NodeMgr()
 
 VisualNode *NodeMgr::AddNode(Node *node)
 {
-	if (m_pNodes->size() == 2)
-		return nullptr;
-
 	if (!node)
 		return nullptr;
 
@@ -62,6 +61,34 @@ VisualNode *NodeMgr::AddNode(Node *node)
 	m_pNodes->push_back(sharedNode);
 
 	return sharedVisualNode.data();
+}
+
+VisualNode *NodeMgr::AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef)
+{
+	if (!nodeDef)
+		return nullptr;
+
+	if (nodeDef->type == -1 || nodeDef->type > Node::FUNCTION)
+		return nullptr;
+
+	if (nodeDef->name == "")
+		return nullptr;
+
+	QPoint cursorPos = QCursor::pos();
+
+	Node *node = new Node(nodeDef->name, sf::Vector2f(0.f, 0.f), static_cast<Node::Type>(nodeDef->type));
+
+	for (auto arg : nodeDef->args)
+	{
+		node->AddWidget(new Widget(node, arg.name, Widget::INPUT, arg.type));
+	}
+
+	if (nodeDef->returnValue.type != -1)
+	{
+		node->AddWidget(new Widget(node, nodeDef->returnValue.name, Widget::OUTPUT, nodeDef->returnValue.type));
+	}	
+
+	return AddNode(node);
 }
 
 bool NodeMgr::RemoveNode(Node *node)

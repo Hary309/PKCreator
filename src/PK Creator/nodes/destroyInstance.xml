@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<type>1</type>
+	<name>DestroyInstance</name>
+	<category>Instance</category>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	</args>
+	<jsCode>function jebacMakowca() { }</jscode>
+</node>
+ 
