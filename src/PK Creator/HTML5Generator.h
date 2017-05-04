@@ -13,6 +13,9 @@
 class HTML5Generator : public CodeGenerator
 {
 private:
+	QSize m_windowSize;
+
+	// html
 	QString	m_htmlCode;
 
 	// javascript
@@ -25,7 +28,7 @@ public:
 	~HTML5Generator();
 
 	void GenerateCanvas(const QString &title, const QSize &windowSize) override;
-
+	void GenerateObject(ObjectItem *object) override;
 	void GenerateSprite(SpriteItem *sprite) override;
 	void GenerateScene(SceneItem *item) override;
 

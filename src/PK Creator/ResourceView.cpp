@@ -395,6 +395,16 @@ void ResourceView::GenerateCode(CodeGenerator *codeGenerator)
 		codeGenerator->GenerateSprite(static_cast<SpriteItem*>(sprite));
 	}
 
+	printf("Generating objects:\n");
+	auto objects = GetItemsByType(Item::Type::OBJECT);
+	for (auto object : objects)
+	{
+		printf("\t%s...\n", object->GetName().toStdString().c_str());
+
+		codeGenerator->GenerateObject(static_cast<ObjectItem*>(object));
+	}
+
+
 	printf("Generating scenes:\n");
 	auto scenes = GetItemsByType(Item::Type::SCENE);
 	for (auto scene : scenes)
