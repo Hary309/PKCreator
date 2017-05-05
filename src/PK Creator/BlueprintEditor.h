@@ -43,12 +43,15 @@ private:
 
 	float									m_scale;
 
+	sf::Vector2f							m_nodePos;
+
 protected:
 	void mouseMoveEvent(QMouseEvent *e) override;
 	void mousePressEvent(QMouseEvent *e) override;
 	void mouseReleaseEvent(QMouseEvent *e) override;
 	void wheelEvent(QWheelEvent *e) override;
-
+	void keyPressEvent(QKeyEvent *e) override;
+	void keyReleaseEvent(QKeyEvent *e) override;
 
 public:
 	explicit BlueprintEditor(QWidget *parent);
@@ -61,11 +64,16 @@ public:
 	void Render() const;
 	void Event(sf::Event *e);
 
-	void ShowNodesWindow();
+	void ShowNodesWindow(const sf::Vector2f &nodePos);
 
 	sf::Vector2f GetViewOffset() const;
 	float GetScale() const { return m_scale; }
 
+	sf::RenderWindow *GetRenderer() const { return m_pRenderer.data(); }
+
 	NodeMgr *GetNodeMgr() const { return m_pNodeMgr.data(); }
+
+private slots:
+	void NodesWindow_accepted() const;
 };
 

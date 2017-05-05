@@ -44,8 +44,10 @@ BlueprintEditor::BlueprintEditor(QWidget *parent)
 	m_viewMoved = false;
 
 	setMouseTracking(true);
+	setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 
 	connect(&m_timer, &QTimer::timeout, this, &BlueprintEditor::Render);
+	connect(ResourceView::Get()->GetNodesWindow(), &QDialog::accepted, this, &BlueprintEditor::NodesWindow_accepted);
 }
 
 BlueprintEditor::~BlueprintEditor()
@@ -99,9 +101,9 @@ void BlueprintEditor::Event(sf::Event *e)
 		{
 			m_viewMoving = false;
 
-			if (m_viewMoved == false && e->mouseButton.button == sf::Mouse::Right && !m_pNodeMgr->GetWireMgr()->IsWire())
+			if (e->mouseButton.button == sf::Mouse::Middle)
 			{
-				ShowNodesWindow();
+				ShowNodesWindow(sf::Vector2f(e->mouseButton.x, e->mouseButton.y));
 			}
 		} break;
 		case sf::Event::MouseMoved:
@@ -130,19 +132,25 @@ void BlueprintEditor::Event(sf::Event *e)
 
 			m_pRenderer->setView(view);
 		} break;
+	default: ;
 	}
 
 	if (m_pNodeMgr)
 		m_pNodeMgr->Event(e);
 }
 
-void BlueprintEditor::ShowNodesWindow()
+void BlueprintEditor::ShowNodesWindow(const sf::Vector2f &nodePos)
 {
+	m_nodePos = nodePos;
+
 	NodesWindow *nodeWnd = ResourceView::Get()->GetNodesWindow();
 
-	nodeWnd->exec();
+	nodeWnd->show();
+}
 
-	auto res = nodeWnd->GetSelectedItem();
+void BlueprintEditor::NodesWindow_accepted() const
+{
+	auto res = ResourceView::Get()->GetNodesWindow()->GetSelectedItem();
 
 	if (!res)
 		return;
@@ -150,7 +158,7 @@ void BlueprintEditor::ShowNodesWindow()
 	if (!res->nodeDef)
 		return;
 
-	m_pNodeMgr->AddNodeFromDef(res->nodeDef);
+	m_pNodeMgr->AddNodeFromDef(res->nodeDef, m_nodePos);
 }
 
 sf::Vector2f BlueprintEditor::GetViewOffset() const
@@ -180,9 +188,10 @@ void BlueprintEditor::mousePressEvent(QMouseEvent *e)
 
 	if (e->button() == Qt::LeftButton)
 		sfEvent.mouseButton.button = sf::Mouse::Left;
-
-	if (e->button() == Qt::RightButton)
+	else if (e->button() == Qt::RightButton)
 		sfEvent.mouseButton.button = sf::Mouse::Right;
+	else if (e->button() == Qt::MiddleButton)
+		sfEvent.mouseButton.button = sf::Mouse::Middle;
 
 	Event(&sfEvent);
 }
@@ -197,9 +206,10 @@ void BlueprintEditor::mouseReleaseEvent(QMouseEvent *e)
 
 	if (e->button() == Qt::LeftButton)
 		sfEvent.mouseButton.button = sf::Mouse::Left;
-
-	if (e->button() == Qt::RightButton)
+	else if (e->button() == Qt::RightButton)
 		sfEvent.mouseButton.button = sf::Mouse::Right;
+	else if (e->button() == Qt::MiddleButton)
+		sfEvent.mouseButton.button = sf::Mouse::Middle;
 
 	Event(&sfEvent);
 }
@@ -211,5 +221,23 @@ void BlueprintEditor::wheelEvent(QWheelEvent *e)
 	sfEvent.type = sf::Event::MouseWheelMoved;
 	sfEvent.mouseWheel.delta = e->delta();
 
+	Event(&sfEvent);
+}
+
+void BlueprintEditor::keyPressEvent(QKeyEvent *e)
+{
+	sf::Event sfEvent;
+
+	sfEvent.type = sf::Event::KeyPressed;
+	sfEvent.key.code = static_cast<sf::Keyboard::Key>(e->key());
+	Event(&sfEvent);
+}
+
+void BlueprintEditor::keyReleaseEvent(QKeyEvent *e)
+{
+	sf::Event sfEvent;
+
+	sfEvent.type = sf::Event::KeyReleased;
+	sfEvent.key.code = static_cast<sf::Keyboard::Key>(e->key());
 	Event(&sfEvent);
 }
