@@ -12,10 +12,12 @@
 #include <SFML/System/Vector2.hpp>
 
 #include <NodeMgr.h>
+#include <BlueprintEditor.h>
 
 Tooltip *Tooltip::s_pInst = nullptr;
 
 Tooltip::Tooltip(NodeMgr *parent)
+	: m_pParent(parent)
 {
 	s_pInst = this;
 
@@ -43,7 +45,12 @@ void Tooltip::SetText(const QString &text)
 
 void Tooltip::SetPos(const sf::Vector2f &pos)
 {
-	sf::Vector2f m_pos = pos + sf::Vector2f(0.f, 16.f);
+	sf::Vector2f viewOffset = m_pParent->GetBpEditor()->GetViewOffset();
+	float scale = m_pParent->GetBpEditor()->GetScale();
+
+	sf::Vector2f newPos = sf::Vector2f(pos.x, pos.y) * scale - viewOffset;
+
+	sf::Vector2f m_pos = newPos + sf::Vector2f(0.f, 16.f);
 
 	m_pBackground->setPosition(m_pos);
 	m_pText->setPosition(m_pos + sf::Vector2f(4.f, m_pText->getCharacterSize() / 2));

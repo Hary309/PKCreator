@@ -24,6 +24,8 @@ class NodeMgr;
 class Tooltip
 {
 private:
+	NodeMgr									*m_pParent;
+
 	QSharedPointer<sf::RectangleShape>		m_pBackground;
 	QSharedPointer<sf::Text>				m_pText;
 
