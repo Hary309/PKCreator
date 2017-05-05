@@ -43,5 +43,5 @@ public:
 	NodeItem *GetSelectedItem() const { return m_pSelectedItem; }
 
 private slots:
-void NodesWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
+	void NodesWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
 };

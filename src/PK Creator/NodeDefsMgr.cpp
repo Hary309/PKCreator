@@ -51,6 +51,8 @@ void NodeDefsMgr::LoadDefs(const QString &path)
 						def->type = reader.readElementText().toInt();
 					else if (reader.name() == "name")
 						def->name = reader.readElementText();
+					else if (reader.name() == "desc")
+						def->desc = reader.readElementText();
 					else if (reader.name() == "category")
 						def->category = reader.readElementText();
 					else if (reader.name() == "args")

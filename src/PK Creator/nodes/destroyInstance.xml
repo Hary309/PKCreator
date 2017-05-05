@@ -2,6 +2,7 @@
 <node>
 	<type>1</type>
 	<name>DestroyInstance</name>
+	<desc>Removes instance from the scene</desc>
 	<category>Instance</category>
 	<args>
 	    <arg>
@@ -9,6 +10,6 @@
 	        <name>InstanceID</name>
 	    </arg>
 	</args>
-	<jsCode>function jebacMakowca() { }</jscode>
+	<jsCode></jscode>
 </node>
  

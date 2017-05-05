@@ -143,10 +143,3 @@ function LoadScene(sceneID)
 		}
 	}
 }
-
-function PointDir(x1, y1, x2, y2)
-{
-	return Math.atan2((y1 - y2), (x1 - x2)) * 180 / Math.PI + 270;
-}
-
-// TBD

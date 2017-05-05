@@ -52,7 +52,7 @@ void NodesWindow::AddDefs(const QVector<QSharedPointer<NodeDefsMgr::NodeDef>> *n
 
 		auto treeItemChild = new QTreeWidgetItem();
 		treeItemChild->setText(0, sharedNodeDef->name);
-
+		treeItemChild->setToolTip(0, sharedNodeDef->desc);
 		topLevelItem->addChild(treeItemChild);
 
 		auto nodeItem = QSharedPointer<NodeItem>(new NodeItem());

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<type>1</type>
+	<name>PointDir</name>
+	<desc>Returns the direction</desc>
+	<category>Math</category>
+	<args>
+	    <arg>
+	        <type>1</type>
+	        <name>x1</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>y1</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>x2</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>y2</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>direction</name>
+	</returnValue>
+	<jsCode>return Math.atan2((y1 - y2), (x1 - x2)) * 180 / Math.PI + 270;</jsCode>
+</node>
+ 

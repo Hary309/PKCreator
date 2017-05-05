@@ -19,8 +19,6 @@
 #include <WireData.h>
 #include <WireExec.h>
 
-#include <QCursor>
-
 WireMgr::WireMgr(NodeMgr *parent)
 	: m_pNodeMgr(parent)
 {

@@ -28,6 +28,7 @@ public:
 	public:
 		int type;
 		QString name;
+		QString desc;
 		QString category;
 		QVector<Arg> args;
 		Arg returnValue;
