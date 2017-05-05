@@ -16,7 +16,7 @@
 
 
 Node::Node(const QString &name, sf::Vector2f pos, Type type)
-	: m_name(name), m_pos(pos)
+	: m_name(name), m_pos(pos), m_type(type)
 {
 	m_idExecFrom = m_idExecTo = 0;
 
@@ -31,6 +31,11 @@ Node::Node(const QString &name, sf::Vector2f pos, Type type)
 	{
 		m_execFrom = false;
 		m_execTo = true;
+	}
+	else if (type == VARIABLE)
+	{
+		m_execFrom = false;
+		m_execTo = false;
 	}
 }
 
@@ -67,8 +72,12 @@ void Node::Load(QDataStream *const dataStream)
 
 	int nInputs = 0, nOutputs = 0;
 
-	*dataStream >> m_id >> x >> y >> m_name >> m_execFrom >> m_idExecFrom >> m_execTo >> m_idExecTo;
+	int type = 0;
+
+	*dataStream >> m_id >> x >> y >> m_name >> type >> m_execFrom >> m_idExecFrom >> m_execTo >> m_idExecTo;
 	m_pos = sf::Vector2f(x, y);
+
+	m_type = static_cast<Type>(type);
 
 	*dataStream >> nInputs;
 
@@ -93,7 +102,7 @@ void Node::Load(QDataStream *const dataStream)
 
 void Node::Save(QDataStream *const dataStream)
 {
-	*dataStream << m_id << m_pos.x << m_pos.y << m_name << m_execFrom << m_idExecFrom << m_execTo << m_idExecTo;
+	*dataStream << m_id << m_pos.x << m_pos.y << m_name << m_type << m_execFrom << m_idExecFrom << m_execTo << m_idExecTo;
 	*dataStream << m_inputs.size();
 
 	for (auto widget : m_inputs)

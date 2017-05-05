@@ -23,7 +23,8 @@ public:
 	enum Type
 	{
 		EVENT = 0,
-		FUNCTION
+		FUNCTION,
+		VARIABLE
 	};
 
 protected:
