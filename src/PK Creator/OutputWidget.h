@@ -33,5 +33,7 @@ public:
 	void Event(sf::Event *e) override;
 
 	void MoveTo(sf::Vector2f pos) override;
+
+	QVector<WireData*> *GetWires() { return &m_wires; }
 };
 

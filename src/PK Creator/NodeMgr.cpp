@@ -63,7 +63,7 @@ VisualNode *NodeMgr::AddNode(Node *node)
 	return sharedVisualNode.data();
 }
 
-VisualNode *NodeMgr::AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef)
+VisualNode *NodeMgr::AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef, const sf::Vector2f &pos)
 {
 	if (!nodeDef)
 		return nullptr;
@@ -76,7 +76,7 @@ VisualNode *NodeMgr::AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef)
 
 	QPoint cursorPos = QCursor::pos();
 
-	Node *node = new Node(nodeDef->name, sf::Vector2f(0.f, 0.f), static_cast<Node::Type>(nodeDef->type));
+	Node *node = new Node(nodeDef->name, pos, static_cast<Node::Type>(nodeDef->type));
 
 	for (auto arg : nodeDef->args)
 	{
@@ -88,7 +88,9 @@ VisualNode *NodeMgr::AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef)
 		node->AddWidget(new Widget(node, nodeDef->returnValue.name, Widget::OUTPUT, nodeDef->returnValue.type));
 	}	
 
-	return AddNode(node);
+	auto visualNode = AddNode(node);
+
+	return visualNode;
 }
 
 bool NodeMgr::RemoveNode(Node *node)
@@ -101,6 +103,7 @@ bool NodeMgr::RemoveNode(Node *node)
 			{
 				if (m_visualNodes[j]->GetData() == m_pNodes->at(i))
 				{
+					m_visualNodes[j]->DisconnectAll();
 					m_visualNodes.removeAt(j);
 					break;
 				}

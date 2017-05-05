@@ -32,5 +32,6 @@ public:
 	void Event(sf::Event *e) override;
 
 	void MoveTo(sf::Vector2f pos) override;
-};
 
+	WireData *GetWire() const { return m_pWire; }
+};

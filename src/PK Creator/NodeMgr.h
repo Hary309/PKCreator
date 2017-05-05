@@ -8,10 +8,8 @@
 
 #pragma once
 
-#include <QSharedPointer>
-#include <QVector>
-
 #include <NodeDefsMgr.h>
+#include <SFML/System/Vector2.hpp>
 
 namespace sf
 {
@@ -48,7 +46,7 @@ public:
 
 	VisualNode *AddNode(Node *node);
 
-	VisualNode *AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef);
+	VisualNode *AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef, const sf::Vector2f &pos);
 
 	bool RemoveNode(Node *node);
 	bool RemoveNode(VisualNode *visualNode);

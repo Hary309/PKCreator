@@ -75,13 +75,14 @@ public:
 	void Render(sf::RenderWindow *renderer);
 	void Event(sf::Event *e);
 
-	void ConnectAllWires();
 
 	void MoveTo(sf::Vector2f pos) const;
 
 	void AddExecFrom();
 	void AddExecTo();
 
+	void ConnectAllWires();
+	void DisconnectAll();
 	void ConnectedWith(VisualNode *node, ExecType execType);
 	void Connect(ExecType execType);
 	void Disconnect(WireExec *wire);

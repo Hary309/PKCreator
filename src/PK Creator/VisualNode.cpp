@@ -8,6 +8,8 @@
 
 #include "VisualNode.h"
 
+#include <QScreen>
+
 #include <BlueprintEditor.h>
 
 #include <NodeMgr.h>
@@ -133,6 +135,12 @@ void VisualNode::Render(sf::RenderWindow *renderer)
 
 void VisualNode::Event(sf::Event *e)
 {
+	if (!m_pNodeMgr)
+		return;
+
+	if (!m_pNodeMgr->GetBpEditor())
+		return;
+
 	sf::Vector2f viewOffset = m_pNodeMgr->GetBpEditor()->GetViewOffset();
 	float scale = m_pNodeMgr->GetBpEditor()->GetScale();
 
@@ -181,6 +189,25 @@ void VisualNode::Event(sf::Event *e)
 			if (m_moving)
 				MoveTo(sf::Vector2f(e->mouseMove.x, e->mouseMove.y) * scale - m_mouseOffset - viewOffset);
 		} break;
+		case sf::Event::KeyReleased:
+		{
+			if (e->key.code == Qt::Key_Delete)
+			{
+				auto pos = sf::Mouse::getPosition(*m_pNodeMgr->GetBpEditor()->GetRenderer());
+
+				sf::Vector2f nodePos = m_pData->m_pos;
+				sf::Vector2f size = m_pHeader->getSize();
+				sf::Vector2f mousePos = sf::Vector2f(pos.x, pos.y) * scale - viewOffset;
+
+				if (mousePos.x > nodePos.x &&
+					mousePos.x < nodePos.x + size.x &&
+					mousePos.y > nodePos.y &&
+					mousePos.y < nodePos.y + size.y)
+				{
+					m_pNodeMgr->RemoveNode(m_pData);
+				}
+			}
+		} break;
 	default: ;
 	}
 
@@ -194,63 +221,6 @@ void VisualNode::Event(sf::Event *e)
 	{
 		if (widget)
 			widget->Event(e);
-	}
-}
-
-void VisualNode::ConnectAllWires()
-{
-	auto allNodes = m_pNodeMgr->GetAllNodes();
-
-	for (auto inputWidget : m_visualInputs)
-	{
-		auto connectedWidget = &inputWidget->GetData()->m_connected;
-
-		if (connectedWidget->size() == 0)
-			continue;
-
-		for (auto sharedVisualNode : *allNodes)
-		{
-			if (sharedVisualNode == this)
-				continue;
-
-			VisualNode *visualNode = sharedVisualNode.data();
-
-			auto visualOutputs = visualNode->GetAllOutputs();
-
-
-			for (auto sharedVisualOutput : *visualOutputs)
-			{
-				VisualWidget *outputWidget = sharedVisualOutput.data();
-
-				if (outputWidget->GetData()->GetID() == connectedWidget->at(0))
-				{
-					inputWidget->ConnectWire();
-					outputWidget->ConnectWire();
-
-					break;
-				}
-			}
-		}
-	}
-
-	auto idWireExecTo = m_pData->m_idExecTo;
-
-	if (idWireExecTo)
-	{
-		for (auto sharedVisualNode : *allNodes)
-		{
-			if (sharedVisualNode == this)
-				continue;
-
-			VisualNode *visualNode = sharedVisualNode.data();
-
-			if (visualNode->GetData()->GetID() == idWireExecTo)
-			{
-				Connect(ExecType::ExecTo);
-				visualNode->Connect(ExecType::ExecFrom);
-				break;
-			}
-		}
 	}
 }
 
@@ -315,6 +285,90 @@ void VisualNode::AddExecTo()
 		m_pShapeExecTo->setRotation(90);
 
 		MoveTo(m_pData->m_pos);
+	}
+}
+
+void VisualNode::ConnectAllWires()
+{
+	auto allNodes = m_pNodeMgr->GetAllNodes();
+
+	for (auto inputWidget : m_visualInputs)
+	{
+		auto connectedWidget = &inputWidget->GetData()->m_connected;
+
+		if (connectedWidget->size() == 0)
+			continue;
+
+		for (auto sharedVisualNode : *allNodes)
+		{
+			if (sharedVisualNode == this)
+				continue;
+
+			VisualNode *visualNode = sharedVisualNode.data();
+
+			auto visualOutputs = visualNode->GetAllOutputs();
+
+
+			for (auto sharedVisualOutput : *visualOutputs)
+			{
+				VisualWidget *outputWidget = sharedVisualOutput.data();
+
+				if (outputWidget->GetData()->GetID() == connectedWidget->at(0))
+				{
+					inputWidget->ConnectWire();
+					outputWidget->ConnectWire();
+
+					break;
+				}
+			}
+		}
+	}
+
+	auto idWireExecTo = m_pData->m_idExecTo;
+
+	if (idWireExecTo)
+	{
+		for (auto sharedVisualNode : *allNodes)
+		{
+			if (sharedVisualNode == this)
+				continue;
+
+			VisualNode *visualNode = sharedVisualNode.data();
+
+			if (visualNode->GetData()->GetID() == idWireExecTo)
+			{
+				Connect(ExecType::ExecTo);
+				visualNode->Connect(ExecType::ExecFrom);
+				break;
+			}
+		}
+	}
+}
+
+void VisualNode::DisconnectAll()
+{
+	auto wireMgr = m_pNodeMgr->GetWireMgr();
+
+	wireMgr->Disconnect(m_pWireExecFrom);
+	wireMgr->Disconnect(m_pWireExecTo);
+
+	for (auto visualWidget : m_visualInputs)
+	{
+		InputWidget *inputWidget = static_cast<InputWidget*>(visualWidget.data());
+
+		wireMgr->Disconnect(reinterpret_cast<Wire*>(inputWidget->GetWire()));
+	}
+
+	for (auto visualWidget : m_visualOutputs)
+	{
+		OutputWidget *outputWidget = static_cast<OutputWidget*>(visualWidget.data());
+
+		auto wires = outputWidget->GetWires();
+
+		for (auto wire : *wires)
+		{
+			wireMgr->Disconnect(reinterpret_cast<Wire*>(wire));
+		}
 	}
 }
 
