@@ -238,7 +238,7 @@ void VisualNode::MoveTo(sf::Vector2f pos) const
 		m_pShapeExecFrom->setPosition(pos + sf::Vector2f(m_pShapeExecFrom->getRadius() / 2 + m_pHeader->getOutlineThickness(), m_pHeader->getSize().y / 2));
 
 	if (m_pShapeExecTo)
-		m_pShapeExecTo->setPosition(pos + sf::Vector2f(m_boxWidth - m_pShapeExecFrom->getRadius() - 1.f - m_pHeader->getOutlineThickness(), m_pHeader->getSize().y / 2));
+		m_pShapeExecTo->setPosition(pos + sf::Vector2f(m_boxWidth - m_pShapeExecTo->getRadius() - 1.f - m_pHeader->getOutlineThickness(), m_pHeader->getSize().y / 2));
 
 	if (m_pWireExecFrom)
 		m_pWireExecFrom->SetEndPos(m_pShapeExecFrom->getPosition());
