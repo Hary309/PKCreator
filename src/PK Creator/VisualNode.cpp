@@ -403,6 +403,8 @@ void VisualNode::Connect(ExecType execType)
 		}
 
 		SetPin(true, ExecType::ExecFrom);
+
+		MoveTo(m_pData->m_pos);
 	}
 	else if (execType == ExecType::ExecTo)
 	{
@@ -421,6 +423,8 @@ void VisualNode::Connect(ExecType execType)
 		}
 
 		SetPin(true, ExecType::ExecTo);
+
+		MoveTo(m_pData->m_pos);
 	}
 }
 
