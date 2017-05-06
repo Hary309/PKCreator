@@ -17,6 +17,7 @@ class Node;
 class VisualWidget;
 class InputWidget;
 class OutputWidget;
+class HTML5Generator;
 
 class Widget
 {
@@ -46,6 +47,7 @@ private:
 	friend InputWidget;
 	friend OutputWidget;
 	friend VisualNode;
+	friend HTML5Generator;
 
 public:
 	Widget(Node *parent, const QString &name, ConnectionType connType, DataType type);

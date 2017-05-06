@@ -16,6 +16,7 @@
 
 class Widget;
 class VisualNode;
+class HTML5Generator;
 
 class Node
 {
@@ -45,6 +46,7 @@ protected:
 	QVector<QSharedPointer<Widget>>		m_outputs;
 
 	friend VisualNode;
+	friend HTML5Generator;
 
 public:
 	Node(const QString &name, sf::Vector2f pos, Type type);

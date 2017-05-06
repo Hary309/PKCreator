@@ -10,6 +10,9 @@
 
 #include <CodeGenerator.h>
 
+class Node;
+class EventObjectItem;
+
 class HTML5Generator : public CodeGenerator
 {
 private:
@@ -19,9 +22,11 @@ private:
 	QString	m_htmlCode;
 
 	// javascript
-	QString m_global;
 	QString m_init;
 	QString m_render;
+
+private:
+	static QString GenerateFunction(EventObjectItem *e, Node *node, QString result);
 
 public:
 	explicit HTML5Generator(const QString &path);
@@ -33,5 +38,6 @@ public:
 	void GenerateScene(SceneItem *item) override;
 
 	void Save() override;
+
 };
 

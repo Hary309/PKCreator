@@ -16,6 +16,10 @@
 #include <SpriteItem.h>
 #include <SceneItem.h>
 #include <Var.h>
+#include <EventObjectItem.h>
+#include <Node.h>
+#include <Widget.h>
+#include <FunctionDefsMgr.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -26,9 +30,6 @@ HTML5Generator::HTML5Generator(const QString &path)
 
 	QDir dir(m_path);
 	dir.mkpath(m_path);
-
-	m_global += "var canvas = document.getElementById('canvas');\n";
-	m_global += "var ctx = canvas.getContext('2d');\n\n";;
 }
 
 
@@ -62,8 +63,7 @@ void HTML5Generator::GenerateSprite(SpriteItem *sprite)
 	QFile tex(ResourceView::Get()->GetMainDir() + sprite->GetTexPath());
 	tex.copy(m_path + "\\" + newTexturePath);
 
-	m_global += "var " + spriteName + ";";
-	m_init += spriteName + " = new Sprite('" + newTexturePath + "'," + QString::number(sprite->GetCenter().x()) + "," + QString::number(sprite->GetCenter().y()) + ");\n";
+	m_init += "var " + spriteName + " = new Sprite('" + newTexturePath + "'," + QString::number(sprite->GetCenter().x()) + "," + QString::number(sprite->GetCenter().y()) + ");\n";
 }
 
 void HTML5Generator::GenerateObject(ObjectItem *object)
@@ -102,7 +102,83 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 		m_init += ";\n";
 	}
 
+	auto events = object->GetEvents();
+
+	printf("\tGenerating events logic...\n");
+
+	for (auto sharedEvent : *events)
+	{
+		if (sharedEvent)
+		{
+			EventObjectItem *e = sharedEvent.data();
+			auto firstNode = e->GetFirstNode();
+
+			printf("\t\t%s...\n", EventDefsMgr::Get()->GetEvent(e->GetType())->name.toStdString().c_str());
+
+			if (firstNode->m_type != Node::EVENT)
+				continue;
+
+			auto eventDef = EventDefsMgr::Get()->GetEvent(e->GetType());
+			
+			if (!eventDef)
+				continue;
+
+			QString declaration = objectName + ".events." + eventDef->functionName + " = function(";
+
+			for (int i = 0; i < firstNode->m_outputs.size(); ++i)
+			{
+				if (i > 0)
+					declaration += ",";
+
+				declaration += "v" + QString::number(firstNode->m_outputs[i]->m_id);
+			}
+
+			declaration += ") {";
+
+			int varNumber = 0;
+
+			auto nextNode = e->GetNode(firstNode->m_idExecTo);
+
+			QString syf = "";
+
+			declaration += GenerateFunction(e, nextNode, syf);
+
+			declaration += "}\n";
+
+			m_init += declaration;
+		}
+
+	}
+
 	m_init += "AddObject(" + objectName + ");\n";
+}
+
+QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString code)
+{
+	QString result = code;
+
+	if (!node)
+		return result;
+
+	if (node->m_outputs.size())
+		result += "var v" + QString::number(node->m_outputs.first()->m_id) + " = ";
+
+	result += node->m_name + "(";
+
+	for (int i = 0; i < node->m_inputs.size(); ++i)
+	{
+		if (i > 0)
+			result += ",";
+
+		result += "v" + QString::number(node->m_inputs[i]->m_connected.first());
+	}
+
+	result += ");";
+
+	if (!node->m_idExecTo)
+		return result;
+
+	return GenerateFunction(e, e->GetNode(node->m_idExecTo), result);
 }
 
 void HTML5Generator::GenerateScene(SceneItem *scene)
@@ -171,9 +247,6 @@ void HTML5Generator::Save()
 	stream << " // Date: " + date.toString("HH:mm dd.MM.yyyy") + " \n";
 	stream << "/*=================================================*/\n\n";
 
-	// global var
-	stream << m_global;
-
 	// init
 	stream << "\nfunction init()\n{\n" << m_init << "}";
 
@@ -188,8 +261,37 @@ void HTML5Generator::Save()
 		"setTimeout(render, 10);\n"
 		"}";
 
-	stream << "\ninit();\nrender();\n";
+	stream << "\ninit();\nrender();\n\n";
 
+	auto functionsDefs = ResourceView::Get()->GetFunctionDefsMgr()->GetFunctionsDef();
+
+	for (auto sharedFuncDef : *functionsDefs)
+	{
+		FunctionDefsMgr::FunctionDef *funcDef = sharedFuncDef.data();
+		
+		if (funcDef->jsCode.isEmpty())
+			continue;
+
+		QString funcBody = "function ";
+		
+		funcBody += funcDef->name + "(";
+
+		for (int i = 0; i < funcDef->args.size(); ++i)
+		{
+			if (i > 0)
+				funcBody += ",";
+			
+			funcBody += funcDef->args[i].name;
+		}
+
+		funcBody += ")\n{\n";
+
+		funcBody += funcDef->jsCode + "\n";
+
+		funcBody += "}\n\n";
+
+		stream << funcBody;
+	}
 
 	// copy lib
 	QFile lib("libs\\js\\lib.js");
