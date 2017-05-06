@@ -20,6 +20,7 @@ class Item;
 
 class NodesWindow;
 class NodeDefsMgr;
+class EventDefsMgr;
 
 class CodeGenerator;
 
@@ -35,6 +36,7 @@ private:
 	QString								m_mainDir;
 
 	QSharedPointer<NodeDefsMgr>			m_pNodeDefsMgr;
+	QSharedPointer<EventDefsMgr>		m_pEventDefsMgr;
 	QSharedPointer<NodesWindow>			m_pNodesWindow;
 
 	// to save

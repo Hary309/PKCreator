@@ -21,6 +21,7 @@
 #include <SceneItem.h>
 #include <Config.h>
 #include <NodeDefsMgr.h>
+#include <EventDefsMgr.h>
 
 #include <CodeGenerator.h>
 
@@ -44,6 +45,7 @@ ResourceView::ResourceView(QWidget *parent)
 
 	m_pNodeDefsMgr = QSharedPointer<NodeDefsMgr>(new NodeDefsMgr());
 	m_pNodeDefsMgr->LoadDefs();
+	m_pEventDefsMgr = QSharedPointer<EventDefsMgr>(new EventDefsMgr());
 
 	m_pProConfig = QSharedPointer<Config>(new Config(this));
 

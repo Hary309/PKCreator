@@ -22,9 +22,6 @@ ObjectItem::ObjectItem(QStandardItem *item, const QString &itemName)
 {
 	ObjectItem::SetName(itemName);
 
-	m_eventName << "Create Event" << "Destroy Event" << "Pulse Event" << "Render Event" << "Mouse Move Event"
-		<< "Mouse Pressed Event" << "Mouse Released Event" << "Mouse Moved Event" << "Key Pressed Event" << "Key Released Event";
-
 	m_type = Item::OBJECT;
 
 	m_pCurrSpr = nullptr;
@@ -83,7 +80,7 @@ void ObjectItem::Load(QDataStream *const dataStream)
 
 		*dataStream >> type;
 
-		auto eventItem = QSharedPointer<EventObjectItem>(new EventObjectItem(EventObjectItem::Type(type), nullptr));
+		auto eventItem = QSharedPointer<EventObjectItem>(new EventObjectItem(EventDefsMgr::Type(type), nullptr));
 		eventItem->Load(dataStream);
 
 		m_events.push_back(eventItem);

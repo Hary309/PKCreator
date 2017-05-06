@@ -21,9 +21,6 @@
 #include <NodeMgr.h>
 #include <Node.h>
 #include <Widget.h>
-#include <WireMgr.h>
-
-#include <Common.h>
 
 BlueprintEditor::BlueprintEditor(QWidget *parent)
 	: QWidget(parent)
@@ -68,6 +65,23 @@ void BlueprintEditor::Resize(QSize size)
 void BlueprintEditor::FillData(EventObjectItem *item)
 {
 	m_pNodeMgr = QSharedPointer<NodeMgr>(new NodeMgr(this, &item->m_nodes));
+
+	if (item->m_new)
+	{
+		item->m_new = false;
+	
+		auto eventDef = EventDefsMgr::Get()->GetEvent(item->m_eventType);
+
+		Node *node = new Node(eventDef->name, sf::Vector2f(0.f, 0.f), Node::EVENT);
+	
+		for (auto arg : eventDef->args)
+		{
+			Widget *widget = new Widget(node, arg.name, Widget::OUTPUT, arg.type);
+			node->AddWidget(widget);
+		}
+
+		m_pNodeMgr->AddNode(node);
+	}
 }
 
 void BlueprintEditor::Render() const
@@ -158,7 +172,7 @@ void BlueprintEditor::NodesWindow_accepted() const
 	if (!res->nodeDef)
 		return;
 
-	m_pNodeMgr->AddNodeFromDef(res->nodeDef, m_nodePos);
+	m_pNodeMgr->AddNodeFromFunctionDef(res->nodeDef, m_nodePos);
 }
 
 sf::Vector2f BlueprintEditor::GetViewOffset() const

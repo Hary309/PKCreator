@@ -9,7 +9,7 @@
 #pragma once
 
 #include <QSharedPointer>
-#include <QVector>
+#include <EventDefsMgr.h>
 
 class QStandardItem;
 class QCloseEvent;
@@ -22,34 +22,21 @@ class Node;
 
 class EventObjectItem
 {
-public:
-	enum Type
-	{
-		CREATE_EVENT = 0,
-		DESTROY_EVENT,
-		PULSE_EVENT,
-		RENDER_EVENT,
-		MOUSE_MOVE_EVENT,
-		MOUSE_PRESSED_EVENT,
-		MOUSE_RELEASED_EVENT,
-		MOUSE_MOVED_EVENT,
-		KEY_PRESSED_EVENT,
-		KEY_RELEASED_EVENT
-	};
-
 protected:
 	QStandardItem							*m_item;
 
-	Type									m_eventType;
+	EventDefsMgr::Type						m_eventType;
 
 	QVector<QSharedPointer<Node>>			m_nodes;
 
 	QSharedPointer<EventObjectItemWindow>	m_pItemWnd;
 
+	bool									m_new;
+
 	friend									BlueprintEditor;
 
 public:
-	EventObjectItem(Type type, QStandardItem *item);
+	EventObjectItem(EventDefsMgr::Type type, QStandardItem *item);
 	~EventObjectItem();
 
 	void SetItem(QStandardItem *listItem) { m_item = listItem; }
@@ -58,9 +45,14 @@ public:
 	void Load(QDataStream *const dataStream);
 	void Save(QDataStream *const dataStream) const;
 
+	Node *GetFirstNode() const { return m_nodes.first().data(); }
+	Node *GetNode(qint64 id) const;
+
 	void Show(QWidget *parent);
 	void Close();
 
-	Type GetType() const { return m_eventType; }
+	void SetAsNew() { m_new = true; }
+
+	EventDefsMgr::Type GetType() const { return m_eventType; }
 };
 

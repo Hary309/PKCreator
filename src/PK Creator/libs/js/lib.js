@@ -3,6 +3,9 @@
 @author: Piotr Krupa
 */
 
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+
 var allObjects = [];
 var allScenes = [];
 
@@ -35,7 +38,12 @@ function Object(id, sprite)
 	this.sprite = sprite;
 	this.vars = [];
 
+	this.events = [];
+
 	this.draw = function() {
+		if (this.events.pulseEvent)
+			this.events.pulseEvent();
+
 		var rad = (this.angle) * Math.PI / 180;
 		
 		ctx.save();
@@ -43,6 +51,9 @@ function Object(id, sprite)
 		ctx.rotate(rad);
 		ctx.drawImage(this.sprite.img,-this.sprite.centerX * 2, -this.sprite.centerY * 2, this.sprite.img.width, this.sprite.img.height);
 		ctx.restore();
+
+		if (this.events.renderEvent)
+			this.events.renderEvent();
 	}
 }
 
@@ -64,6 +75,7 @@ function Instance(object, x, y)
 	this.object = object;
 	this.sprite = object.sprite;
 	this.vars = object.vars;
+	this.events = object.events;
 
 	this.x = x;
 	this.y = y;
@@ -80,6 +92,9 @@ function CreateInstance(objectID, x, y)
 		{
 			var instance = new Instance(allObjects[i], x, y);
 
+			if (instance.events.createEvent)
+				instance.events.createEvent();
+
 			currentScene.instances.push(instance);
 			return instance;
 		}
@@ -92,6 +107,9 @@ function DestroyInstance(instanceID)
 	{
 		if (currentScene.instances[i].id == instanceID)
 		{
+			if (instance.events.destroyEvent)
+				instance.events.destroyEvent();
+
 			currentScene.instances.splice(i, 1);
 		}
 	}
@@ -142,4 +160,52 @@ function LoadScene(sceneID)
 			}
 		}
 	}
+}
+
+
+
+// Events
+canvas.onmousemove = function(data) { 
+	var x = data.x;
+	var y = data.y;
+
+	for (i = 0; i < currentScene.instances.length; i++)
+		if (currentScene.instances[i].events.mouseMoveEvent)
+			currentScene.instances[i].events.mouseMoveEvent(x,y);
+}
+
+// Mouse pressed
+canvas.onmousedown = function(data) { 
+	var x = data.x;
+	var y = data.y;
+
+	for (i = 0; i < currentScene.instances.length; i++)
+		if (currentScene.instances[i].events.mouseDownEvent)
+			currentScene.instances[i].events.mouseDownEvent(x,y);
+}
+
+// Mouse released
+canvas.onmouseup = function(data) { 
+	var x = data.x;
+	var y = data.y;
+
+	for (i = 0; i < currentScene.instances.length; i++)
+		if (currentScene.instances[i].events.mouseUpEvent)
+			currentScene.instances[i].events.mouseUpEvent(x,y);
+}
+
+canvas.onkeydown = function(data) { 
+	var key;
+
+	for (i = 0; i < currentScene.instances.length; i++)
+		if (currentScene.instances[i].events.keyDownEvent)
+			currentScene.instances[i].events.keyDownEvent(key);
+}
+
+canvas.onkeyup = function(data) { 
+	var key;
+
+	for (i = 0; i < currentScene.instances.length; i++)
+		if (currentScene.instances[i].events.keyUpEvent)
+			currentScene.instances[i].events.keyUpEvent(key);
 }

@@ -167,6 +167,7 @@
     </ClCompile>
     <ClCompile Include="BlueprintEditor.cpp" />
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="EventDefsMgr.cpp" />
     <ClCompile Include="HTML5Generator.cpp" />
     <ClCompile Include="InputWidget.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -231,6 +232,7 @@
     </CustomBuild>
     <ClInclude Include="CodeGenerator.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="EventDefsMgr.h" />
     <ClInclude Include="HTML5Generator.h" />
     <ClInclude Include="InputWidget.h" />
     <ClInclude Include="NodeDefsMgr.h" />

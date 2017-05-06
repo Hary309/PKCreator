@@ -84,9 +84,9 @@ bool ObjectItemWindow::FillData(Item *item)
 
 	for (auto eventItem : m_pItemParent->m_events)
 	{
-		int type = eventItem->GetType();
+		auto type = eventItem->GetType();
 
-		auto treeItem = new QStandardItem(m_pItemParent->m_eventName[type]);
+		auto treeItem = new QStandardItem(EventDefsMgr::Get()->GetEvent(type)->name);
 
 		eventItem->SetItem(treeItem);
 
@@ -107,9 +107,9 @@ void ObjectItemWindow::CreateContextMenu()
 {
 	m_pContextMenu = QSharedPointer<QMenu>(new QMenu("Context menu", this));
 
-	for (auto eventName : m_pItemParent->m_eventName)
+	for (auto eventName : *EventDefsMgr::Get()->GetEvents())
 	{
-		auto action = QSharedPointer<QAction>(new QAction(eventName, this));
+		auto action = QSharedPointer<QAction>(new QAction(eventName->name, this));
 
 		m_actionList.push_back(action);
 	}
@@ -123,7 +123,6 @@ void ObjectItemWindow::CreateContextMenu()
 	connect(m_actionList[6].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(6); });
 	connect(m_actionList[7].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(7); });
 	connect(m_actionList[8].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(8); });
-	connect(m_actionList[9].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(9); });
 	
 	for (auto actionItem : m_actionList)
 	{
@@ -220,21 +219,22 @@ void ObjectItemWindow::EditButton_clicked()
 
 void ObjectItemWindow::AddEventAction_triggered(int eventType)
 {
-	if (eventType < 0 && eventType > m_pItemParent->m_eventName.size())
+	if (eventType < 0 && eventType > EventDefsMgr::Get()->GetEvents()->size())
 		return;
 
 	if (m_pItemParent->GetEvent(eventType))
 	{
-		QMessageBox::information(this, "PK Creator", QString::asprintf("%s already exists!", m_pItemParent->m_eventName[eventType].toStdString().c_str()));
+		QMessageBox::information(this, "PK Creator", QString::asprintf("%s already exists!", EventDefsMgr::Get()->GetEvent(static_cast<EventDefsMgr::Type>(eventType))->name.toStdString().c_str()));
 
 		return;
 	}
 
-	QStandardItem *item = new QStandardItem(m_pItemParent->m_eventName[eventType]);
+	QStandardItem *item = new QStandardItem(EventDefsMgr::Get()->GetEvent(static_cast<EventDefsMgr::Type>(eventType))->name);
 	item->setEditable(false);
 	m_pModel->appendRow(item);
 
-	auto objEvent = QSharedPointer<EventObjectItem>(new EventObjectItem(EventObjectItem::Type(eventType), item));
+	auto objEvent = QSharedPointer<EventObjectItem>(new EventObjectItem(EventDefsMgr::Type(eventType), item));
+	objEvent->SetAsNew();
 	objEvent->Show(this);
 
 	m_pItemParent->m_events.push_back(objEvent);

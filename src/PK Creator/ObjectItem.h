@@ -26,8 +26,6 @@ protected:
 	QVector<QSharedPointer<EventObjectItem>>	m_events;
 	QVector<QSharedPointer<Var>>				m_vars;
 
-	QStringList									m_eventName;
-
 	friend										ObjectItemWindow;
 
 public:
@@ -38,6 +36,7 @@ public:
 
 	EventObjectItem *GetEvent(int eventType);
 	EventObjectItem *GetEvent(QStandardItem *item);
+	auto GetEvents() { return &m_events; }
 
 	auto GetVars() const { return &m_vars; }
 

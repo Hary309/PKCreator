@@ -261,6 +261,7 @@
       <Filter>Source Files\Blueprint\Editor</Filter>
     </ClCompile>
     <ClCompile Include="NodeDefsMgr.cpp">
+    <ClCompile Include="EventDefsMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -433,6 +434,7 @@
       <Filter>Header Files\Blueprint\Editor</Filter>
     </ClInclude>
     <ClInclude Include="NodeDefsMgr.h">
+    <ClInclude Include="EventDefsMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

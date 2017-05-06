@@ -11,9 +11,10 @@
 #include <EventObjectItemWindow.h>
 #include <Node.h>
 
-EventObjectItem::EventObjectItem(Type type, QStandardItem *item)
+EventObjectItem::EventObjectItem(EventDefsMgr::Type type, QStandardItem *item)
 	: m_eventType(type), m_item(item)
 {
+	m_new = false;
 	m_pItemWnd = nullptr;
 }
 
@@ -44,6 +45,17 @@ void EventObjectItem::Save(QDataStream *const dataStream) const
 	{
 		node->Save(dataStream);
 	}
+}
+
+Node *EventObjectItem::GetNode(qint64 id) const
+{
+	for (auto node : m_nodes)
+	{
+		if (node->GetID() == id)
+			return node.data();
+	}
+
+	return nullptr;
 }
 
 void EventObjectItem::Show(QWidget *parent)
