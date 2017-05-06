@@ -63,12 +63,9 @@ VisualNode *NodeMgr::AddNode(Node *node)
 	return sharedVisualNode.data();
 }
 
-VisualNode *NodeMgr::AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef, const sf::Vector2f &pos)
+VisualNode *NodeMgr::AddNodeFromFunctionDef(FunctionDefsMgr::FunctionDef *nodeDef, const sf::Vector2f &pos)
 {
 	if (!nodeDef)
-		return nullptr;
-
-	if (nodeDef->type == -1 || nodeDef->type > Node::FUNCTION)
 		return nullptr;
 
 	if (nodeDef->name == "")
@@ -76,7 +73,7 @@ VisualNode *NodeMgr::AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef, const sf::Vec
 
 	QPoint cursorPos = QCursor::pos();
 
-	Node *node = new Node(nodeDef->name, pos, static_cast<Node::Type>(nodeDef->type));
+	Node *node = new Node(nodeDef->name, pos, Node::FUNCTION);
 
 	for (auto arg : nodeDef->args)
 	{

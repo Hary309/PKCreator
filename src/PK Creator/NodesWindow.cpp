@@ -26,7 +26,7 @@ NodesWindow::~NodesWindow()
 {
 }
 
-void NodesWindow::AddDefs(const QVector<QSharedPointer<NodeDefsMgr::NodeDef>> *nodesDef)
+void NodesWindow::AddDefs(const QVector<QSharedPointer<FunctionDefsMgr::FunctionDef>> *nodesDef)
 {
 	for (auto sharedNodeDef : *nodesDef)
 	{

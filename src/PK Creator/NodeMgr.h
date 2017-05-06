@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <NodeDefsMgr.h>
+#include <FunctionDefsMgr.h>
 #include <SFML/System/Vector2.hpp>
 
 namespace sf
@@ -46,7 +46,7 @@ public:
 
 	VisualNode *AddNode(Node *node);
 
-	VisualNode *AddNodeFromDef(NodeDefsMgr::NodeDef *nodeDef, const sf::Vector2f &pos);
+	VisualNode *AddNodeFromFunctionDef(FunctionDefsMgr::FunctionDef *nodeDef, const sf::Vector2f &pos);
 
 	bool RemoveNode(Node *node);
 	bool RemoveNode(VisualNode *visualNode);

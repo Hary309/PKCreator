@@ -11,7 +11,7 @@
 #include <QDialog>
 #include <ui_NodesWindow.h>
 
-#include <NodeDefsMgr.h>
+#include <FunctionDefsMgr.h>
 
 class NodesWindow : public QDialog
 {
@@ -21,7 +21,7 @@ class NodesWindow : public QDialog
 	{
 	public:
 		QTreeWidgetItem				*treeItem;
-		NodeDefsMgr::NodeDef		*nodeDef;
+		FunctionDefsMgr::FunctionDef		*nodeDef;
 	};
 
 private:
@@ -38,7 +38,7 @@ public:
 	NodesWindow(QWidget *parent);
 	~NodesWindow();
 
-	void AddDefs(const QVector<QSharedPointer<NodeDefsMgr::NodeDef>> *nodesDef);
+	void AddDefs(const QVector<QSharedPointer<FunctionDefsMgr::FunctionDef>> *nodesDef);
 
 	NodeItem *GetSelectedItem() const { return m_pSelectedItem; }
 

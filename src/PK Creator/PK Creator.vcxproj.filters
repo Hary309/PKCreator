@@ -260,7 +260,9 @@
     <ClCompile Include="Tooltip.cpp">
       <Filter>Source Files\Blueprint\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="NodeDefsMgr.cpp">
+    <ClCompile Include="FunctionDefsMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="EventDefsMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -433,7 +435,9 @@
     <ClInclude Include="Tooltip.h">
       <Filter>Header Files\Blueprint\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="NodeDefsMgr.h">
+    <ClInclude Include="FunctionDefsMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="EventDefsMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>

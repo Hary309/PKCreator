@@ -1,6 +1,6 @@
 /*
 *********************************************************************
-* File          : NodeDefsMgr.h
+* File          : FunctionDefsMgr.h
 * Project		: PK Creator
 * Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
 *********************************************************************
@@ -13,7 +13,7 @@
 #include <QVector>
 #include <QSharedPointer>
 
-class NodeDefsMgr
+class FunctionDefsMgr
 {
 public:
 	class Arg
@@ -23,10 +23,9 @@ public:
 		QString name;
 	};
 
-	class NodeDef
+	class FunctionDef
 	{
 	public:
-		int type;
 		QString name;
 		QString desc;
 		QString category;
@@ -34,9 +33,8 @@ public:
 		Arg returnValue;
 		QString jsCode;
 
-		NodeDef()
+		FunctionDef()
 		{
-			type = -1;
 			name = "";
 			category = "";
 			returnValue.type = static_cast<DataType>(-1);
@@ -46,14 +44,14 @@ public:
 	};
 
 private:
-	QVector<QSharedPointer<NodeDef>> m_nodesDef;
+	QVector<QSharedPointer<FunctionDef>> m_nodesDef;
 
 public:
-	NodeDefsMgr();
-	~NodeDefsMgr();
+	FunctionDefsMgr();
+	~FunctionDefsMgr();
 
 	void LoadDefs(const QString &path = "nodes");
 
-	auto GetNodesDef() const { return &m_nodesDef; }
+	auto GetFunctionsDef() const { return &m_nodesDef; }
 };
 

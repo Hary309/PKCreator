@@ -1,32 +1,32 @@
 /*
 *********************************************************************
-* File          : NodeDefsMgr.cpp
+* File          : FunctionDefsMgr.cpp
 * Project		: PK Creator
 * Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
 *********************************************************************
 */
 
-#include "NodeDefsMgr.h"
+#include "FunctionDefsMgr.h"
 
 #include <QDir>
 #include <QXmlStreamReader>
 #include <QTextStream>
 
-NodeDefsMgr::NodeDefsMgr()
+FunctionDefsMgr::FunctionDefsMgr()
 {
 }
 
-NodeDefsMgr::~NodeDefsMgr()
+FunctionDefsMgr::~FunctionDefsMgr()
 {
 }
 
-void NodeDefsMgr::LoadDefs(const QString &path)
+void FunctionDefsMgr::LoadDefs(const QString &path)
 {
 	QDir dir(path);
 
 	auto list = dir.entryList(QDir::Files);
 
-	printf("List:\n");
+	printf("Functions list:\n");
 
 	for (auto item : list)
 	{
@@ -43,13 +43,11 @@ void NodeDefsMgr::LoadDefs(const QString &path)
 		{
 			if (reader.name() == "node")
 			{
-				auto def = QSharedPointer<NodeDef>(new NodeDef());
+				auto def = QSharedPointer<FunctionDef>(new FunctionDef());
 
 				while (reader.readNextStartElement())
 				{
-					if (reader.name() == "type")
-						def->type = reader.readElementText().toInt();
-					else if (reader.name() == "name")
+					if (reader.name() == "name")
 						def->name = reader.readElementText();
 					else if (reader.name() == "desc")
 						def->desc = reader.readElementText();

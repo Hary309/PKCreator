@@ -19,7 +19,7 @@ class QStandardItem;
 class Item;
 
 class NodesWindow;
-class NodeDefsMgr;
+class FunctionDefsMgr;
 class EventDefsMgr;
 
 class CodeGenerator;
@@ -35,11 +35,10 @@ private:
 
 	QString								m_mainDir;
 
-	QSharedPointer<NodeDefsMgr>			m_pNodeDefsMgr;
+	QSharedPointer<FunctionDefsMgr>		m_pFunctionDefsMgr;
 	QSharedPointer<EventDefsMgr>		m_pEventDefsMgr;
 	QSharedPointer<NodesWindow>			m_pNodesWindow;
 
-	// to save
 	QSharedPointer<QStandardItemModel>  m_pTreeModel;
 	
 	QVector<QSharedPointer<Item>>		m_items;
@@ -86,11 +85,12 @@ public:
 	const QString &GetMainDir() const { return m_mainDir; }
 
 	// @type - Item::Type
-	QVector <Item*>					GetItemsByType(int type);
+	QVector <Item*> GetItemsByType(int type);
 
-	Config		*GetConfig()		const { return m_pProConfig.data(); }
+	Config *GetConfig() const { return m_pProConfig.data(); }
 
 	NodesWindow *GetNodesWindow() const { return m_pNodesWindow.data(); }
+	FunctionDefsMgr *GetFunctionDefsMgr() const { return m_pFunctionDefsMgr.data(); }
 
 	static ResourceView *Get() { return s_pInst; }
 

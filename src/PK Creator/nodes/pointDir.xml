@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <node>
-	<type>1</type>
 	<name>PointDir</name>
 	<desc>Returns the direction</desc>
 	<category>Math</category>

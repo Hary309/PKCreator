@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <node>
-	<type>1</type>
 	<name>DestroyInstance</name>
 	<desc>Removes instance from the scene</desc>
 	<category>Instance</category>
