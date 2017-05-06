@@ -21,7 +21,7 @@ Widget::Widget(Node *parent, const QString &name, ConnectionType connType, DataT
 	switch (m_dataType)
 	{
 		case DATA_OBJECTID:
-			m_color = sf::Color(0xF44336FF);
+			m_color = sf::Color(0xE57373FF);
 			break;
 		case DATA_BOOLEAN:
 			m_color = sf::Color(0xE0E0E0FF);
@@ -30,13 +30,12 @@ Widget::Widget(Node *parent, const QString &name, ConnectionType connType, DataT
 			m_color = sf::Color(0x2196F3FF);
 			break;
 		case DATA_NUMBER:
-			m_color = sf::Color(0x0D47A1FF);
+			m_color = sf::Color(0x9575CDFF);
 			break;
 		case DATA_STRING:
 			m_color = sf::Color(0xFF9800FF);
 			break;
 	}
-	
 }
 
 Widget::~Widget()
