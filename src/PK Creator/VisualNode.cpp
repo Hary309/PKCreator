@@ -204,7 +204,10 @@ void VisualNode::Event(sf::Event *e)
 					mousePos.y > nodePos.y &&
 					mousePos.y < nodePos.y + size.y)
 				{
-					m_pNodeMgr->RemoveNode(m_pData);
+					if (!m_pData->m_type == Node::EVENT)
+					{
+						m_pNodeMgr->RemoveNode(m_pData);
+					}
 				}
 			}
 		} break;
