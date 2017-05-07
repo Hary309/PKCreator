@@ -50,6 +50,7 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 	m_pTitle = QSharedPointer<sf::Text>(new sf::Text());
 	m_pTitle->setFont(*m_pFont);
 	m_pTitle->setCharacterSize(15);
+
 	m_pTitle->setString(m_pData->m_name.toStdString());
 
 	m_moving = false;
@@ -298,6 +299,9 @@ void VisualNode::ConnectAllWires()
 	for (auto inputWidget : m_visualInputs)
 	{
 		auto connectedWidget = &inputWidget->GetData()->m_connected;
+
+		if (!connectedWidget)
+			continue;
 
 		if (connectedWidget->size() == 0)
 			continue;

@@ -11,6 +11,7 @@
 
 #include <QVector>
 #include <Common.h>
+#include "EventDefsMgr.h"
 
 class EventObjectItem;
 class SpriteItem;
@@ -38,6 +39,8 @@ public:
 	EventObjectItem *GetEvent(QStandardItem *item);
 	auto GetEvents() { return &m_events; }
 
+	Var *GetVar(qint64 id) const;
+	Var *GetVarByWidget(qint64 widgetID, EventDefsMgr::Type eventType) const;
 	auto GetVars() const { return &m_vars; }
 
 	SpriteItem *GetSprite() const { return m_pCurrSpr; }

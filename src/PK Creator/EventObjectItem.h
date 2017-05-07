@@ -14,7 +14,7 @@
 class QStandardItem;
 class QCloseEvent;
 class QWidget;
-
+class ObjectItem;
 class EventObjectItemWindow;
 
 class BlueprintEditor;
@@ -23,6 +23,7 @@ class Node;
 class EventObjectItem
 {
 protected:
+	ObjectItem								*m_pParent;
 	QStandardItem							*m_item;
 
 	EventDefsMgr::Type						m_eventType;
@@ -36,7 +37,7 @@ protected:
 	friend									BlueprintEditor;
 
 public:
-	EventObjectItem(EventDefsMgr::Type type, QStandardItem *item);
+	EventObjectItem(ObjectItem *parent, EventDefsMgr::Type type, QStandardItem *item);
 	~EventObjectItem();
 
 	void SetItem(QStandardItem *listItem) { m_item = listItem; }
@@ -45,6 +46,7 @@ public:
 	void Load(QDataStream *const dataStream);
 	void Save(QDataStream *const dataStream) const;
 
+	auto GetNodes() const { return &m_nodes; }
 	Node *GetFirstNode() const { return m_nodes.first().data(); }
 	Node *GetNode(qint64 id) const;
 
@@ -52,6 +54,8 @@ public:
 	void Close();
 
 	void SetAsNew() { m_new = true; }
+
+	ObjectItem *GetParent() const { return m_pParent; }
 
 	EventDefsMgr::Type GetType() const { return m_eventType; }
 };

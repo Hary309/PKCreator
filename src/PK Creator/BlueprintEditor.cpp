@@ -64,6 +64,7 @@ void BlueprintEditor::Resize(QSize size)
 
 void BlueprintEditor::FillData(EventObjectItem *item)
 {
+	m_pData = item;
 	m_pNodeMgr = QSharedPointer<NodeMgr>(new NodeMgr(this, &item->m_nodes));
 
 	if (item->m_new)
@@ -159,20 +160,39 @@ void BlueprintEditor::ShowNodesWindow(const sf::Vector2f &nodePos)
 
 	NodesWindow *nodeWnd = ResourceView::Get()->GetNodesWindow();
 
-	nodeWnd->show();
+	nodeWnd->show(m_pData->GetParent());
 }
 
 void BlueprintEditor::NodesWindow_accepted() const
 {
-	auto res = ResourceView::Get()->GetNodesWindow()->GetSelectedItem();
+	auto nodesWindow = ResourceView::Get()->GetNodesWindow();
 
-	if (!res)
-		return;
+	Node::Type type = static_cast<Node::Type>(nodesWindow->GetNodeType());
 
-	if (!res->nodeDef)
-		return;
+	if (type == Node::FUNCTION)
+	{
+		auto res = nodesWindow->GetSelectedFunctionItem();
 
-	m_pNodeMgr->AddNodeFromFunctionDef(res->nodeDef, m_nodePos);
+		if (!res)
+			return;
+
+		if (!res->nodeDef)
+			return;
+
+		m_pNodeMgr->AddNodeFromFunctionDef(res->nodeDef, m_nodePos);
+	}
+	else if (type == Node::VARIABLE)
+	{
+		auto res = nodesWindow->GetSelectedVarItem();
+
+		if (!res)
+			return;
+
+		if (!res->var)
+			return;
+
+		m_pNodeMgr->AddNodeFromVar(res->var, m_nodePos);
+	}
 }
 
 sf::Vector2f BlueprintEditor::GetViewOffset() const

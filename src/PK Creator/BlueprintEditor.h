@@ -29,6 +29,7 @@ class BlueprintEditor : public QWidget
 	Q_OBJECT
 
 private:
+	EventObjectItem							*m_pData;
 	QSharedPointer<sf::RenderWindow>		m_pRenderer;
 	QSharedPointer<NodeMgr>					m_pNodeMgr;
 	QTimer									m_timer;
@@ -68,6 +69,8 @@ public:
 
 	sf::Vector2f GetViewOffset() const;
 	float GetScale() const { return m_scale; }
+
+	EventObjectItem *GetData() const { return m_pData; }
 
 	sf::RenderWindow *GetRenderer() const { return m_pRenderer.data(); }
 

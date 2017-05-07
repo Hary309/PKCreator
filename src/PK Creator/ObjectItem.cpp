@@ -12,8 +12,9 @@
 #include <SpriteItem.h>
 #include <ResourceView.h>
 #include <ObjectItemWindow.h>
-#include <CodeGenerator.h>
 #include <Var.h>
+#include <Node.h>
+#include <Widget.h>s
 
 #include <QString>
 
@@ -60,6 +61,72 @@ EventObjectItem *ObjectItem::GetEvent(QStandardItem *item)
 	return nullptr;
 }
 
+Var *ObjectItem::GetVar(qint64 id) const
+{
+	for (auto var : m_vars)
+	{
+		if (var->m_id == id)
+			return var.data();
+	}
+
+	return nullptr;
+}
+
+Var *ObjectItem::GetVarByWidget(qint64 widgetID, EventDefsMgr::Type eventType) const
+{
+	qint64 id = 0;
+
+	EventObjectItem *e = nullptr;
+
+	for (auto e_ : m_events)
+	{
+		if (e_->GetType() == eventType)
+		{
+			e = e_.data();
+			break;
+		}
+	}
+
+	for (auto node : *e->GetNodes())
+	{
+		for (auto widget : node->m_inputs)
+		{
+			if (widgetID == widget->GetID())
+			{
+				id = node->GetID();
+				break;
+			}
+		}
+
+		if (id)
+			break;
+
+		for (auto widget : node->m_outputs)
+		{
+			if (widgetID == widget->GetID())
+			{
+				id = node->GetID();
+				break;
+			}
+		}
+
+		if (id)
+			break;
+	}
+
+
+	if (!id)
+		return nullptr;
+
+	for (auto var : m_vars)
+	{
+		if (var->m_id == id)
+			return var.data();
+	}
+
+	return nullptr;
+}
+
 void ObjectItem::Load(QDataStream *const dataStream)
 {
 	Item::Load(dataStream);
@@ -80,7 +147,7 @@ void ObjectItem::Load(QDataStream *const dataStream)
 
 		*dataStream >> type;
 
-		auto eventItem = QSharedPointer<EventObjectItem>(new EventObjectItem(EventDefsMgr::Type(type), nullptr));
+		auto eventItem = QSharedPointer<EventObjectItem>(new EventObjectItem(this, EventDefsMgr::Type(type), nullptr));
 		eventItem->Load(dataStream);
 
 		m_events.push_back(eventItem);
@@ -120,6 +187,7 @@ void ObjectItem::Load(QDataStream *const dataStream)
 		case DATA_BOOLEAN:
 			*dataStream >> var->m_data.boolean;
 			break;
+		default: ;
 		}
 
 		m_vars.push_back(QSharedPointer<Var>(var));
@@ -160,6 +228,7 @@ void ObjectItem::Save(QDataStream *const dataStream)
 		case DATA_BOOLEAN: 
 			*dataStream << var->m_data.boolean;
 			break;
+		default: ;
 		}
 	}
 }

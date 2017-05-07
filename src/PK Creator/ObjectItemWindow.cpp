@@ -233,7 +233,7 @@ void ObjectItemWindow::AddEventAction_triggered(int eventType)
 	item->setEditable(false);
 	m_pModel->appendRow(item);
 
-	auto objEvent = QSharedPointer<EventObjectItem>(new EventObjectItem(EventDefsMgr::Type(eventType), item));
+	auto objEvent = QSharedPointer<EventObjectItem>(new EventObjectItem(m_pItemParent, EventDefsMgr::Type(eventType), item));
 	objEvent->SetAsNew();
 	objEvent->Show(this);
 

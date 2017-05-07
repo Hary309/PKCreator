@@ -10,14 +10,17 @@
 
 #include <conio.h>
 
+#include <BlueprintEditor.h>
+#include <EventObjectItem.h>
+#include <ObjectItem.h>
 #include <Node.h>
 #include <VisualNode.h>
 #include <WireMgr.h>
 #include <Tooltip.h>
 #include <Widget.h>
+#include <Var.h>
 
 #include <SFML/Graphics/Font.hpp>
-#include <QCursor>
 
 NodeMgr::NodeMgr(BlueprintEditor *parent, QVector<QSharedPointer<Node>> *nodes)
 	: m_pParent(parent), m_pNodes(nodes)
@@ -33,6 +36,31 @@ NodeMgr::NodeMgr(BlueprintEditor *parent, QVector<QSharedPointer<Node>> *nodes)
 	{
 		if (node)
 		{
+			if (node->GetType() == Node::VARIABLE)
+			{
+				auto vars = parent->GetData()->GetParent()->GetVars();
+
+				for (auto var : *vars)
+				{
+					if (node->GetID() == var->m_id)
+					{
+						node->m_name = var->m_name;
+
+						if (node->m_inputs.first()->m_dataType != var->m_type ||
+							node->m_outputs.first()->m_dataType != var->m_type)
+						{
+							// reset connections
+							node->m_inputs.first()->m_connected.clear();
+							node->m_outputs.first()->m_connected.clear();
+							
+							// change type and color
+							node->m_inputs.first()->SetDataType(var->m_type);
+							node->m_outputs.first()->SetDataType(var->m_type);
+						}
+					}
+				}
+			}
+
 			auto sharedVisualNode = QSharedPointer<VisualNode>(new VisualNode(this, node.data()));
 			m_visualNodes.push_back(sharedVisualNode);
 		}
@@ -71,8 +99,6 @@ VisualNode *NodeMgr::AddNodeFromFunctionDef(FunctionDefsMgr::FunctionDef *nodeDe
 	if (nodeDef->name == "")
 		return nullptr;
 
-	QPoint cursorPos = QCursor::pos();
-
 	Node *node = new Node(nodeDef->name, pos, Node::FUNCTION);
 
 	for (auto arg : nodeDef->args)
@@ -88,6 +114,25 @@ VisualNode *NodeMgr::AddNodeFromFunctionDef(FunctionDefsMgr::FunctionDef *nodeDe
 	auto visualNode = AddNode(node);
 
 	return visualNode;
+}
+
+VisualNode *NodeMgr::AddNodeFromVar(Var *var, const sf::Vector2f &pos)
+{
+	if (!var)
+		return nullptr;
+
+	if (var->m_name == "")
+		return nullptr;
+
+	if (var->m_id < 0)
+		return nullptr;
+
+	Node *node = new Node(var->m_id, var->m_name, pos, Node::VARIABLE);
+
+	node->AddWidget(new Widget(node, "Set", Widget::INPUT, var->m_type));
+	node->AddWidget(new Widget(node, "Get", Widget::OUTPUT, var->m_type));
+
+	return AddNode(node);
 }
 
 bool NodeMgr::RemoveNode(Node *node)

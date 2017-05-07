@@ -17,6 +17,8 @@
 class Widget;
 class VisualNode;
 class HTML5Generator;
+class NodeMgr;
+class ObjectItem;
 
 class Node
 {
@@ -46,14 +48,18 @@ protected:
 	QVector<QSharedPointer<Widget>>		m_outputs;
 
 	friend VisualNode;
+	friend NodeMgr;
 	friend HTML5Generator;
+	friend ObjectItem;
 
 public:
 	Node(const QString &name, sf::Vector2f pos, Type type);
+	Node(qint64 id, const QString &name, sf::Vector2f pos, Type type);
 	~Node();
 
 	Widget *AddWidget(Widget *widget);
 	const QString &GetName() const { return m_name; }
+	Type GetType() const { return m_type; }
 
 	void Load(QDataStream *const dataStream);
 	void Save(QDataStream *const dataStream);

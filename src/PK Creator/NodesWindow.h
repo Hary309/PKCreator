@@ -13,23 +13,36 @@
 
 #include <FunctionDefsMgr.h>
 
+class ObjectItem;
+class Var;
+
 class NodesWindow : public QDialog
 {
 	Q_OBJECT
 
-	class NodeItem
+	class FunctionNodeItem
 	{
 	public:
-		QTreeWidgetItem				*treeItem;
+		QTreeWidgetItem						*treeItem;
 		FunctionDefsMgr::FunctionDef		*nodeDef;
+	};
+
+	class VarNodeItem
+	{
+	public:
+		QTreeWidgetItem	*treeItem;
+		Var				*var;
 	};
 
 private:
 	Ui::NodesWindow m_ui;
 
-	QVector <QSharedPointer<NodeItem>> m_nodesWidgetItems;
+	QVector <QSharedPointer<FunctionNodeItem>>	m_funcitonNodesWidgetItems;
+	QVector <QSharedPointer<VarNodeItem>>		m_varNodeWidgetItems;
 
-	NodeItem *m_pSelectedItem;
+	int m_type;
+	FunctionNodeItem *m_pSelectedFunctionItem;
+	VarNodeItem *m_pSelectedVarItem;
 
 protected:
 	bool event(QEvent *e) override;
@@ -40,7 +53,11 @@ public:
 
 	void AddDefs(const QVector<QSharedPointer<FunctionDefsMgr::FunctionDef>> *nodesDef);
 
-	NodeItem *GetSelectedItem() const { return m_pSelectedItem; }
+	void show(ObjectItem *objectItem);
+
+	int GetNodeType() const { return m_type; }
+	FunctionNodeItem *GetSelectedFunctionItem() const { return m_pSelectedFunctionItem; }
+	VarNodeItem *GetSelectedVarItem() const { return m_pSelectedVarItem; }
 
 private slots:
 	void NodesWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);

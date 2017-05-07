@@ -17,29 +17,36 @@ Widget::Widget(Node *parent, const QString &name, ConnectionType connType, DataT
 {
 	m_id = qint64(this);
 
-	// colors source: https://material.io/guidelines/style/color.html
-	switch (m_dataType)
-	{
-		case DATA_OBJECTID:
-			m_color = sf::Color(0xE57373FF);
-			break;
-		case DATA_BOOLEAN:
-			m_color = sf::Color(0xE0E0E0FF);
-			break;
-		case DATA_INTEGER:
-			m_color = sf::Color(0x2196F3FF);
-			break;
-		case DATA_NUMBER:
-			m_color = sf::Color(0x9575CDFF);
-			break;
-		case DATA_STRING:
-			m_color = sf::Color(0xFF9800FF);
-			break;
-	}
+	SetDataType(dataType);
 }
 
 Widget::~Widget()
 {
+}
+
+void Widget::SetDataType(DataType type)
+{
+	m_dataType = type;
+
+	// colors source: https://material.io/guidelines/style/color.html
+	switch (type)
+	{
+	case DATA_OBJECTID:
+		m_color = sf::Color(0xE57373FF);
+		break;
+	case DATA_BOOLEAN:
+		m_color = sf::Color(0xE0E0E0FF);
+		break;
+	case DATA_INTEGER:
+		m_color = sf::Color(0x2196F3FF);
+		break;
+	case DATA_NUMBER:
+		m_color = sf::Color(0x9575CDFF);
+		break;
+	case DATA_STRING:
+		m_color = sf::Color(0xFF9800FF);
+		break;
+	}
 }
 
 void Widget::Load(QDataStream *const dataStream)

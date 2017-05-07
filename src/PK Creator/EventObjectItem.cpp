@@ -11,8 +11,8 @@
 #include <EventObjectItemWindow.h>
 #include <Node.h>
 
-EventObjectItem::EventObjectItem(EventDefsMgr::Type type, QStandardItem *item)
-	: m_eventType(type), m_item(item)
+EventObjectItem::EventObjectItem(ObjectItem *parent, EventDefsMgr::Type type, QStandardItem *item)
+	: m_pParent(parent), m_eventType(type), m_item(item)
 {
 	m_new = false;
 	m_pItemWnd = nullptr;

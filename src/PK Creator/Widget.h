@@ -18,6 +18,7 @@ class VisualWidget;
 class InputWidget;
 class OutputWidget;
 class HTML5Generator;
+class NodeMgr;
 
 class Widget
 {
@@ -48,6 +49,9 @@ private:
 	friend OutputWidget;
 	friend VisualNode;
 	friend HTML5Generator;
+	friend NodeMgr;
+
+	void SetDataType(DataType type);
 
 public:
 	Widget(Node *parent, const QString &name, ConnectionType connType, DataType type);

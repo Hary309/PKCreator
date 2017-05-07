@@ -16,11 +16,14 @@
 
 
 Node::Node(const QString &name, sf::Vector2f pos, Type type)
-	: m_name(name), m_pos(pos), m_type(type)
+{
+	Node(qint64(this), name, pos, type);
+}
+
+Node::Node(qint64 id, const QString &name, sf::Vector2f pos, Type type)
+	: m_id(id), m_name(name), m_pos(pos), m_type(type)
 {
 	m_idExecFrom = m_idExecTo = 0;
-
-	m_id = qint64(this);
 
 	if (type == FUNCTION)
 	{

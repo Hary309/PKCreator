@@ -104,50 +104,52 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 
 	auto events = object->GetEvents();
 
-	printf("\tGenerating events logic...\n");
-
-	for (auto sharedEvent : *events)
+	if (!events->isEmpty())
 	{
-		if (sharedEvent)
+		printf("\tGenerating events logic...\n");
+
+		for (auto sharedEvent : *events)
 		{
-			EventObjectItem *e = sharedEvent.data();
-			auto firstNode = e->GetFirstNode();
-
-			printf("\t\t%s...\n", EventDefsMgr::Get()->GetEvent(e->GetType())->name.toStdString().c_str());
-
-			if (firstNode->m_type != Node::EVENT)
-				continue;
-
-			auto eventDef = EventDefsMgr::Get()->GetEvent(e->GetType());
-			
-			if (!eventDef)
-				continue;
-
-			QString declaration = objectName + ".events." + eventDef->functionName + " = function(";
-
-			for (int i = 0; i < firstNode->m_outputs.size(); ++i)
+			if (sharedEvent)
 			{
-				if (i > 0)
-					declaration += ",";
+				EventObjectItem *e = sharedEvent.data();
+				auto firstNode = e->GetFirstNode();
 
-				declaration += "v" + QString::number(firstNode->m_outputs[i]->m_id);
+				printf("\t\t%s...\n", EventDefsMgr::Get()->GetEvent(e->GetType())->name.toStdString().c_str());
+
+				if (firstNode->m_type != Node::EVENT)
+					continue;
+
+				auto eventDef = EventDefsMgr::Get()->GetEvent(e->GetType());
+
+				if (!eventDef)
+					continue;
+
+				QString declaration = objectName + ".events." + eventDef->functionName + " = function(";
+
+				for (int i = 0; i < firstNode->m_outputs.size(); ++i)
+				{
+					if (i > 0)
+						declaration += ",";
+
+					declaration += "v" + QString::number(firstNode->m_outputs[i]->m_id);
+				}
+
+				declaration += ") {";
+
+				int varNumber = 0;
+
+				auto nextNode = e->GetNode(firstNode->m_idExecTo);
+
+				QString syf = "";
+
+				declaration += GenerateFunction(e, nextNode, syf);
+
+				declaration += "}\n";
+
+				m_init += declaration;
 			}
-
-			declaration += ") {";
-
-			int varNumber = 0;
-
-			auto nextNode = e->GetNode(firstNode->m_idExecTo);
-
-			QString syf = "";
-
-			declaration += GenerateFunction(e, nextNode, syf);
-
-			declaration += "}\n";
-
-			m_init += declaration;
 		}
-
 	}
 
 	m_init += "AddObject(" + objectName + ");\n";
@@ -170,10 +172,34 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 		if (i > 0)
 			result += ",";
 
-		result += "v" + QString::number(node->m_inputs[i]->m_connected.first());
+		if (node->m_inputs[i]->m_connected.isEmpty())
+		{
+			result += "0";
+			continue;
+		}
+
+		qint64 id = node->m_inputs[i]->m_connected.first();
+
+		auto var = e->GetParent()->GetVarByWidget(id, e->GetType());
+
+		if (var)
+			result += e->GetParent()->GetName() + ".vars." + var->m_name;
+		else
+			result += "v" + QString::number(id);
 	}
 
 	result += ");";
+
+	for (auto output : node->m_outputs)
+	{
+		for (auto connID : output->m_connected)
+		{
+			auto var = e->GetParent()->GetVarByWidget(connID, e->GetType());
+
+			if (var)
+				result += e->GetParent()->GetName() + ".vars." + var->m_name + " = v" + QString::number(node->m_outputs.first()->m_id) + ";";
+		}
+	}
 
 	if (!node->m_idExecTo)
 		return result;
