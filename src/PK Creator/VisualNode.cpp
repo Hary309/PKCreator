@@ -370,9 +370,10 @@ void VisualNode::DisconnectAll()
 	{
 		OutputWidget *outputWidget = static_cast<OutputWidget*>(visualWidget.data());
 
-		auto wires = outputWidget->GetWires();
+		// Not optimal but the easiest way
+		auto wires = *outputWidget->GetWires();
 
-		for (auto wire : *wires)
+		for (auto wire : wires)
 		{
 			wireMgr->Disconnect(reinterpret_cast<Wire*>(wire));
 		}
