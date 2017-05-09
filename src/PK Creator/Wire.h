@@ -17,6 +17,8 @@ namespace sf
 	class RenderWindow;
 }
 
+class WireMgr;
+
 class Wire
 {
 public:
@@ -33,8 +35,6 @@ protected:
 	sf::Color			m_wireColor;
 
 	WireType			m_wireType;
-
-	int					nPoints;
 
 public:
 	Wire();

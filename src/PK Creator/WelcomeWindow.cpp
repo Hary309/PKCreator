@@ -234,14 +234,22 @@ void WelcomeWindow::DeleteButton_clicked()
 
 	for (int i = 0; i < m_projectList.size(); ++i)
 	{
-		if (m_projectList[i])
-		{
-			if (m_projectList[i]->item == treeItem)
-			{
-				QDir dir(m_projectList[i]->path + "resources");
-				dir.removeRecursively();
+		auto projectListItem = m_projectList[i];
 
-				QFile file(m_projectList[i]->path + m_projectList[i]->name + ".pkp");
+		if (projectListItem)
+		{
+			if (projectListItem->item == treeItem)
+			{
+				// remove resources
+				QDir resources(projectListItem->path + "resources");
+				resources.removeRecursively();
+
+				// remove generated files
+				QDir generated(projectListItem->path + "Generated");
+				generated.removeRecursively();
+
+				// remove main project file
+				QFile file(projectListItem->path + projectListItem->name + ".pkp");
 				file.remove();
 
 				m_projectList.removeAt(i);

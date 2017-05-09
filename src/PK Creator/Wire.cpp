@@ -15,7 +15,7 @@ Wire::Wire()
 {
 	m_wireColor = sf::Color::White;
 
-
+	m_wireType = WireType(-1);
 }
 
 Wire::~Wire()
@@ -31,7 +31,6 @@ void Wire::Render(sf::RenderWindow *renderer)
 	constexpr float minOffset = 60.f;
 
 	QVector<sf::Vector2f> points;
-
 
 	if (offset.x < minOffset)
 	{

@@ -22,6 +22,8 @@ VisualWidget::VisualWidget(VisualNode *parent, Widget *data, sf::Vector2f offset
 {
 	m_height = 20.f;
 
+	m_shownTooltip = false;
+
 	m_pSpace = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(parent->GetWidth() / 2 - m_verMargin, m_height)));
 	m_pSpace->setFillColor(sf::Color(0x505050FF));
 

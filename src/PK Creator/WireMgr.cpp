@@ -23,6 +23,7 @@ WireMgr::WireMgr(NodeMgr *parent)
 	: m_pNodeMgr(parent)
 {
 	m_pCurrentLine = nullptr;
+	m_type = ConnectTo(-1);
 }
 
 WireMgr::~WireMgr()

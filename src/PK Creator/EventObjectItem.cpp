@@ -12,7 +12,7 @@
 #include <Node.h>
 
 EventObjectItem::EventObjectItem(ObjectItem *parent, EventDefsMgr::Type type, QStandardItem *item)
-	: m_pParent(parent), m_eventType(type), m_item(item)
+	: m_pParent(parent), m_item(item), m_eventType(type)
 {
 	m_new = false;
 	m_pItemWnd = nullptr;

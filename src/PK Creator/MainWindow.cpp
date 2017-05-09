@@ -12,10 +12,10 @@
 #include <QTime>
 #include <QMessageBox>
 
-#include <ResourceView.h>
-#include <WelcomeWindow.h>
 #include <Config.h>
+#include <ResourceView.h>
 #include <HTML5Generator.h>
+#include <WelcomeWindow.h>
 
 MainWindow *MainWindow::s_pInst;
 

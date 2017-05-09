@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <QDialog>
 #include "ui_VarEditWindow.h"
 
 #include <VariablesWindow.h>
@@ -25,7 +24,7 @@ private:
 	bool m_accepted;
 
 public:
-	VarEditWindow(QWidget *parent = Q_NULLPTR);
+	explicit VarEditWindow(QWidget *parent = Q_NULLPTR);
 	~VarEditWindow();
 
 	void SetVar(Var *var);

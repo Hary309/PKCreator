@@ -33,11 +33,11 @@ public:
 protected:
 	qint64								m_id;
 
+	QString								m_name;
+
 	Type								m_type;
 
 	sf::Vector2f						m_pos;
-
-	QString								m_name;
 
 	bool								m_execFrom;
 	qint64								m_idExecFrom;
@@ -51,6 +51,9 @@ protected:
 	friend NodeMgr;
 	friend HTML5Generator;
 	friend ObjectItem;
+
+private:
+	void SetType(Type type);
 
 public:
 	Node(const QString &name, sf::Vector2f pos, Type type);

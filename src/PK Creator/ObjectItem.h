@@ -10,7 +10,6 @@
 #include <Item.h>
 
 #include <QVector>
-#include <Common.h>
 #include "EventDefsMgr.h"
 
 class EventObjectItem;

@@ -58,9 +58,6 @@ void SceneItem::Load(QDataStream *const dataStream)
 	
 		*dataStream >> id >> pos;
 
-		//printf("Name: %s\n", name.toStdString().c_str());
-		//printf("Pos: (%d, %d)\n", pos.x(), pos.y());
-
 		auto sObj = QSharedPointer<SceneObject>(new SceneObject());
 
 		sObj->pObj = static_cast<ObjectItem*>(ResourceView::Get()->GetItem(id));

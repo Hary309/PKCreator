@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <QSharedPointer>
 #include <EventDefsMgr.h>
 
 class QStandardItem;

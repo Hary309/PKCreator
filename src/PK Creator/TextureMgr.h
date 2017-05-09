@@ -9,7 +9,6 @@
 #pragma once
 
 #include <QVector>
-#include <QSize>
 #include <QPoint>
 
 #include <QSharedPointer>

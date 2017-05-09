@@ -16,15 +16,29 @@
 
 
 Node::Node(const QString &name, sf::Vector2f pos, Type type)
-{
-	Node(qint64(this), name, pos, type);
-}
-
-Node::Node(qint64 id, const QString &name, sf::Vector2f pos, Type type)
-	: m_id(id), m_name(name), m_pos(pos), m_type(type)
+	: m_name(name), m_type(type), m_pos(pos)
 {
 	m_idExecFrom = m_idExecTo = 0;
 
+	m_id = qint64(this);
+
+	SetType(type);
+}
+
+Node::Node(qint64 id, const QString &name, sf::Vector2f pos, Type type)
+	: m_id(id), m_name(name), m_type(type), m_pos(pos)
+{
+	m_idExecFrom = m_idExecTo = 0;
+
+	SetType(type);
+}
+
+Node::~Node()
+{
+}
+
+void Node::SetType(Type type)
+{
 	if (type == FUNCTION)
 	{
 		m_execFrom = true;
@@ -40,10 +54,6 @@ Node::Node(qint64 id, const QString &name, sf::Vector2f pos, Type type)
 		m_execFrom = false;
 		m_execTo = false;
 	}
-}
-
-Node::~Node()
-{
 }
 
 Widget *Node::AddWidget(Widget *widget)

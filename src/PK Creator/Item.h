@@ -38,7 +38,7 @@ protected:
 
 public:
 	Item(QStandardItem *item, const QString &itemName)
-		: m_itemName(itemName), m_pTreeItem(item)
+		: m_type(Type(-1)), m_itemName(itemName), m_pTreeItem(item)
 	{
 		// getting id from timestamp
 		QDateTime currDateTime = QDateTime::currentDateTime();

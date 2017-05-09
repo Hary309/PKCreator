@@ -83,11 +83,11 @@ public:
 
 	void ConnectAllWires();
 	void DisconnectAll();
-	void ConnectedWith(VisualNode *node, ExecType execType);
+	void ConnectedWith(VisualNode *node, ExecType execType) const;
 	void Connect(ExecType execType);
 	void Disconnect(WireExec *wire);
 
-	void SetPin(bool pin, ExecType pinType);
+	void SetPin(bool pin, ExecType pinType) const;
 
 	int GetWidth() const { return m_boxWidth; }
 

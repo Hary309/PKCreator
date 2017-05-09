@@ -26,7 +26,7 @@
 #include <SFML/Graphics.hpp>
 
 VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int width)
-	: m_pNodeMgr(nodeMgr), m_pData(data), m_defaultColor(defaultColor), m_boxWidth(width), m_pFont(m_pNodeMgr->GetFont())
+	: m_pNodeMgr(nodeMgr), m_pData(data), m_boxWidth(width), m_defaultColor(defaultColor), m_pFont(m_pNodeMgr->GetFont())
 {
 	if (m_pData->m_type == Node::FUNCTION)
 		m_defaultColor = sf::Color(0x388E3CFF);
@@ -380,7 +380,7 @@ void VisualNode::DisconnectAll()
 	}
 }
 
-void VisualNode::ConnectedWith(VisualNode *node, ExecType execType)
+void VisualNode::ConnectedWith(VisualNode *node, ExecType execType) const
 {
 	if (execType == ExecType::ExecFrom)
 	{
@@ -453,7 +453,7 @@ void VisualNode::Disconnect(WireExec *wire)
 	}
 }
 
-void VisualNode::SetPin(bool pin, ExecType pinType)
+void VisualNode::SetPin(bool pin, ExecType pinType) const
 {
 	if (pinType == ExecType::ExecFrom)
 	{

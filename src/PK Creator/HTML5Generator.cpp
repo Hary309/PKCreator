@@ -137,8 +137,6 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 
 				declaration += ") {";
 
-				int varNumber = 0;
-
 				auto nextNode = e->GetNode(firstNode->m_idExecTo);
 
 				QString syf = "";

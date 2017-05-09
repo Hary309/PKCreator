@@ -14,7 +14,7 @@
 #include <ObjectItemWindow.h>
 #include <Var.h>
 #include <Node.h>
-#include <Widget.h>s
+#include <Widget.h>
 
 #include <QString>
 
