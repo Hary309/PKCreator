@@ -17,12 +17,13 @@ namespace sf
 {
 	class RenderWindow;
 	class RectangleShape;
+	class Sprite;
 }
 
 class TextureMgr;
 class ObjectItem;
 class SceneItemWindow;
-class SceneObject;
+class SceneObject; // dec in SceneItem.h
 class SceneItem;
 
 class SceneEditor : public QWidget
@@ -34,6 +35,8 @@ private:
 
 	QVector<QSharedPointer<SceneObject>>	*m_pObjects;
 	SceneItem								*m_pSceneItem;
+
+	QSharedPointer<sf::Sprite>				*m_pBackground;
 
 	const ObjectItem						*m_pSelectedObj;
 

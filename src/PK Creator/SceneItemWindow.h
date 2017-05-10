@@ -14,13 +14,27 @@ class SceneItem;
 class SceneEditor;
 class Item;
 
+class BackgroundItem;
+
 #include <ItemWindow.h>
 
 #include <QVector>
 #include <QSharedPointer>
 
+namespace sf
+{
+	class Texture;
+	class Sprite;
+}
+
 class SceneItemWindow : public ItemWindow
 {
+	struct ComboBoxItem
+	{
+		int index;
+		BackgroundItem *pBg;
+	};
+
 	Q_OBJECT
 
 	struct ObjectListItem
@@ -34,7 +48,15 @@ private:
 	SceneItem									*m_pItemParent;
 	QSharedPointer<SceneEditor>					m_pEditor;
 
+	QSharedPointer<sf::Texture>					m_pBgTexture;
+	QSharedPointer<sf::Sprite>					m_pBgSprite;
+
 	QVector<QSharedPointer<ObjectListItem>>		m_objectsList;
+
+	QVector<QSharedPointer<ComboBoxItem>>		m_backgrounds;
+
+private:
+	void RefreshBgBox();
 
 protected:
 	void enterEvent(QEvent *event) override;
@@ -51,10 +73,14 @@ public:
 
 	bool FillData(Item *item) override;
 
+	auto GetBgImage() { return &m_pBgSprite; }
+
 private slots:
 	void OkButton_clicked();
 	void BgColorButton_clicked();
 	void ObjectList_ItemClicked(QListWidgetItem *item);
+
+	void BackgroundBox_activated(int index);
 
 	void snapXBox_valueChanged(int i);
 	void snapYBox_valueChanged(int i);

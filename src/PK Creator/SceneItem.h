@@ -17,6 +17,8 @@ class SceneItemWindow;
 
 class ObjectItem;
 
+class BackgroundItem;
+
 namespace sf
 {
 	class Sprite;
@@ -35,6 +37,10 @@ class SceneItem : public Item
 {
 protected:
 	QVector<QSharedPointer<SceneObject>>	m_objects;
+
+	BackgroundItem							*m_pBackground;
+	bool									m_tileVer;
+	bool									m_tileHor;
 
 	unsigned								m_bgColor;
 

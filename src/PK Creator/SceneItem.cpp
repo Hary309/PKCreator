@@ -15,6 +15,7 @@
 #include <Item.h>
 #include <SceneItemWindow.h>
 #include <ObjectItem.h>
+#include <BackgroundItem.h>
 #include <ResourceView.h>
 
 #include <CodeGenerator.h>
@@ -30,6 +31,10 @@ SceneItem::SceneItem(QStandardItem *item, const QString &itemName)
 	m_bgColor = sf::Color(158, 158, 158).toInteger();
 
 	m_pItemWnd = nullptr;
+
+	m_pBackground = nullptr;
+	m_tileVer = false;
+	m_tileHor = false;
 }
 
 SceneItem::~SceneItem()
@@ -49,7 +54,12 @@ void SceneItem::Load(QDataStream *const dataStream)
 
 	int size = 0;
 
-	*dataStream >> size;
+	qint64 bgId = 0;
+
+	*dataStream >> bgId >> m_tileHor >> m_tileVer >> size;
+
+	if (bgId)
+		m_pBackground = static_cast<BackgroundItem*>(ResourceView::Get()->GetItem(bgId));
 
 	for (int i = 0; i < size; ++i)
 	{
@@ -72,7 +82,7 @@ void SceneItem::Save(QDataStream *const dataStream)
 {
 	Item::Save(dataStream);
 
-	*dataStream << m_bgColor;
+	*dataStream << m_bgColor << (m_pBackground ? m_pBackground->GetID() : static_cast<long long>(-1)) << m_tileHor << m_tileVer;
 
 	*dataStream << m_objects.size();
 
@@ -83,7 +93,7 @@ void SceneItem::Save(QDataStream *const dataStream)
 	}
 }
 
-void SceneItem::Show(QWidget * wndParent)
+void SceneItem::Show(QWidget *wndParent)
 {
 	if (!m_pItemWnd)
 	{

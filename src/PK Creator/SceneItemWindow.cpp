@@ -17,12 +17,14 @@
 #include <ResourceView.h>
 #include <Item.h>
 #include <SpriteItem.h>
-
+#include <BackgroundItem.h>
 #include <SceneItem.h>
 #include <SceneEditor.h>
 #include <ObjectItem.h>
 #include <TextureMgr.h>
 #include <Config.h>
+
+#include <SFML/Graphics.hpp>
 
 SceneItemWindow::SceneItemWindow(QWidget* parent)
 	: ItemWindow(parent)
@@ -31,6 +33,9 @@ SceneItemWindow::SceneItemWindow(QWidget* parent)
 	m_ui.nameEdit->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{1,24}")));
 
 	m_pItemParent = nullptr;
+
+	m_pBgTexture = nullptr;
+	m_pBgSprite = nullptr;
 
 	m_pEditor = QSharedPointer<SceneEditor>(new SceneEditor(this));
 	m_pEditor->setObjectName(QStringLiteral("widget"));
@@ -47,6 +52,10 @@ SceneItemWindow::SceneItemWindow(QWidget* parent)
 	connect(m_ui.bgColorButton, &QPushButton::clicked, this, &SceneItemWindow::BgColorButton_clicked);
 	connect(m_ui.objectList, &QListWidget::itemClicked, this, &SceneItemWindow::ObjectList_ItemClicked);
 
+	connect(m_ui.backgroundBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &SceneItemWindow::BackgroundBox_activated);
+	connect(m_ui.tileHorCheckBox, &QCheckBox::stateChanged, this, [this](int state) { m_pItemParent->m_tileHor = state; });
+	connect(m_ui.tileVerCheckBox, &QCheckBox::stateChanged, this, [this](int state) { m_pItemParent->m_tileVer = state; });
+	
 	connect(m_ui.snapXBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SceneItemWindow::snapXBox_valueChanged);
 	connect(m_ui.snapYBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SceneItemWindow::snapYBox_valueChanged);
 	connect(m_ui.drawGrid, &QCheckBox::stateChanged, this, &SceneItemWindow::DrawGrid_stateChanged);
@@ -73,6 +82,33 @@ bool SceneItemWindow::FillData(Item *item)
 
 	QString newColor = QString::asprintf("background-color: rgb(%d, %d, %d);", color.red(), color.green(), color.blue());
 	m_ui.bgColorButton->setStyleSheet(newColor);
+
+	RefreshBgBox();
+
+	bool set = false;
+
+	for (auto spr : m_backgrounds)
+	{
+		if (m_pItemParent->m_pBackground == spr->pBg)
+		{
+			m_ui.backgroundBox->setCurrentIndex(spr->index + 1);
+
+			m_pBgTexture.reset(new sf::Texture());
+			m_pBgTexture->loadFromFile(m_pItemParent->m_pBackground->GetTexPath().toStdString());
+
+			m_pBgSprite.reset(new sf::Sprite());
+			m_pBgSprite->setTexture(*m_pBgTexture);
+
+			set = true;
+			break;
+		}
+	}
+
+	if (!set)
+		m_ui.backgroundBox->setCurrentIndex(0);
+
+	m_ui.tileHorCheckBox->setChecked(m_pItemParent->m_tileHor);
+	m_ui.tileVerCheckBox->setChecked(m_pItemParent->m_tileVer);
 
 	return true;
 }
@@ -125,6 +161,35 @@ SceneItemWindow::ObjectListItem *SceneItemWindow::GetObjectListItem(QListWidgetI
 	}
 
 	return nullptr;
+}
+
+void SceneItemWindow::RefreshBgBox()
+{
+	m_backgrounds.clear();
+
+	auto backgroundBox = m_ui.backgroundBox;
+
+	QString currentIndex = backgroundBox->currentText();
+
+	backgroundBox->clear();
+
+	backgroundBox->insertItem(0, "None");
+
+	const QVector<Item*> bgs = ResourceView::Get()->GetItemsByType(Item::BACKGROUND);
+
+	for (int i = 0; i < bgs.size(); ++i)
+	{
+		backgroundBox->insertItem(i + 1, bgs[i]->GetName());
+
+		auto texItem = QSharedPointer<ComboBoxItem>(new ComboBoxItem());
+
+		texItem->index = i;
+		texItem->pBg = static_cast<BackgroundItem*>(bgs[i]);
+
+		m_backgrounds.push_back(texItem);
+	}
+
+	backgroundBox->setCurrentIndex(backgroundBox->findText(currentIndex));
 }
 
 void SceneItemWindow::enterEvent(QEvent *e)
@@ -192,6 +257,40 @@ void SceneItemWindow::ObjectList_ItemClicked(QListWidgetItem *item)
 
 		m_pEditor->SetCurrObject(objItem);
 	}
+}
+
+void SceneItemWindow::BackgroundBox_activated(int index)
+{
+	if (!index)
+	{
+		m_pBgTexture.reset();
+		m_pBgSprite.reset();
+		m_pItemParent->m_pBackground = nullptr;
+		return;
+	}
+
+	index--;
+
+	for (auto bg : m_backgrounds)
+	{
+		if (bg)
+		{
+			if (bg->index == index)
+			{
+				m_pItemParent->m_pBackground = bg->pBg;
+
+				m_pBgTexture.reset(new sf::Texture());
+				m_pBgTexture->loadFromFile((ResourceView::Get()->GetMainDir() + m_pItemParent->m_pBackground->GetTexPath()).toStdString());
+
+				m_pBgSprite.reset(new sf::Sprite());
+				m_pBgSprite->setTexture(*m_pBgTexture);
+				m_pBgSprite->setPosition(0.f, 0.f);
+				return;
+			}
+		}
+	}
+
+	m_pItemParent->m_pBackground = nullptr;
 }
 
 void SceneItemWindow::snapXBox_valueChanged(int i)

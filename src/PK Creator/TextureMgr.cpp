@@ -15,7 +15,6 @@
 #include <ResourceView.h>
 #include <SpriteItem.h>
 
-
 TextureMgr::TextureMgr()
 {
 }

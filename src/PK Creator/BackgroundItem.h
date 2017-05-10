@@ -24,6 +24,9 @@ public:
 	BackgroundItem(QStandardItem *item, const QString &itemName);
 	~BackgroundItem();
 
+	QSize GetSize()			const		{ return m_size; }
+	QString GetTexPath()	const		{ return m_texPath; }
+
 	void SetName(const QString &name)			override;
 
 	void Load(QDataStream *const dataStream)	override;

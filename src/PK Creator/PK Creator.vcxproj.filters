@@ -269,14 +269,14 @@
     <ClCompile Include="BackgroundItem.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
-    <ClCompile Include="BackgroundItemWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\QtFiles\Debug\moc_BackgroundItemWindow.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_BackgroundItemWindow.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="BackgroundItemWindow.cpp">
+      <Filter>Source Files\Items\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,7 +368,7 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="BackgroundItemWindow.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Items\Windows</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

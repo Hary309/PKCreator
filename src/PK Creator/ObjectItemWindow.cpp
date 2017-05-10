@@ -134,17 +134,19 @@ void ObjectItemWindow::RefreshSpriteBox()
 {
 	m_sprites.clear();
 
-	QString currentIndex = m_ui.spriteBox->currentText();
+	auto spriteBox = m_ui.spriteBox;
 
-	m_ui.spriteBox->clear();
+	QString currentIndex = spriteBox->currentText();
 
-	m_ui.spriteBox->insertItem(0, "None");
+	spriteBox->clear();
+
+	spriteBox->insertItem(0, "None");
 
 	const QVector<Item*> sprites = ResourceView::Get()->GetItemsByType(Item::SPRITE);
 
 	for (int i = 0; i < sprites.size(); ++i)
 	{
-		m_ui.spriteBox->insertItem(i + 1, sprites[i]->GetName());
+		spriteBox->insertItem(i + 1, sprites[i]->GetName());
 
 		auto texItem = QSharedPointer<ComboBoxItem>(new ComboBoxItem());
 
@@ -154,7 +156,7 @@ void ObjectItemWindow::RefreshSpriteBox()
 		m_sprites.push_back(texItem);
 	}
 
-	m_ui.spriteBox->setCurrentIndex(m_ui.spriteBox->findText(currentIndex));
+	spriteBox->setCurrentIndex(spriteBox->findText(currentIndex));
 }
 
 void ObjectItemWindow::changeEvent(QEvent *e)

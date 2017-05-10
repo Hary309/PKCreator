@@ -17,6 +17,7 @@
 #include <TextureMgr.h>
 #include <ObjectItem.h>
 #include <SceneItem.h>
+#include <SceneItemWindow.h>
 #include <SpriteItem.h>
 
 SceneEditor::SceneEditor(QWidget *parent)
@@ -34,6 +35,8 @@ SceneEditor::SceneEditor(QWidget *parent)
 	m_pObjects = nullptr;
 	m_pCurrObj = nullptr;
 	m_pSelectedObj = nullptr;
+
+	m_pBackground = nullptr;
 
 	m_timer.setInterval(10);
 	m_timer.start();
@@ -62,6 +65,8 @@ void SceneEditor::SetSource(SceneItem *sceneItem)
 	m_pSceneItem = sceneItem;
 	m_pObjects =  &sceneItem->m_objects;
 
+	m_pBackground = reinterpret_cast<SceneItemWindow*>(parent())->GetBgImage();
+
 	for (auto obj : *m_pObjects)
 	{
 		if (!obj)
@@ -88,6 +93,26 @@ void SceneEditor::Render()
 	if (m_pRenderer)
 	{
 		m_pRenderer->clear(sf::Color(m_pSceneItem->m_bgColor));
+
+		if (m_pBackground && *m_pBackground)
+		{
+			auto texSize = m_pBackground->data()->getTexture()->getSize();
+
+			if (texSize.x > 0 && texSize.y > 0)
+			{
+				int maxX = m_pSceneItem->m_tileHor ? geometry().width() /  texSize.x : 0;
+				int maxY = m_pSceneItem->m_tileVer ? geometry().height() / texSize.y : 0;
+
+				for (int i = 0; i <= maxX; ++i)
+				{
+					for (int j = 0; j <= maxY; ++j)
+					{
+						m_pBackground->data()->setPosition(i * texSize.x, j * texSize.y);
+						m_pRenderer->draw(**m_pBackground);
+					}
+				}
+			}
+		}
 
 		if (m_pCurrObj)
 		{
