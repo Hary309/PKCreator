@@ -17,6 +17,7 @@
 #include <NodesWindow.h>
 
 #include <SpriteItem.h>
+#include <BackgroundItem.h>
 #include <ObjectItem.h>
 #include <SceneItem.h>
 #include <Config.h>
@@ -40,6 +41,7 @@ ResourceView::ResourceView(QWidget *parent)
 	Setup();
 
 	m_lastSpriteID = 0;
+	m_lastBackgroundID = 0;
 	m_lastObjectID = 0;
 	m_lastSceneID = 0;
 
@@ -200,7 +202,18 @@ void ResourceView::ActionAdd_triggered()
 		} break;
 		case Item::BACKGROUND:
 		{
+			while (true)
+			{
+				name.sprintf("background%d", m_lastBackgroundID++);
 
+				if (!IsNameExists(name))
+					break;
+			}
+			treeItem = InsertRow(treeItem, name);
+
+			auto item = QSharedPointer<BackgroundItem>(new BackgroundItem(treeItem, name));
+			item->Show(this);
+			m_items.push_back(item);
 		} break;
 		case Item::OBJECT:
 		{
@@ -307,7 +320,7 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 	m_pProConfig->Load(dataStream);
 
 
-	*dataStream >> m_lastSpriteID >> m_lastObjectID >> m_lastSceneID;
+	*dataStream >> m_lastSpriteID >> m_lastObjectID >> m_lastObjectID >> m_lastSceneID;
 
 	m_mainDir = currPath;
 
@@ -342,7 +355,7 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 			} break;
 			case Item::BACKGROUND:
 			{
-
+				item = new BackgroundItem(treeItem, name);
 			} break;
 			case Item::OBJECT:
 			{
@@ -376,7 +389,7 @@ void ResourceView::Save(QDataStream *const dataStream)
 {
 	m_pProConfig->Save(dataStream);
 
-	*dataStream << m_lastSpriteID << m_lastObjectID << m_lastSceneID;
+	*dataStream << m_lastSpriteID << m_lastBackgroundID << m_lastObjectID << m_lastSceneID;
 
 	qSort(m_items.begin(), m_items.end(), Item::SavingComparison);
 
