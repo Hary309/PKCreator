@@ -44,8 +44,8 @@ SceneEditor::SceneEditor(QWidget *parent)
 	m_pRenderer = QSharedPointer<sf::RenderWindow>(new sf::RenderWindow(HWND(winId())));
 	m_pTexMgr = QSharedPointer<TextureMgr>(new TextureMgr());
 
-	m_hLine = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(1, m_windowSize.height())));
-	m_vLine = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_windowSize.width(), 1)));
+	m_hLine = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_windowSize.width(), 1)));
+	m_vLine = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(1, m_windowSize.height())));
 
 	m_hLine->setFillColor(sf::Color(0, 0, 0));
 	m_vLine->setFillColor(sf::Color(0, 0, 0));
@@ -96,31 +96,26 @@ void SceneEditor::Render()
 			{
 				sf::IntRect rect = spr->getTextureRect();
 
-				int lineWidth = 2;
-
-				sf::RectangleShape verLine(sf::Vector2f(rect.width, lineWidth));
-				sf::RectangleShape horLine(sf::Vector2f(lineWidth, rect.height));
-
-				verLine.setFillColor(sf::Color(255, 255, 255));
-				horLine.setFillColor(sf::Color(255, 255, 255));
-
 				sf::Vector2f pos = spr->getPosition() - spr->getOrigin();
 
-				// Top
-				verLine.setPosition(pos - sf::Vector2f(0.f, lineWidth));
-				m_pRenderer->draw(verLine);
+				sf::Vertex vertex[5];
 
-				// Bottom
-				verLine.setPosition(pos + sf::Vector2f(0.f, rect.height));
-				m_pRenderer->draw(verLine);
+				// left top
+				vertex[0] = sf::Vertex(pos - sf::Vector2f(1.f, 0.f), sf::Color::White);
+				
+				// right top
+				vertex[1] = sf::Vertex(pos + sf::Vector2f(rect.width, 0.f), sf::Color::White);
 
-				// Left
-				horLine.setPosition(pos - sf::Vector2f(lineWidth, 0.f));
-				m_pRenderer->draw(horLine);
+				// right bottom
+				vertex[2] = sf::Vertex(pos + sf::Vector2f(rect.width, rect.height + 1.f), sf::Color::White);
 
-				// Right
-				horLine.setPosition(pos + sf::Vector2f(rect.width, 0.f));
-				m_pRenderer->draw(horLine);
+				// left bottom
+				vertex[3] = sf::Vertex(pos + sf::Vector2f(-1.f, rect.height + 1.f), sf::Color::White);
+
+				// left top
+				vertex[4] = sf::Vertex(pos - sf::Vector2f(1.f, 1.f), sf::Color::White);
+
+				m_pRenderer->draw(vertex, 5, sf::PrimitiveType::LineStrip);
 			}
 		}
 
@@ -136,18 +131,18 @@ void SceneEditor::Render()
 		{
 			if (m_snapX > 1)
 			{
-				for (int i = 0; i < m_windowSize.width() / m_snapX + 1; ++i)
+				for (int i = 0; i < m_windowSize.height() / m_snapY + 1; ++i)
 				{
-					m_hLine->setPosition(i * m_snapX, 0);
+					m_hLine->setPosition(0, i * m_snapY);
 					m_pRenderer->draw(*m_hLine);
 				}
 			}
 
 			if (m_snapY > 1)
 			{
-				for (int i = 0; i < m_windowSize.height() / m_snapY + 1; ++i)
+				for (int i = 0; i < m_windowSize.width() / m_snapX + 1; ++i)
 				{
-					m_vLine->setPosition(0, i * m_snapY);
+					m_vLine->setPosition(i * m_snapX, 0);
 					m_pRenderer->draw(*m_vLine);
 				}
 			}

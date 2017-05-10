@@ -61,7 +61,7 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 
 		if (widget)
 		{
-			auto offset = sf::Vector2f(VisualWidget::m_verMargin, i == 0 ? 20.f + VisualWidget::m_horMargin : 20.f + (i + 1) * VisualWidget::m_horMargin + i * m_visualInputs.last()->GetHeight());
+			auto offset = sf::Vector2f(VisualWidget::m_horMargin, i == 0 ? 20.f + VisualWidget::m_verMargin : 20.f + (i + 1) * VisualWidget::m_verMargin + i * m_visualInputs.last()->GetHeight());
 
 			auto inputWidget = QSharedPointer<InputWidget>(new InputWidget(this, widget.data(), offset));
 
@@ -70,7 +70,7 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 			auto bodySize = m_pBody->getSize();
 
 			if (bodySize.y < offset.y)
-				m_pBody->setSize(sf::Vector2f(bodySize.x, offset.y + VisualWidget::m_horMargin));
+				m_pBody->setSize(sf::Vector2f(bodySize.x, offset.y + VisualWidget::m_verMargin));
 		}
 	}
 
@@ -80,7 +80,7 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 
 		if (widget)
 		{
-			auto offset = sf::Vector2f(m_boxWidth / 2, i == 0 ? 20.f + VisualWidget::m_horMargin : 20.f + (i + 1) * VisualWidget::m_horMargin + i * m_visualOutputs.last()->GetHeight());
+			auto offset = sf::Vector2f(m_boxWidth / 2, i == 0 ? 20.f + VisualWidget::m_verMargin : 20.f + (i + 1) * VisualWidget::m_verMargin + i * m_visualOutputs.last()->GetHeight());
 
 			auto outputWidget = QSharedPointer<OutputWidget>(new OutputWidget(this, widget.data(), offset));
 			
@@ -89,7 +89,7 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 			auto bodySize = m_pBody->getSize();
 
 			if (bodySize.y < offset.y)
-				m_pBody->setSize(sf::Vector2f(bodySize.x, offset.y + VisualWidget::m_horMargin));
+				m_pBody->setSize(sf::Vector2f(bodySize.x, offset.y + VisualWidget::m_verMargin));
 		}
 	}
 
