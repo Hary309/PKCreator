@@ -229,17 +229,14 @@ void SceneItemWindow::BgColorButton_clicked()
 
 	colorDialog.setCurrentColor(m_pItemParent->m_bgColor >> 8);
 	colorDialog.setWindowTitle("Choose background color");
-
-	connect(&colorDialog, &QColorDialog::colorSelected, this, [this](const QColor &color)
-	{
-		// Bit shift deletes alpha
-		m_pItemParent->m_bgColor = (color.rgb() << 8);
-		QString newColor = QString::asprintf("background-color: rgb(%d, %d, %d);", color.red(), color.green(), color.blue());
-		m_ui.bgColorButton->setStyleSheet(newColor);
-	}
-	);
-
 	colorDialog.exec();
+
+	auto color = colorDialog.selectedColor();
+
+	// Bit shift deletes alpha
+	m_pItemParent->m_bgColor = (color.rgb() << 8);
+	QString newColor = QString::asprintf("background-color: rgb(%d, %d, %d);", color.red(), color.green(), color.blue());
+	m_ui.bgColorButton->setStyleSheet(newColor);
 }
 
 void SceneItemWindow::ObjectList_ItemClicked(QListWidgetItem *item)
