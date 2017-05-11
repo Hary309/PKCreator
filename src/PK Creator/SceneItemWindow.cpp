@@ -94,7 +94,7 @@ bool SceneItemWindow::FillData(Item *item)
 			m_ui.backgroundBox->setCurrentIndex(spr->index + 1);
 
 			m_pBgTexture.reset(new sf::Texture());
-			m_pBgTexture->loadFromFile(m_pItemParent->m_pBackground->GetTexPath().toStdString());
+			m_pBgTexture->loadFromFile((ResourceView::Get()->GetMainDir() + m_pItemParent->m_pBackground->GetTexPath()).toStdString());
 
 			m_pBgSprite.reset(new sf::Sprite());
 			m_pBgSprite->setTexture(*m_pBgTexture);

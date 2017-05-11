@@ -14,6 +14,7 @@
 #include <ResourceView.h>
 #include <ObjectItem.h>
 #include <SpriteItem.h>
+#include <BackgroundItem.h>
 #include <SceneItem.h>
 #include <Var.h>
 #include <EventObjectItem.h>
@@ -216,7 +217,23 @@ void HTML5Generator::GenerateScene(SceneItem *scene)
 
 	auto objects = scene->GetObjects();
 
-	m_init += "var " + sceneName + " = new Scene(" + QString::number(scene->GetID()) + ", 'rgb(" + QString::number(color.r) + "," + QString::number(color.g) + "," + QString::number(color.b) + ")');\n";
+	QString textureName = "";
+
+	if (scene->m_pBackground)
+	{
+		textureName = sceneName + "Background." + scene->m_pBackground->GetTexPath().split(".").last();;
+		 
+		QFile tex(ResourceView::Get()->GetMainDir() + scene->m_pBackground->GetTexPath());
+		tex.copy(m_path + "\\" + textureName);
+	}
+
+	int bgTile = (scene->m_tileHor ? 1 : 0) + (scene->m_tileVer ? 2 : 0);
+
+	m_init +=	"var " + sceneName + " = new Scene(" + QString::number(scene->GetID()) + 
+				", 'rgb(" + QString::number(color.r) + "," + QString::number(color.g) + "," + QString::number(color.b) + ")'" +
+				", '" + textureName + "'" +
+				", " + QString::number(bgTile) + ");\n";
+
 
 	int i = 0;
 
@@ -275,13 +292,14 @@ void HTML5Generator::Save()
 	stream << "\nfunction init()\n{\n" << m_init << "}";
 
 	// render
-	stream << 
+	stream <<
 		"\n\nfunction render()\n"
 		"{\n"
 		"ctx.fillStyle=currentScene.bgColor;\n"
-		"ctx.fillRect(0, 0, " + QString::number(m_windowSize.width()) + ", " + QString::number(m_windowSize.height()) + ");\n"
+		"ctx.fillRect(0, 0, canvas.width, canvas.height);\n"
+		"currentScene.scene.draw();\n"
 		"for (i = 0; i < currentScene.instances.length; i++)\n"
-			"currentScene.instances[i].draw();\n"
+			"\tcurrentScene.instances[i].draw();\n"
 		"setTimeout(render, 10);\n"
 		"}";
 

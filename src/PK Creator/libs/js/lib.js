@@ -63,9 +63,11 @@ function AddObject(object)
 }
 
 // CurrentScene && Instance
-function CurrentScene(bgColor)
+function CurrentScene(scene)
 {
-	this.bgColor = bgColor;
+	this.bgColor = scene.bgColor;
+	this.scene = scene;
+
 	this.instances = [];
 }
 
@@ -116,12 +118,43 @@ function DestroyInstance(instanceID)
 }
 
 // Scene
-function Scene(id, bgColor)
+function Scene(id, bgColor, bgImagePath, bgTile)
 {
 	this.id = id;
 	this.bgColor = bgColor;
+	this.bgImage = new Image();
+	this.bgImage.src = bgImagePath;
+	this.bgTile = bgTile;
 
 	this.sceneObjects = [];
+
+	this.draw = function() 
+	{ 
+		var maxX = 0;
+		var maxY = 0;
+
+		if (bgTile == 3 || bgTile == 1)
+		{
+			if (this.bgImage.width)
+				maxX = canvas.width / this.bgImage.width;
+		}
+
+		if (bgTile == 3 || bgTile == 2)
+		{
+			if (this.bgImage.height)
+				maxY = canvas.height / this.bgImage.height;
+		}
+
+		for (var i = 0; i <= maxX; i++)
+		{
+			for (var j = 0; j <= maxY; j++)
+			{
+				ctx.drawImage(this.bgImage, this.bgImage.width * i, this.bgImage.height * j);
+			}
+		}
+
+
+	}
 }
 
 function SceneObject(objectID, x, y)
@@ -150,7 +183,7 @@ function LoadScene(sceneID)
 	{
 		if (allScenes[i].id == sceneID)
 		{
-			currentScene = new CurrentScene(allScenes[i].bgColor);
+			currentScene = new CurrentScene(allScenes[i]);
 
 			for (var j = 0; j < allScenes[i].sceneObjects.length; j++)
 			{

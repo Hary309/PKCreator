@@ -32,6 +32,7 @@ struct SceneObject
 };
 
 class CodeGenerator;
+class HTML5Generator;
 
 class SceneItem : public Item
 {
@@ -44,8 +45,9 @@ protected:
 
 	unsigned								m_bgColor;
 
-	friend									SceneItemWindow;
-	friend									SceneEditor;
+	friend SceneItemWindow;
+	friend SceneEditor;
+	friend HTML5Generator;
 
 public:
 	SceneItem(QStandardItem *item, const QString &itemName);
