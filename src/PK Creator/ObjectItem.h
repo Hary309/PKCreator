@@ -40,6 +40,8 @@ public:
 
 	Var *GetVar(qint64 id) const;
 	Var *GetVarByWidget(qint64 widgetID, EventDefsMgr::Type eventType) const;
+	QString GetInlineVarValue(qint64 widgetID, EventDefsMgr::Type eventType) const;
+
 	auto GetVars() const { return &m_vars; }
 
 	SpriteItem *GetSprite() const { return m_pCurrSpr; }

@@ -54,6 +54,11 @@ void Node::SetType(Type type)
 		m_execFrom = false;
 		m_execTo = false;
 	}
+	else if (type == INLINE_VARIABLE)
+	{
+		m_execFrom = false;
+		m_execTo = false;
+	}
 }
 
 Widget *Node::AddWidget(Widget *widget)
@@ -89,8 +94,10 @@ void Node::Load(QDataStream *const dataStream)
 
 	*dataStream >> m_id >> x >> y >> m_name >> type >> m_execFrom >> m_idExecFrom >> m_execTo >> m_idExecTo;
 	m_pos = sf::Vector2f(x, y);
-
 	m_type = static_cast<Type>(type);
+
+	if (m_type == INLINE_VARIABLE)
+		*dataStream >> m_defaultValue;
 
 	*dataStream >> nInputs;
 
@@ -116,6 +123,10 @@ void Node::Load(QDataStream *const dataStream)
 void Node::Save(QDataStream *const dataStream)
 {
 	*dataStream << m_id << m_pos.x << m_pos.y << m_name << m_type << m_execFrom << m_idExecFrom << m_execTo << m_idExecTo;
+
+	if (m_type == INLINE_VARIABLE)
+		*dataStream << m_defaultValue;
+
 	*dataStream << m_inputs.size();
 
 	for (auto widget : m_inputs)

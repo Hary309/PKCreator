@@ -193,6 +193,15 @@ void BlueprintEditor::NodesWindow_accepted() const
 
 		m_pNodeMgr->AddNodeFromVar(res->var, m_nodePos);
 	}
+	else if (type == Node::INLINE_VARIABLE)
+	{
+		auto res = nodesWindow->GetSelectedInlineVarItem();
+
+		if (!res)
+			return;
+
+		m_pNodeMgr->AddNodeInlineVar(res->value, res->name, m_nodePos);
+	}
 }
 
 sf::Vector2f BlueprintEditor::GetViewOffset() const

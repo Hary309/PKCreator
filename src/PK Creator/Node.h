@@ -27,7 +27,8 @@ public:
 	{
 		EVENT = 0,
 		FUNCTION,
-		VARIABLE
+		VARIABLE,
+		INLINE_VARIABLE
 	};
 
 protected:
@@ -36,6 +37,8 @@ protected:
 	QString								m_name;
 
 	Type								m_type;
+
+	QString								m_defaultValue; // only for INLINE_VARIABLE
 
 	sf::Vector2f						m_pos;
 
@@ -63,6 +66,8 @@ public:
 	Widget *AddWidget(Widget *widget);
 	const QString &GetName() const { return m_name; }
 	Type GetType() const { return m_type; }
+
+	const QString &GetDefaultValue() const { return m_defaultValue; }
 
 	void Load(QDataStream *const dataStream);
 	void Save(QDataStream *const dataStream);

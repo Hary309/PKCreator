@@ -140,9 +140,7 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 
 				auto nextNode = e->GetNode(firstNode->m_idExecTo);
 
-				QString syf = "";
-
-				declaration += GenerateFunction(e, nextNode, syf);
+				declaration += GenerateFunction(e, nextNode, "");
 
 				declaration += "}\n";
 
@@ -180,9 +178,12 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 		qint64 id = node->m_inputs[i]->m_connected.first();
 
 		auto var = e->GetParent()->GetVarByWidget(id, e->GetType());
+		auto inlineVar = e->GetParent()->GetInlineVarValue(id, e->GetType());
 
 		if (var)
 			result += e->GetParent()->GetName() + ".vars." + var->m_name;
+		else if (!inlineVar.isEmpty())
+			result += inlineVar;
 		else
 			result += "v" + QString::number(id);
 	}
@@ -199,7 +200,7 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 				result += e->GetParent()->GetName() + ".vars." + var->m_name + " = v" + QString::number(node->m_outputs.first()->m_id) + ";";
 		}
 	}
-
+	
 	if (!node->m_idExecTo)
 		return result;
 

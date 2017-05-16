@@ -34,15 +34,30 @@ class NodesWindow : public QDialog
 		Var				*var;
 	};
 
+	class InlineVarNodeItem
+	{
+	public:
+		QTreeWidgetItem		*treeItem;
+		QString				value;
+		QString				name;
+	};
+
 private:
 	Ui::NodesWindow m_ui;
 
 	QVector <QSharedPointer<FunctionNodeItem>>	m_funcitonNodesWidgetItems;
 	QVector <QSharedPointer<VarNodeItem>>		m_varNodeWidgetItems;
+	QVector <QSharedPointer<InlineVarNodeItem>> m_inlineVarNodeWidgetItems;
 
 	int m_type;
-	FunctionNodeItem *m_pSelectedFunctionItem;
-	VarNodeItem *m_pSelectedVarItem;
+	FunctionNodeItem		*m_pSelectedFunctionItem;
+	VarNodeItem				*m_pSelectedVarItem;
+	InlineVarNodeItem		*m_pSelectedInlineVarItem;
+
+private:
+	void AddVarDefs(ObjectItem *objectItem);
+	void AddKeyDef(QTreeWidgetItem *topLevelItem, int key, const QString &name);
+	void AddInlineVarDefs();
 
 protected:
 	bool event(QEvent *e) override;
@@ -58,6 +73,7 @@ public:
 	int GetNodeType() const { return m_type; }
 	FunctionNodeItem *GetSelectedFunctionItem() const { return m_pSelectedFunctionItem; }
 	VarNodeItem *GetSelectedVarItem() const { return m_pSelectedVarItem; }
+	InlineVarNodeItem *GetSelectedInlineVarItem() const { return m_pSelectedInlineVarItem; }
 
 private slots:
 	void NodesWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);

@@ -135,6 +135,16 @@ VisualNode *NodeMgr::AddNodeFromVar(Var *var, const sf::Vector2f &pos)
 	return AddNode(node);
 }
 
+VisualNode * NodeMgr::AddNodeInlineVar(const QString &value, const QString &name, const sf::Vector2f &pos)
+{
+	Node *node = new Node(name, pos, Node::INLINE_VARIABLE);
+	node->m_defaultValue = value;
+
+	node->AddWidget(new Widget(node, "Value", Widget::OUTPUT, DataType::DATA_INTEGER));
+
+	return AddNode(node);
+}
+
 bool NodeMgr::RemoveNode(Node *node)
 {
 	for (int i = 0; i < m_pNodes->size(); ++i)

@@ -9,6 +9,7 @@
 #include "VisualNode.h"
 
 #include <QScreen>
+#include <QMessageBox>
 
 #include <BlueprintEditor.h>
 
@@ -34,6 +35,8 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 		m_defaultColor = sf::Color(0x0288D1FF);
 	else if (m_pData->m_type == Node::VARIABLE)
 		m_defaultColor = sf::Color(0xD32F2FFF);
+	else if (m_pData->m_type == Node::INLINE_VARIABLE)
+		m_defaultColor = sf::Color(0xB71C1CFF);
 	
 	m_pHeader = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_boxWidth, 20)));
 	m_pBody = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_boxWidth, 0)));
@@ -207,7 +210,12 @@ void VisualNode::Event(sf::Event *e)
 				{
 					if (!m_pData->m_type == Node::EVENT)
 					{
-						m_pNodeMgr->RemoveNode(m_pData);
+						auto result = QMessageBox::question(m_pNodeMgr->GetBpEditor(), "PK Creator", "Are your sure you want to remove " + m_pData->GetName() + " node?");
+
+						if (result == QMessageBox::Yes)
+						{
+							m_pNodeMgr->RemoveNode(m_pData);
+						}
 					}
 				}
 			}

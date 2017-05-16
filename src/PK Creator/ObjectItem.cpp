@@ -87,6 +87,9 @@ Var *ObjectItem::GetVarByWidget(qint64 widgetID, EventDefsMgr::Type eventType) c
 		}
 	}
 
+	if (!e)
+		return nullptr;
+
 	for (auto node : *e->GetNodes())
 	{
 		for (auto widget : node->m_inputs)
@@ -125,6 +128,41 @@ Var *ObjectItem::GetVarByWidget(qint64 widgetID, EventDefsMgr::Type eventType) c
 	}
 
 	return nullptr;
+}
+
+QString ObjectItem::GetInlineVarValue(qint64 widgetID, EventDefsMgr::Type eventType) const
+{
+	qint64 id = 0;
+
+	EventObjectItem *e = nullptr;
+
+	for (auto e_ : m_events)
+	{
+		if (e_->GetType() == eventType)
+		{
+			e = e_.data();
+			break;
+		}
+	}
+
+	if (!e)
+		return nullptr;
+
+	for (auto node : *e->GetNodes())
+	{
+		if (node->GetType() == Node::INLINE_VARIABLE)
+		{
+			for (auto widget : node->m_inputs)
+			{
+				if (widgetID == widget->GetID())
+				{
+					return node->GetDefaultValue();
+				}
+			}
+		}
+	}
+
+	return QString();
 }
 
 void ObjectItem::Load(QDataStream *const dataStream)
