@@ -94,7 +94,10 @@ bool MainWindow::Load(Project *project)
 		file.close();
 	}
 
-	printf("Loaded \"%s\" in %d ms \n", m_proInfo->name.toStdString().c_str(), timer.elapsed());
+	if (m_proInfo)
+		printf("Loaded \"%s\" in %d ms \n", m_proInfo->name.toStdString().c_str(), timer.elapsed());
+	else
+		printf("Cannot load!\n");
 
 	return true;
 }

@@ -26,7 +26,8 @@ private:
 	QString m_render;
 
 private:
-	static QString GenerateFunction(EventObjectItem *e, Node *node, QString result);
+	QString GenerateFunction(EventObjectItem *e, Node *node, QString result);
+	QString GetVar(EventObjectItem *e, qint64 id);
 
 public:
 	explicit HTML5Generator(const QString &path);

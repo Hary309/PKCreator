@@ -79,7 +79,9 @@ function Instance(object, x, y)
 	this.vars = object.vars;
 	this.events = object.events;
 
+	this.hspeed = 0;
 	this.x = x;
+	this.vspeed = 0;
 	this.y = y;
 	this.angle = 0;
 
@@ -203,8 +205,8 @@ canvas.onmousemove = function(data) {
 	var y = data.y;
 
 	for (i = 0; i < currentScene.instances.length; i++)
-		if (currentScene.instances[i].events.mouseMoveEvent)
-			currentScene.instances[i].events.mouseMoveEvent(x,y);
+		if (currentScene.instances[i].events.mouseMovedEvent)
+			currentScene.instances[i].events.mouseMovedEvent(x,y);
 }
 
 // Mouse pressed

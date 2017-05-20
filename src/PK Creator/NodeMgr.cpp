@@ -103,12 +103,12 @@ VisualNode *NodeMgr::AddNodeFromFunctionDef(FunctionDefsMgr::FunctionDef *nodeDe
 
 	for (auto arg : nodeDef->args)
 	{
-		node->AddWidget(new Widget(node, arg.name, Widget::INPUT, arg.type));
+		node->AddWidget(new Widget(node, arg.name, Widget::DATA, Widget::INPUT, arg.type));
 	}
 
 	if (nodeDef->returnValue.type != -1)
 	{
-		node->AddWidget(new Widget(node, nodeDef->returnValue.name, Widget::OUTPUT, nodeDef->returnValue.type));
+		node->AddWidget(new Widget(node, nodeDef->returnValue.name, Widget::DATA, Widget::OUTPUT, nodeDef->returnValue.type));
 	}	
 
 	auto visualNode = AddNode(node);
@@ -129,18 +129,41 @@ VisualNode *NodeMgr::AddNodeFromVar(Var *var, const sf::Vector2f &pos)
 
 	Node *node = new Node(var->m_id, var->m_name, pos, Node::VARIABLE);
 
-	node->AddWidget(new Widget(node, "Set", Widget::INPUT, var->m_type));
-	node->AddWidget(new Widget(node, "Get", Widget::OUTPUT, var->m_type));
+	node->AddWidget(new Widget(node, "Set", Widget::DATA, Widget::INPUT, var->m_type));
+	node->AddWidget(new Widget(node, "Get", Widget::DATA, Widget::OUTPUT, var->m_type));
 
 	return AddNode(node);
 }
 
-VisualNode * NodeMgr::AddNodeInlineVar(const QString &value, const QString &name, const sf::Vector2f &pos)
+VisualNode * NodeMgr::AddInlineVarNode(const QString &value, const QString &name, const sf::Vector2f &pos)
 {
 	Node *node = new Node(name, pos, Node::INLINE_VARIABLE);
 	node->m_defaultValue = value;
 
-	node->AddWidget(new Widget(node, "Value", Widget::OUTPUT, DataType::DATA_INTEGER));
+	node->AddWidget(new Widget(node, "Value", Widget::DATA, Widget::OUTPUT, DataType::DATA_INTEGER));
+
+	return AddNode(node);
+}
+
+VisualNode *NodeMgr::AddConditionNode(const NodesWindow::ConditionItem *conditionItem, const sf::Vector2f &pos)
+{
+	Node *node = new Node(conditionItem->name, pos, Node::CONDITION);
+	node->m_defaultValue = conditionItem->conditionType;
+
+	printf("ConditionType: %s\n", conditionItem->conditionType.toStdString().c_str());
+
+	if (conditionItem->nInputs == 1)
+	{
+		node->AddWidget(new Widget(node, "a", Widget::DATA, Widget::INPUT, conditionItem->dataType));
+	}
+	else if (conditionItem->nInputs == 2)
+	{
+		node->AddWidget(new Widget(node, "a", Widget::DATA, Widget::INPUT, conditionItem->dataType));
+		node->AddWidget(new Widget(node, "b", Widget::DATA, Widget::INPUT, conditionItem->dataType));
+	}
+
+	node->AddWidget(new Widget(node, "true", Widget::EXEC, Widget::OUTPUT, DataType::DATA_INTEGER));
+	node->AddWidget(new Widget(node, "false", Widget::EXEC, Widget::OUTPUT, DataType::DATA_INTEGER));
 
 	return AddNode(node);
 }

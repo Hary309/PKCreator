@@ -59,7 +59,7 @@ public:
 
 	virtual void ConnectedWith(VisualWidget *widget) = 0;
 
-	virtual WireData *ConnectWire() = 0;
+	virtual Wire *ConnectWire() = 0;
 	virtual void Disconnect(Wire *wire) = 0;
 
 	virtual void Render(sf::RenderWindow *renderer) = 0;

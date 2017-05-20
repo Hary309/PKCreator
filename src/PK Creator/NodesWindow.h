@@ -11,6 +11,7 @@
 #include <QDialog>
 #include <ui_NodesWindow.h>
 
+#include <Common.h>
 #include <FunctionDefsMgr.h>
 
 class ObjectItem;
@@ -20,26 +21,39 @@ class NodesWindow : public QDialog
 {
 	Q_OBJECT
 
-	class FunctionNodeItem
+public:
+	class NodeItem
 	{
 	public:
-		QTreeWidgetItem						*treeItem;
-		FunctionDefsMgr::FunctionDef		*nodeDef;
+		QTreeWidgetItem *treeItem;
 	};
 
-	class VarNodeItem
+	class FunctionNodeItem : public NodeItem
 	{
 	public:
-		QTreeWidgetItem	*treeItem;
-		Var				*var;
+		FunctionDefsMgr::FunctionDef *nodeDef;
 	};
 
-	class InlineVarNodeItem
+	class VarNodeItem : public NodeItem
 	{
 	public:
-		QTreeWidgetItem		*treeItem;
-		QString				value;
-		QString				name;
+		Var	*var;
+	};
+
+	class InlineVarNodeItem : public NodeItem
+	{
+	public:
+		QString		value;
+		QString		name;
+	};
+
+	class ConditionItem : public NodeItem
+	{
+	public:
+		QString		name;
+		QString		conditionType;
+		int			nInputs;
+		DataType	dataType;
 	};
 
 private:
@@ -48,16 +62,19 @@ private:
 	QVector <QSharedPointer<FunctionNodeItem>>	m_funcitonNodesWidgetItems;
 	QVector <QSharedPointer<VarNodeItem>>		m_varNodeWidgetItems;
 	QVector <QSharedPointer<InlineVarNodeItem>> m_inlineVarNodeWidgetItems;
+	QVector <QSharedPointer<ConditionItem>>		m_conditionNodeWidgetItems;
 
 	int m_type;
-	FunctionNodeItem		*m_pSelectedFunctionItem;
-	VarNodeItem				*m_pSelectedVarItem;
-	InlineVarNodeItem		*m_pSelectedInlineVarItem;
+	NodeItem		*m_pSelectedItem;
 
 private:
 	void AddVarDefs(ObjectItem *objectItem);
-	void AddKeyDef(QTreeWidgetItem *topLevelItem, int key, const QString &name);
+
+	void AddConditionDefs();
+	void AddConditionDef(QTreeWidgetItem *topLevelItem, const QString &name, const QString &type, int nInputs, DataType dataType);
+
 	void AddInlineVarDefs();
+	void AddKeyDef(QTreeWidgetItem *topLevelItem, int key, const QString &name);
 
 protected:
 	bool event(QEvent *e) override;
@@ -66,14 +83,13 @@ public:
 	NodesWindow(QWidget *parent);
 	~NodesWindow();
 
-	void AddDefs(const QVector<QSharedPointer<FunctionDefsMgr::FunctionDef>> *nodesDef);
+	void AddFuncDefs(const QVector<QSharedPointer<FunctionDefsMgr::FunctionDef>> *nodesDef);
 
 	void show(ObjectItem *objectItem);
 
 	int GetNodeType() const { return m_type; }
-	FunctionNodeItem *GetSelectedFunctionItem() const { return m_pSelectedFunctionItem; }
-	VarNodeItem *GetSelectedVarItem() const { return m_pSelectedVarItem; }
-	InlineVarNodeItem *GetSelectedInlineVarItem() const { return m_pSelectedInlineVarItem; }
+	NodeItem *GetSelectedItem() const { return m_pSelectedItem; }
+
 
 private slots:
 	void NodesWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);

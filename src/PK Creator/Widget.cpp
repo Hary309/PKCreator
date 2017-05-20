@@ -12,8 +12,8 @@
 
 #include <QDataStream>
 
-Widget::Widget(Node *parent, const QString &name, ConnectionType connType, DataType dataType)
-	: m_pParent(parent), m_name(name), m_connType(connType), m_dataType(dataType)
+Widget::Widget(Node *parent, const QString &name, Type type, ConnectionType connType, DataType dataType)
+	: m_pParent(parent), m_name(name), m_type(type), m_connType(connType), m_dataType(dataType)
 {
 	m_id = qint64(this);
 
@@ -31,7 +31,7 @@ void Widget::SetDataType(DataType type)
 		m_color = sf::Color(0xE57373FF);
 		break;
 	case DATA_BOOLEAN:
-		m_color = sf::Color(0xE0E0E0FF);
+		m_color = sf::Color(0x4CAF50FF);
 		break;
 	case DATA_INTEGER:
 		m_color = sf::Color(0x2196F3FF);
@@ -47,12 +47,14 @@ void Widget::SetDataType(DataType type)
 
 void Widget::Load(QDataStream *const dataStream)
 {
+	int type = 0;
 	int connType = 0;
 	int dataType = 0;
 	unsigned color = 0;
 
-	*dataStream >> m_id >> m_name >> connType >> m_connected >> dataType >> color;
+	*dataStream >> m_id >> m_name >> type >> connType >> m_connected >> dataType >> color;
 
+	m_type = static_cast<Type>(type);
 	m_connType = static_cast<ConnectionType>(connType);
 	m_dataType = static_cast<DataType>(dataType);
 	m_color = sf::Color(color);
@@ -60,5 +62,5 @@ void Widget::Load(QDataStream *const dataStream)
 
 void Widget::Save(QDataStream *const dataStream)
 {
-	*dataStream << m_id << m_name << m_connType << m_connected << m_dataType << m_color.toInteger();
+	*dataStream << m_id << m_name << m_type << m_connType << m_connected << m_dataType << m_color.toInteger();
 }

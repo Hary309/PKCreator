@@ -59,6 +59,11 @@ void Node::SetType(Type type)
 		m_execFrom = false;
 		m_execTo = false;
 	}
+	else if (type == CONDITION)
+	{
+		m_execFrom = true;
+		m_execTo = true;
+	}
 }
 
 Widget *Node::AddWidget(Widget *widget)
@@ -96,14 +101,14 @@ void Node::Load(QDataStream *const dataStream)
 	m_pos = sf::Vector2f(x, y);
 	m_type = static_cast<Type>(type);
 
-	if (m_type == INLINE_VARIABLE)
+	if (m_type == INLINE_VARIABLE || m_type == CONDITION)
 		*dataStream >> m_defaultValue;
 
 	*dataStream >> nInputs;
 
 	for (int i = 0; i < nInputs; ++i)
 	{
-		auto widget = new Widget(this, QString(), Widget::INPUT, DataType::DATA_BOOLEAN);
+		auto widget = new Widget(this, QString(), Widget::DATA, Widget::INPUT, DataType::DATA_BOOLEAN);
 		widget->Load(dataStream);
 
 		AddWidget(widget);
@@ -113,7 +118,7 @@ void Node::Load(QDataStream *const dataStream)
 
 	for (int i = 0; i < nOutputs; ++i)
 	{
-		auto widget = new Widget(this, QString(), Widget::OUTPUT, DataType::DATA_BOOLEAN);
+		auto widget = new Widget(this, QString(), Widget::DATA, Widget::OUTPUT, DataType::DATA_BOOLEAN);
 		widget->Load(dataStream);
 
 		AddWidget(widget);
@@ -124,7 +129,7 @@ void Node::Save(QDataStream *const dataStream)
 {
 	*dataStream << m_id << m_pos.x << m_pos.y << m_name << m_type << m_execFrom << m_idExecFrom << m_execTo << m_idExecTo;
 
-	if (m_type == INLINE_VARIABLE)
+	if (m_type == INLINE_VARIABLE || m_type == CONDITION)
 		*dataStream << m_defaultValue;
 
 	*dataStream << m_inputs.size();

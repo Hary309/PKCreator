@@ -159,52 +159,108 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 	if (!node)
 		return result;
 
-	if (node->m_outputs.size())
-		result += "var v" + QString::number(node->m_outputs.first()->m_id) + " = ";
-
-	result += node->m_name + "(";
-
-	for (int i = 0; i < node->m_inputs.size(); ++i)
+	if (node->m_type == Node::CONDITION)
 	{
-		if (i > 0)
-			result += ",";
-
-		if (node->m_inputs[i]->m_connected.isEmpty())
+		if (node->m_outputs.size() == 2 && (node->m_inputs.size() == 1 || node->m_inputs.size() == 2))
 		{
-			result += "0";
-			continue;
+			if (!node->m_outputs[0]->m_connected.isEmpty() && !node->m_outputs[1]->m_connected.isEmpty())
+			{
+				if (node->m_inputs.size() == 1)
+				{
+					result += "if (";
+					result += GetVar(e, node->m_inputs[0]->m_connected.first());
+					result += ")";
+				}
+				else if (node->m_inputs.size() == 2)
+				{
+					result += "if (";
+					result += GetVar(e, node->m_inputs[0]->m_connected.first());
+					result += node->m_defaultValue;
+					result += GetVar(e, node->m_inputs[1]->m_connected.first());
+					result += ")";
+				}
+
+				// if true
+				if (!node->m_outputs[0]->m_connected.isEmpty())
+				{
+					result += "{";
+					result += GenerateFunction(e, e->GetNode(node->m_outputs[0]->m_connected.first()), "");
+					result += "}";
+				}
+
+				// if false
+				if (!node->m_outputs[1]->m_connected.isEmpty())
+				{
+					result += "else{";
+					result += GenerateFunction(e, e->GetNode(node->m_outputs[1]->m_connected.first()), "");
+					result += "}";
+				}
+			}
 		}
 
-		qint64 id = node->m_inputs[i]->m_connected.first();
+		if (node->m_idExecTo)
+			return GenerateFunction(e, e->GetNode(node->m_idExecTo), result);
 
-		auto var = e->GetParent()->GetVarByWidget(id, e->GetType());
-		auto inlineVar = e->GetParent()->GetInlineVarValue(id, e->GetType());
-
-		if (var)
-			result += e->GetParent()->GetName() + ".vars." + var->m_name;
-		else if (!inlineVar.isEmpty())
-			result += inlineVar;
-		else
-			result += "v" + QString::number(id);
-	}
-
-	result += ");";
-
-	for (auto output : node->m_outputs)
-	{
-		for (auto connID : output->m_connected)
-		{
-			auto var = e->GetParent()->GetVarByWidget(connID, e->GetType());
-
-			if (var)
-				result += e->GetParent()->GetName() + ".vars." + var->m_name + " = v" + QString::number(node->m_outputs.first()->m_id) + ";";
-		}
-	}
-	
-	if (!node->m_idExecTo)
 		return result;
+	}
+	else
+	{
+		if (node->m_outputs.size())
+			result += "var v" + QString::number(node->m_outputs.first()->m_id) + " = ";
 
-	return GenerateFunction(e, e->GetNode(node->m_idExecTo), result);
+		result += node->m_name + "(";
+
+		for (int i = 0; i < node->m_inputs.size(); ++i)
+		{
+			if (i > 0)
+				result += ",";
+
+			if (node->m_inputs[i]->m_connected.isEmpty())
+			{
+				result += "0";
+				continue;
+			}
+
+			qint64 id = node->m_inputs[i]->m_connected.first();
+
+			result += GetVar(e, id);
+		}
+
+		result += ");";
+
+		for (auto output : node->m_outputs)
+		{
+			for (auto connID : output->m_connected)
+			{
+				auto var = e->GetParent()->GetVarByWidget(connID, e->GetType());
+
+				if (var)
+					result += e->GetParent()->GetName() + ".vars." + var->m_name + " = v" + QString::number(node->m_outputs.first()->m_id) + ";";
+			}
+		}
+
+		if (!node->m_idExecTo)
+			return result;
+
+		return GenerateFunction(e, e->GetNode(node->m_idExecTo), result);
+	}
+}
+
+QString HTML5Generator::GetVar(EventObjectItem *e, qint64 id)
+{
+	QString result;
+
+	auto var = e->GetParent()->GetVarByWidget(id, e->GetType());
+	auto inlineVar = e->GetParent()->GetInlineVarValue(id, e->GetType());
+
+	if (var)
+		result += e->GetParent()->GetName() + ".vars." + var->m_name;
+	else if (!inlineVar.isEmpty())
+		result += inlineVar;
+	else
+		result += "v" + QString::number(id);
+
+	return result;
 }
 
 void HTML5Generator::GenerateScene(SceneItem *scene)

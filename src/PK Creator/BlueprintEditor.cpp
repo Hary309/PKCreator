@@ -77,7 +77,7 @@ void BlueprintEditor::FillData(EventObjectItem *item)
 	
 		for (auto arg : eventDef->args)
 		{
-			Widget *widget = new Widget(node, arg.name, Widget::OUTPUT, arg.type);
+			Widget *widget = new Widget(node, arg.name, Widget::DATA, Widget::OUTPUT, arg.type);
 			node->AddWidget(widget);
 		}
 
@@ -118,7 +118,12 @@ void BlueprintEditor::Event(sf::Event *e)
 
 			if (e->mouseButton.button == sf::Mouse::Middle)
 			{
-				ShowNodesWindow(sf::Vector2f(e->mouseButton.x, e->mouseButton.y));
+				sf::Vector2f viewOffset = GetViewOffset();
+				float scale = GetScale();
+
+				auto cursorPos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y) * scale - viewOffset;
+
+				ShowNodesWindow(sf::Vector2f(cursorPos.x, cursorPos.y));
 			}
 		} break;
 		case sf::Event::MouseMoved:
@@ -147,6 +152,16 @@ void BlueprintEditor::Event(sf::Event *e)
 
 			m_pRenderer->setView(view);
 		} break;
+		case sf::Event::KeyPressed:
+		{
+			if (e->key.code == Qt::Key::Key_A)
+			{
+				Node *node = new Node("Is true", sf::Vector2f(), Node::CONDITION);
+				node->AddWidget(new Widget(node, "true", Widget::Type::EXEC, Widget::ConnectionType::OUTPUT, DataType::DATA_INTEGER));
+				node->AddWidget(new Widget(node, "false", Widget::Type::EXEC, Widget::ConnectionType::OUTPUT, DataType::DATA_INTEGER));
+				m_pNodeMgr->AddNode(node);
+			}
+		} break;
 	default: ;
 	}
 
@@ -169,38 +184,54 @@ void BlueprintEditor::NodesWindow_accepted() const
 
 	Node::Type type = static_cast<Node::Type>(nodesWindow->GetNodeType());
 
-	if (type == Node::FUNCTION)
+	NodesWindow::NodeItem *nodeItem = nodesWindow->GetSelectedItem();
+
+	switch (type)
 	{
-		auto res = nodesWindow->GetSelectedFunctionItem();
+		case Node::FUNCTION:
+		{
+			NodesWindow::FunctionNodeItem *funcNode = static_cast<NodesWindow::FunctionNodeItem*>(nodeItem);
 
-		if (!res)
-			return;
+			if (!funcNode)
+				return;
 
-		if (!res->nodeDef)
-			return;
+			if (!funcNode->nodeDef)
+				return;
 
-		m_pNodeMgr->AddNodeFromFunctionDef(res->nodeDef, m_nodePos);
-	}
-	else if (type == Node::VARIABLE)
-	{
-		auto res = nodesWindow->GetSelectedVarItem();
+			m_pNodeMgr->AddNodeFromFunctionDef(funcNode->nodeDef, m_nodePos);
+		} break;
+		case Node::VARIABLE:
+		{
+			NodesWindow::VarNodeItem *varNode = static_cast<NodesWindow::VarNodeItem*>(nodeItem);
 
-		if (!res)
-			return;
+			if (!varNode)
+				return;
 
-		if (!res->var)
-			return;
+			if (!varNode->var)
+				return;
 
-		m_pNodeMgr->AddNodeFromVar(res->var, m_nodePos);
-	}
-	else if (type == Node::INLINE_VARIABLE)
-	{
-		auto res = nodesWindow->GetSelectedInlineVarItem();
+			m_pNodeMgr->AddNodeFromVar(varNode->var, m_nodePos);
+		} break;
+		case Node::INLINE_VARIABLE:
+		{
+			NodesWindow::InlineVarNodeItem *inlineVarNode = static_cast<NodesWindow::InlineVarNodeItem*>(nodeItem);
 
-		if (!res)
-			return;
+			if (!inlineVarNode)
+				return;
 
-		m_pNodeMgr->AddNodeInlineVar(res->value, res->name, m_nodePos);
+			m_pNodeMgr->AddInlineVarNode(inlineVarNode->value, inlineVarNode->name, m_nodePos);
+		} break;
+		case Node::CONDITION:
+		{
+			NodesWindow::ConditionItem *conditionItem = static_cast<NodesWindow::ConditionItem*>(nodeItem);
+
+			if (!conditionItem)
+				return;
+
+			m_pNodeMgr->AddConditionNode(conditionItem, m_nodePos);
+
+		} break;
+	default: ;
 	}
 }
 

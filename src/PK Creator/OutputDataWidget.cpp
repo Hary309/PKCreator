@@ -6,7 +6,7 @@
 *********************************************************************
 */
 
-#include "OutputWidget.h"
+#include "OutputDataWidget.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -18,16 +18,12 @@
 #include <Wire.h>
 #include <WireData.h>
 
-OutputWidget::OutputWidget(VisualNode *parent, Widget *data, sf::Vector2f offset)
+OutputDataWidget::OutputDataWidget(VisualNode *parent, Widget *data, sf::Vector2f offset)
 	: VisualWidget(parent, data, offset)
 {
 }
 
-OutputWidget::~OutputWidget()
-{
-}
-
-void OutputWidget::ConnectedWith(VisualWidget *widget)
+void OutputDataWidget::ConnectedWith(VisualWidget *widget)
 {
 	auto connected = &m_pData->m_connected;
 
@@ -40,7 +36,7 @@ void OutputWidget::ConnectedWith(VisualWidget *widget)
 	connected->push_back(widget->GetData()->GetID());
 }
 
-WireData *OutputWidget::ConnectWire()
+Wire *OutputDataWidget::ConnectWire()
 {
 	WireData *wire = static_cast<WireData*>(m_pParent->GetNodeMgr()->GetWireMgr()->ConnectData(m_pPin->getPosition(), WireMgr::START, this));
 
@@ -55,7 +51,7 @@ WireData *OutputWidget::ConnectWire()
 	return wire;
 }
 
-void OutputWidget::Disconnect(Wire *wire)
+void OutputDataWidget::Disconnect(Wire *wire)
 {
 	auto connected = &m_pData->m_connected;
 
@@ -84,14 +80,14 @@ void OutputWidget::Disconnect(Wire *wire)
 		SetPin(false);
 }
 
-void OutputWidget::Render(sf::RenderWindow *renderer)
+void OutputDataWidget::Render(sf::RenderWindow *renderer)
 {
 	renderer->draw(*m_pSpace);
 	renderer->draw(*m_pName);
 	renderer->draw(*m_pPin);
 }
 
-void OutputWidget::Event(sf::Event *e)
+void OutputDataWidget::Event(sf::Event *e)
 {
 	VisualWidget::Event(e);
 
@@ -114,16 +110,16 @@ void OutputWidget::Event(sf::Event *e)
 	}
 }
 
-void OutputWidget::MoveTo(sf::Vector2f pos)
+void OutputDataWidget::MoveTo(sf::Vector2f pos)
 {
 	m_pos = pos + m_offset;
 
 	m_pSpace->setPosition(m_pos);
 
-	m_pPin->setPosition(m_pos + sf::Vector2f(m_pSpace->getSize().x - m_verMargin, m_height / 2));
+	m_pPin->setPosition(m_pos + sf::Vector2f(m_pSpace->getSize().x - m_verMargin - m_pPin->getRadius(), m_height / 2));
 
 	sf::FloatRect bounds = m_pName->getLocalBounds();
-	m_pName->setPosition(sf::Vector2f(m_pPin->getPosition().x - m_pPin->getSize().x * 1.5f - bounds.width - m_verMargin, m_pos.y + m_height / 2));
+	m_pName->setPosition(sf::Vector2f(m_pPin->getPosition().x - m_pPin->getRadius() * 1.5f - bounds.width - m_verMargin, m_pos.y + m_height / 2));
 
 	for (auto wire : m_wires)
 	{

@@ -10,6 +10,7 @@
 
 #include <FunctionDefsMgr.h>
 #include <SFML/System/Vector2.hpp>
+#include <NodesWindow.h>
 
 namespace sf
 {
@@ -25,6 +26,7 @@ class WireMgr;
 class BlueprintEditor;
 class Tooltip;
 class Var;
+
 
 class NodeMgr
 {
@@ -49,7 +51,8 @@ public:
 
 	VisualNode *AddNodeFromFunctionDef(FunctionDefsMgr::FunctionDef *nodeDef, const sf::Vector2f &pos);
 	VisualNode *AddNodeFromVar(Var *var, const sf::Vector2f &pos);
-	VisualNode *AddNodeInlineVar(const QString &value, const QString &name, const sf::Vector2f &pos);
+	VisualNode *AddInlineVarNode(const QString &value, const QString &name, const sf::Vector2f &pos);
+	VisualNode *AddConditionNode(const NodesWindow::ConditionItem *conditionItem, const sf::Vector2f &pos);
 
 	bool RemoveNode(Node *node);
 	bool RemoveNode(VisualNode *visualNode);

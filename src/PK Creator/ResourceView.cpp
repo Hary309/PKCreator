@@ -55,7 +55,7 @@ ResourceView::ResourceView(QWidget *parent)
 	s_pInst = this;
 
 	m_pNodesWindow = QSharedPointer<NodesWindow>(new NodesWindow(this));
-	m_pNodesWindow->AddDefs(m_pFunctionDefsMgr->GetFunctionsDef());
+	m_pNodesWindow->AddFuncDefs(m_pFunctionDefsMgr->GetFunctionsDef());
 
 	connect(this, &QTreeView::expanded, this, &ResourceView::ResourceView_expanded);
 	connect(this, &QTreeView::collapsed, this, &ResourceView::ResourceView_collapsed);

@@ -1,6 +1,6 @@
 /*
 *********************************************************************
-* File          : OutputWidget.h
+* File          : InputWidget.h
 * Project		: PK Creator
 * Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
 *********************************************************************
@@ -8,25 +8,24 @@
 
 #pragma once
 
-#include <QVector>
-
 #include <VisualWidget.h>
 
 class VisualNode;
 class Widget;
+
 class WireData;
 
-class OutputWidget : public VisualWidget
+class InputDataWidget : public VisualWidget
 {
 private:
-	QVector<WireData*>		m_wires;
+	WireData		*m_pWire;
 
 public:
-	OutputWidget(VisualNode *parent, Widget *data, sf::Vector2f offset);
-	~OutputWidget();
+	InputDataWidget(VisualNode *parent, Widget *data, sf::Vector2f offset);
+	~InputDataWidget() = default;
 
 	void ConnectedWith(VisualWidget *widget) override;
-	WireData *ConnectWire() override;
+	Wire *ConnectWire() override;
 	void Disconnect(Wire *wire) override;
 
 	void Render(sf::RenderWindow *renderer) override;
@@ -34,6 +33,5 @@ public:
 
 	void MoveTo(sf::Vector2f pos) override;
 
-	QVector<WireData*> *GetWires() { return &m_wires; }
+	WireData *GetWire() const { return m_pWire; }
 };
-

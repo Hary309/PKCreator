@@ -28,7 +28,8 @@ public:
 		EVENT = 0,
 		FUNCTION,
 		VARIABLE,
-		INLINE_VARIABLE
+		INLINE_VARIABLE,
+		CONDITION
 	};
 
 protected:
@@ -38,7 +39,7 @@ protected:
 
 	Type								m_type;
 
-	QString								m_defaultValue; // only for INLINE_VARIABLE
+	QString								m_defaultValue; // only for INLINE_VARIABLE and CONDITION
 
 	sf::Vector2f						m_pos;
 

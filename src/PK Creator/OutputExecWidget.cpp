@@ -1,63 +1,77 @@
 /*
 *********************************************************************
-* File          : InputWidget.cpp
+* File          : OutputExecWidget.cpp
 * Project		: PK Creator
 * Developers    : Piotr Krupa (piotrkrupa06@gmail.com)
 *********************************************************************
 */
 
-#include "InputWidget.h"
+#include "OutputExecWidget.h"
 
 #include <SFML/Graphics.hpp>
 
-#include <Widget.h>
 #include <BlueprintEditor.h>
 #include <NodeMgr.h>
 #include <VisualNode.h>
 #include <WireMgr.h>
 #include <Wire.h>
-#include <WireData.h>
+#include <WireExec.h>
+#include <Widget.h>
+#include <Node.h>
 
-InputWidget::InputWidget(VisualNode *parent, Widget *data, sf::Vector2f offset)
+OutputExecWidget::OutputExecWidget(VisualNode *parent, Widget *data, sf::Vector2f offset)
 	: VisualWidget(parent, data, offset)
 {
 	auto boxSize = m_pSpace->getSize();
 	boxSize.x -= VisualWidget::m_verMargin;
 	m_pSpace->setSize(boxSize);
 
+	m_pPin->setPointCount(3);
+	m_pPin->setRotation(90);
+
+	data->m_color = sf::Color::White;
+
+	m_pPin->setOutlineColor(data->m_color);
+
+	m_waitingForWire = false;
+	
 	m_pWire = nullptr;
 }
 
-
-InputWidget::~InputWidget()
+bool OutputExecWidget::ConnectedWith(VisualNode *node)
 {
-}
+	if (!m_waitingForWire)
+		return false;
 
-void InputWidget::ConnectedWith(VisualWidget *widget)
-{
 	auto connected = &m_pData->m_connected;
 
 	connected->clear();
 
-	connected->push_back(widget->GetData()->GetID());
+	connected->push_back(node->GetData()->GetID());
+
+	m_waitingForWire = false;
+
+	return true;
 }
 
-WireData *InputWidget::ConnectWire()
+Wire *OutputExecWidget::ConnectWire()
 {
 	if (m_pWire)
 		m_pParent->GetNodeMgr()->GetWireMgr()->Disconnect(m_pWire);
 
-	m_pWire = static_cast<WireData*>(m_pParent->GetNodeMgr()->GetWireMgr()->ConnectData(m_pPin->getPosition(), WireMgr::END, this));
+	m_waitingForWire = true;
+
+	m_pWire = static_cast<WireExec*>(m_pParent->GetNodeMgr()->GetWireMgr()->ConnectExec(m_pPin->getPosition(), WireMgr::START, m_pParent));
 
 	if (!m_pWire)
 		return nullptr;
 
 	SetPin(true);
-	
+
 	return m_pWire;
 }
 
-void InputWidget::Disconnect(Wire *wire)
+void OutputExecWidget::Disconnect(Wire *wire)
 {
 	if (m_pWire == wire)
 	{
@@ -68,18 +82,16 @@ void InputWidget::Disconnect(Wire *wire)
 	}
 }
 
-void InputWidget::Render(sf::RenderWindow *renderer)
+void OutputExecWidget::Render(sf::RenderWindow *renderer)
 {
 	renderer->draw(*m_pSpace);
 	renderer->draw(*m_pName);
 	renderer->draw(*m_pPin);
 }
 
-void InputWidget::Event(sf::Event *e)
+void OutputExecWidget::Event(sf::Event *e)
 {
-	VisualWidget::Event(e);
-
-	if (e->type == sf::Event::MouseButtonPressed && (e->mouseButton.button == sf::Mouse::Left || e->mouseButton.button == sf::Mouse::Right))
+	if (e->type == sf::Event::MouseButtonPressed && e->mouseButton.button == sf::Mouse::Left)
 	{
 		sf::Vector2f viewOffset = m_pParent->GetNodeMgr()->GetBpEditor()->GetViewOffset();
 		float scale = m_pParent->GetNodeMgr()->GetBpEditor()->GetScale();
@@ -93,29 +105,22 @@ void InputWidget::Event(sf::Event *e)
 			cursorPos.x < spacePos.x + spaceSize.x &&
 			cursorPos.y < spacePos.y + spaceSize.y)
 		{
-			if (e->mouseButton.button == sf::Mouse::Left)
-			{
-				ConnectWire();
-			}
-			else if (e->mouseButton.button == sf::Mouse::Right)
-			{
-				if (m_pWire)
-					m_pParent->GetNodeMgr()->GetWireMgr()->Disconnect(m_pWire);
-			}
+			ConnectWire();
 		}
 	}
 }
 
-void InputWidget::MoveTo(sf::Vector2f pos)
+void OutputExecWidget::MoveTo(sf::Vector2f pos)
 {
 	m_pos = pos + m_offset;
 
 	m_pSpace->setPosition(m_pos);
 
-	m_pPin->setPosition(m_pos + sf::Vector2f(m_verMargin + m_pPin->getSize().x, m_height / 2));
+	m_pPin->setPosition(m_pos + sf::Vector2f(m_pSpace->getSize().x - m_verMargin - m_pPin->getRadius(), m_height / 2));
 
-	m_pName->setPosition(sf::Vector2f(m_pPin->getPosition().x + m_pPin->getSize().x + m_verMargin, m_pos.y + m_height / 2));
+	sf::FloatRect bounds = m_pName->getLocalBounds();
+	m_pName->setPosition(sf::Vector2f(m_pPin->getPosition().x - m_pPin->getRadius() * 1.5f - bounds.width - m_verMargin, m_pos.y + m_height / 2));
 
 	if (m_pWire)
-		m_pWire->SetEndPos(m_pPin->getPosition());
+		m_pWire->SetStartPos(m_pPin->getPosition());
 }

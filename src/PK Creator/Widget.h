@@ -15,8 +15,9 @@
 class VisualNode;
 class Node;
 class VisualWidget;
-class InputWidget;
-class OutputWidget;
+class InputDataWidget;
+class OutputDataWidget;
+class OutputExecWidget;
 class HTML5Generator;
 class NodeMgr;
 
@@ -29,10 +30,18 @@ public:
 		OUTPUT
 	};
 
+	enum Type
+	{
+		DATA,
+		EXEC
+	};
+
 private:
 	qint64				m_id;
 
 	sf::Color			m_color;
+
+	Type				m_type;
 
 	Node				*m_pParent;
 
@@ -42,11 +51,14 @@ private:
 
 	DataType			m_dataType;
 
+	// if m_type == DATA widget's id
+	// if m_type == EXEC node's id
 	QVector<qint64>		m_connected;
 
 	friend VisualWidget;
-	friend InputWidget;
-	friend OutputWidget;
+	friend InputDataWidget;
+	friend OutputDataWidget;
+	friend OutputExecWidget;
 	friend VisualNode;
 	friend HTML5Generator;
 	friend NodeMgr;
@@ -54,16 +66,16 @@ private:
 	void SetDataType(DataType type);
 
 public:
-	Widget(Node *parent, const QString &name, ConnectionType connType, DataType type);
+	Widget(Node *parent, const QString &name, Type type, ConnectionType connType, DataType dataType);
 	~Widget() = default;
 
 	void Load(QDataStream *const dataStream);
 	void Save(QDataStream *const dataStream);
 
-	ConnectionType GetConnType() const { return m_connType; }
-	const QString &GetName() const { return m_name; }
-	qint64 GetID() const { return m_id; }
-	DataType GetDataType() const { return m_dataType; }
-	sf::Color GetColor() const { return m_color; }
+	ConnectionType GetConnType()	const	 { return m_connType; }
+	const QString &GetName()		const	 { return m_name; }
+	qint64 GetID()					const	 { return m_id; }
+	DataType GetDataType()			const	 { return m_dataType; }
+	sf::Color GetColor()			const	 { return m_color; }
 };
 		

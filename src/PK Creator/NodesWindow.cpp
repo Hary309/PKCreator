@@ -21,8 +21,9 @@ NodesWindow::NodesWindow(QWidget *parent)
 	m_ui.setupUi(this);
 
 	m_type = -1;
-	m_pSelectedFunctionItem = nullptr;
-	m_pSelectedVarItem = nullptr;
+	m_pSelectedItem = nullptr;
+
+	AddConditionDefs();
 
 	connect(m_ui.nodesWidget, &QTreeWidget::itemDoubleClicked, this, &NodesWindow::NodesWidget_itemDoubleClicked);
 }
@@ -31,7 +32,7 @@ NodesWindow::~NodesWindow()
 {
 }
 
-void NodesWindow::AddDefs(const QVector<QSharedPointer<FunctionDefsMgr::FunctionDef>> *nodesDef)
+void NodesWindow::AddFuncDefs(const QVector<QSharedPointer<FunctionDefsMgr::FunctionDef>> *nodesDef)
 {
 	for (auto sharedNodeDef : *nodesDef)
 	{
@@ -82,42 +83,56 @@ void NodesWindow::NodesWidget_itemDoubleClicked(QTreeWidgetItem *item, int colum
 	{
 		if (nodesWidgetItem->treeItem == item)
 		{
-			m_pSelectedFunctionItem = nodesWidgetItem.data();
+			m_pSelectedItem = nodesWidgetItem.data();
 			m_type = Node::FUNCTION;
 
 			accept();
 			return;
 		}
 
-		m_pSelectedFunctionItem = nullptr;
+		m_pSelectedItem = nullptr;
 	}
 
 	for (auto nodesWidgetItem : m_varNodeWidgetItems)
 	{
 		if (nodesWidgetItem->treeItem == item)
 		{
-			m_pSelectedVarItem = nodesWidgetItem.data();
+			m_pSelectedItem = nodesWidgetItem.data();
 			m_type = Node::VARIABLE;
 
 			accept();
 			return;
 		}
 		
-		m_pSelectedVarItem = nullptr;
+		m_pSelectedItem = nullptr;
 	}
 
 	for (auto nodesWidgetItem : m_inlineVarNodeWidgetItems)
 	{
 		if (nodesWidgetItem->treeItem == item)
 		{
-			m_pSelectedInlineVarItem = nodesWidgetItem.data();
+			m_pSelectedItem = nodesWidgetItem.data();
 			m_type = Node::INLINE_VARIABLE;
 
 			accept();
 			return;
 		}
 
-		m_pSelectedInlineVarItem = nullptr;
+		m_pSelectedItem = nullptr;
+	}
+
+	for (auto nodesWidgetItem : m_conditionNodeWidgetItems)
+	{
+		if (nodesWidgetItem->treeItem == item)
+		{
+			m_pSelectedItem = nodesWidgetItem.data();
+			m_type = Node::CONDITION;
+
+			accept();
+			return;
+		}
+
+		m_pSelectedItem = nullptr;
 	}
 }
 
@@ -235,6 +250,49 @@ void NodesWindow::AddKeyDef(QTreeWidgetItem *topLevelItem, int key, const QStrin
 	nodeItem->value = QString::number(key);
 	nodeItem->name = name + " key";
 	m_inlineVarNodeWidgetItems.push_back(nodeItem);
+}
+
+void NodesWindow::AddConditionDefs()
+{
+	m_inlineVarNodeWidgetItems.clear();
+
+	auto nodesWidget = m_ui.nodesWidget;
+
+	for (int i = 0; i < nodesWidget->topLevelItemCount(); ++i)
+	{
+		if (nodesWidget->topLevelItem(i)->text(0) == "Conditions")
+			return;
+	}
+
+	QTreeWidgetItem *topLevelItem = new QTreeWidgetItem();
+	topLevelItem->setText(0, "Conditions");
+	nodesWidget->addTopLevelItem(topLevelItem);
+
+	AddConditionDef(topLevelItem, "Is 'a' true", "", 1, DataType::DATA_BOOLEAN);
+	AddConditionDef(topLevelItem, "Is 'a' is equal to 'b' (i)", "==", 2, DataType::DATA_INTEGER);
+	AddConditionDef(topLevelItem, "Is 'a' is bigger than 'b' (i)", ">", 2, DataType::DATA_INTEGER);
+	AddConditionDef(topLevelItem, "Is 'a' is smaller than 'b' (i)", "<", 2, DataType::DATA_INTEGER);
+
+	AddConditionDef(topLevelItem, "Is 'a' is equal to 'b' (n)", "==", 2, DataType::DATA_NUMBER);
+	AddConditionDef(topLevelItem, "Is 'a' is bigger than 'b' (n)", ">", 2, DataType::DATA_NUMBER);
+	AddConditionDef(topLevelItem, "Is 'a' is smaller than 'b' (n)", "<", 2, DataType::DATA_NUMBER);
+
+	AddConditionDef(topLevelItem, "Is 'a' is equal to 'b' (OID)", "==", 2, DataType::DATA_OBJECTID);
+}
+
+void NodesWindow::AddConditionDef(QTreeWidgetItem *topLevelItem, const QString &name, const QString &type, int nInputs, DataType dataType)
+{
+	auto treeItemChild = new QTreeWidgetItem();
+	treeItemChild->setText(0, name);
+	topLevelItem->addChild(treeItemChild);
+
+	auto nodeItem = QSharedPointer<ConditionItem>(new ConditionItem());
+	nodeItem->treeItem = treeItemChild;
+	nodeItem->name = name;
+	nodeItem->conditionType = type;
+	nodeItem->nInputs = nInputs;
+	nodeItem->dataType = dataType;
+	m_conditionNodeWidgetItems.push_back(nodeItem);
 }
 
 bool NodesWindow::event(QEvent *e)

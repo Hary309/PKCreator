@@ -21,8 +21,9 @@
 #include <WireExec.h>
 
 #include <Widget.h>
-#include <InputWidget.h>
-#include <OutputWidget.h>
+#include <InputDataWidget.h>
+#include <OutputDataWidget.h>
+#include <OutputExecWidget.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -37,6 +38,8 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 		m_defaultColor = sf::Color(0xD32F2FFF);
 	else if (m_pData->m_type == Node::INLINE_VARIABLE)
 		m_defaultColor = sf::Color(0xB71C1CFF);
+	else if (m_pData->m_type == Node::CONDITION)
+		m_defaultColor = sf::Color(0x6D4C41FF);
 	
 	m_pHeader = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_boxWidth, 20)));
 	m_pBody = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_boxWidth, 0)));
@@ -66,7 +69,7 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 		{
 			auto offset = sf::Vector2f(VisualWidget::m_horMargin, i == 0 ? 20.f + VisualWidget::m_verMargin : 20.f + (i + 1) * VisualWidget::m_verMargin + i * m_visualInputs.last()->GetHeight());
 
-			auto inputWidget = QSharedPointer<InputWidget>(new InputWidget(this, widget.data(), offset));
+			auto inputWidget = QSharedPointer<InputDataWidget>(new InputDataWidget(this, widget.data(), offset));
 
 			m_visualInputs.push_back(inputWidget);
 
@@ -83,16 +86,32 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 
 		if (widget)
 		{
-			auto offset = sf::Vector2f(m_boxWidth / 2, i == 0 ? 20.f + VisualWidget::m_verMargin : 20.f + (i + 1) * VisualWidget::m_verMargin + i * m_visualOutputs.last()->GetHeight());
+			if (widget->m_type == Widget::DATA)
+			{
+				auto offset = sf::Vector2f(m_boxWidth / 2, i == 0 ? 20.f + VisualWidget::m_verMargin : 20.f + (i + 1) * VisualWidget::m_verMargin + i * m_visualOutputs.last()->GetHeight());
 
-			auto outputWidget = QSharedPointer<OutputWidget>(new OutputWidget(this, widget.data(), offset));
-			
-			m_visualOutputs.push_back(outputWidget);
+				auto outputWidget = QSharedPointer<OutputDataWidget>(new OutputDataWidget(this, widget.data(), offset));
 
-			auto bodySize = m_pBody->getSize();
+				m_visualOutputs.push_back(outputWidget);
 
-			if (bodySize.y < offset.y)
-				m_pBody->setSize(sf::Vector2f(bodySize.x, offset.y + VisualWidget::m_verMargin));
+				auto bodySize = m_pBody->getSize();
+
+				if (bodySize.y < offset.y)
+					m_pBody->setSize(sf::Vector2f(bodySize.x, offset.y + VisualWidget::m_verMargin));
+			}
+			else if (widget->m_type == Widget::EXEC)
+			{
+				auto offset = sf::Vector2f(m_boxWidth / 2, i == 0 ? 20.f + VisualWidget::m_verMargin : 20.f + (i + 1) * VisualWidget::m_verMargin + i * m_visualOutputs.last()->GetHeight());
+
+				auto outputWidget = QSharedPointer<OutputExecWidget>(new OutputExecWidget(this, widget.data(), offset));
+
+				m_visualOutputs.push_back(outputWidget);
+
+				auto bodySize = m_pBody->getSize();
+
+				if (bodySize.y < offset.y)
+					m_pBody->setSize(sf::Vector2f(bodySize.x, offset.y + VisualWidget::m_verMargin));
+			}
 		}
 	}
 
@@ -255,7 +274,9 @@ void VisualNode::MoveTo(sf::Vector2f pos) const
 	if (m_pWireExecTo)
 		m_pWireExecTo->SetStartPos(m_pShapeExecTo->getPosition());
 
-	m_pTitle->setPosition(m_pShapeExecFrom ? sf::Vector2f(m_pShapeExecFrom->getPosition().x + m_pShapeExecFrom->getRadius() * 2, pos.y) : pos + sf::Vector2f(8.f, 0));
+	static const float margin = 8.f;
+
+	m_pTitle->setPosition(m_pShapeExecFrom ? sf::Vector2f(m_pShapeExecFrom->getPosition().x + m_pShapeExecFrom->getRadius() * 2 + margin, pos.y) : pos + sf::Vector2f(margin, 0));
 
 	for (auto widget : m_visualInputs)
 	{
@@ -302,6 +323,8 @@ void VisualNode::AddExecTo()
 
 void VisualNode::ConnectAllWires()
 {
+	printf("\n\n");
+
 	auto allNodes = m_pNodeMgr->GetAllNodes();
 
 	for (auto inputWidget : m_visualInputs)
@@ -311,7 +334,7 @@ void VisualNode::ConnectAllWires()
 		if (!connectedWidget)
 			continue;
 
-		if (connectedWidget->size() == 0)
+		if (connectedWidget->isEmpty())
 			continue;
 
 		for (auto sharedVisualNode : *allNodes)
@@ -319,10 +342,7 @@ void VisualNode::ConnectAllWires()
 			if (sharedVisualNode == this)
 				continue;
 
-			VisualNode *visualNode = sharedVisualNode.data();
-
-			auto visualOutputs = visualNode->GetAllOutputs();
-
+			auto visualOutputs = sharedVisualNode->GetAllOutputs();
 
 			for (auto sharedVisualOutput : *visualOutputs)
 			{
@@ -339,6 +359,35 @@ void VisualNode::ConnectAllWires()
 		}
 	}
 
+	if (m_pData->m_type == Node::CONDITION)
+	{
+		for (auto outputWidget : m_visualOutputs)
+		{
+			auto connectedNode = &outputWidget->GetData()->m_connected;
+
+			if (!connectedNode)
+				continue;
+
+			if (connectedNode->isEmpty())
+				continue;
+
+			for (auto sharedVisualNode : *allNodes)
+			{
+				if (sharedVisualNode == this)
+					continue;
+
+				if (connectedNode->isEmpty())
+					continue;
+
+				if (sharedVisualNode->GetData()->GetID() == connectedNode->first())
+				{
+					outputWidget->ConnectWire();
+					sharedVisualNode->Connect(ExecType::ExecFrom);
+				}
+			}
+		}
+	}
+
 	auto idWireExecTo = m_pData->m_idExecTo;
 
 	if (idWireExecTo)
@@ -348,12 +397,10 @@ void VisualNode::ConnectAllWires()
 			if (sharedVisualNode == this)
 				continue;
 
-			VisualNode *visualNode = sharedVisualNode.data();
-
-			if (visualNode->GetData()->GetID() == idWireExecTo)
+			if (sharedVisualNode->GetData()->GetID() == idWireExecTo)
 			{
 				Connect(ExecType::ExecTo);
-				visualNode->Connect(ExecType::ExecFrom);
+				sharedVisualNode->Connect(ExecType::ExecFrom);
 				break;
 			}
 		}
@@ -369,34 +416,74 @@ void VisualNode::DisconnectAll()
 
 	for (auto visualWidget : m_visualInputs)
 	{
-		InputWidget *inputWidget = static_cast<InputWidget*>(visualWidget.data());
+		InputDataWidget *inputWidget = static_cast<InputDataWidget*>(visualWidget.data());
 
 		wireMgr->Disconnect(reinterpret_cast<Wire*>(inputWidget->GetWire()));
 	}
 
 	for (auto visualWidget : m_visualOutputs)
 	{
-		OutputWidget *outputWidget = static_cast<OutputWidget*>(visualWidget.data());
-
-		// Not optimal but the easiest way
-		auto wires = *outputWidget->GetWires();
-
-		for (auto wire : wires)
+		if (m_pData->m_type == Node::CONDITION)
 		{
+			OutputExecWidget *outputWidget = static_cast<OutputExecWidget*>(visualWidget.data());
+
+			WireExec *wire = outputWidget->GetWire();
+
 			wireMgr->Disconnect(reinterpret_cast<Wire*>(wire));
+
+		}
+		else
+		{
+			OutputDataWidget *outputWidget = static_cast<OutputDataWidget*>(visualWidget.data());
+
+			// Not optimal but the easiest way
+			auto wires = *outputWidget->GetWires();
+
+			for (auto wire : wires)
+			{
+				wireMgr->Disconnect(reinterpret_cast<Wire*>(wire));
+			}
 		}
 	}
 }
 
 void VisualNode::ConnectedWith(VisualNode *node, ExecType execType) const
 {
-	if (execType == ExecType::ExecFrom)
+	if (m_pData->m_type == Node::CONDITION)
 	{
-		m_pData->m_idExecFrom = node->GetData()->GetID();
+		bool connected = false;
+
+		for (auto widget : m_visualOutputs)
+		{
+			OutputExecWidget *outputExec = static_cast<OutputExecWidget*>(widget.data());
+			connected = outputExec->ConnectedWith(node);
+			
+			if (connected)
+				break;
+		}
+
+		if (!connected)
+		{
+			if (execType == ExecType::ExecFrom)
+			{
+				m_pData->m_idExecFrom = node->GetData()->GetID();
+			}
+			else if (execType == ExecType::ExecTo)
+			{
+				m_pData->m_idExecTo = node->GetData()->GetID();
+			}
+		}
 	}
-	else if (execType == ExecType::ExecTo)
+	else
 	{
-		m_pData->m_idExecTo = node->GetData()->GetID();
+		if (execType == ExecType::ExecFrom)
+		{
+			m_pData->m_idExecFrom = node->GetData()->GetID();
+		}
+		else if (execType == ExecType::ExecTo)
+		{
+			m_pData->m_idExecTo = node->GetData()->GetID();
+		}
 	}
 }
 
@@ -427,6 +514,9 @@ void VisualNode::Connect(ExecType execType)
 		if (m_pWireExecTo)
 			m_pNodeMgr->GetWireMgr()->Disconnect(m_pWireExecTo);
 
+		if (!m_pShapeExecTo)
+			return;
+
 		m_pWireExecTo = static_cast<WireExec*>(m_pNodeMgr->GetWireMgr()->ConnectExec(m_pShapeExecTo->getPosition() + sf::Vector2f(0.f, 4.f), WireMgr::START, this));
 
 		if (m_pWireExecTo == nullptr)
@@ -446,6 +536,16 @@ void VisualNode::Connect(ExecType execType)
 
 void VisualNode::Disconnect(WireExec *wire)
 {
+	if (m_pData->m_type == Node::CONDITION)
+	{
+		for (auto widget : m_visualOutputs)
+		{
+			OutputExecWidget *outputExec = static_cast<OutputExecWidget*>(widget.data());
+
+			outputExec->Disconnect(wire);
+		}
+	}
+
 	if (m_pWireExecFrom == wire)
 	{
 		m_pData->m_idExecFrom = 0;

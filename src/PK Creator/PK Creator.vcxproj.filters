@@ -203,12 +203,6 @@
     <ClCompile Include="VisualWidget.cpp">
       <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="OutputWidget.cpp">
-      <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="InputWidget.cpp">
-      <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="WireMgr.cpp">
       <Filter>Source Files\Blueprint\Editor\Wires</Filter>
     </ClCompile>
@@ -277,6 +271,15 @@
     </ClCompile>
     <ClCompile Include="BackgroundItemWindow.cpp">
       <Filter>Source Files\Items\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputExecWidget.cpp">
+      <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="InputDataWidget.cpp">
+      <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputDataWidget.cpp">
+      <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -408,12 +411,6 @@
     <ClInclude Include="NodeMgr.h">
       <Filter>Header Files\Blueprint\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="InputWidget.h">
-      <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="OutputWidget.h">
-      <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
-    </ClInclude>
     <ClInclude Include="VisualWidget.h">
       <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
     </ClInclude>
@@ -464,6 +461,15 @@
     </ClInclude>
     <ClInclude Include="BackgroundItem.h">
       <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDataWidget.h">
+      <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputDataWidget.h">
+      <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputExecWidget.h">
+      <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
