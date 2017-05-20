@@ -19,6 +19,7 @@ namespace sf
 	class Font;
 	class Text;
 	class RectangleShape;
+	class CircleShape;
 }
 
 class Widget;
@@ -35,7 +36,7 @@ protected:
 
 	QSharedPointer<sf::RectangleShape>	m_pSpace;
 	QSharedPointer<sf::Text>			m_pName;
-	QSharedPointer<sf::RectangleShape>	m_pPin;
+	QSharedPointer<sf::CircleShape>		m_pPin;
 
 	sf::Vector2f						m_pos;
 	sf::Vector2f						m_offset;
