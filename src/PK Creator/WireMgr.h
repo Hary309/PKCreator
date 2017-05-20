@@ -48,7 +48,7 @@ private:
 
 public:
 	WireMgr(NodeMgr *parent);
-	~WireMgr();
+	~WireMgr() = default;
 
 	WireData *ConnectData(sf::Vector2f startPos, ConnectTo type, VisualWidget *widget);
 	WireExec *ConnectExec(sf::Vector2f startPos, ConnectTo type, VisualNode *node);

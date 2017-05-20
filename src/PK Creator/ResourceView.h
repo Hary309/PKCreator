@@ -65,7 +65,7 @@ private slots:
 
 public:
 	explicit ResourceView(QWidget *parent);
-	virtual ~ResourceView();
+	~ResourceView() = default;
 
 	void Setup();
 	QStandardItem *InsertRow(QStandardItem *parent, const QString &name);

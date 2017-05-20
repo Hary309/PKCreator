@@ -55,7 +55,7 @@ private:
 
 public:
 	Widget(Node *parent, const QString &name, ConnectionType connType, DataType type);
-	~Widget();
+	~Widget() = default;
 
 	void Load(QDataStream *const dataStream);
 	void Save(QDataStream *const dataStream);

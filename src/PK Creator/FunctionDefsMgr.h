@@ -47,8 +47,8 @@ private:
 	QVector<QSharedPointer<FunctionDef>> m_nodesDef;
 
 public:
-	FunctionDefsMgr();
-	~FunctionDefsMgr();
+	FunctionDefsMgr() = default;
+	~FunctionDefsMgr() = default;
 
 	void LoadDefs(const QString &path = "nodes");
 

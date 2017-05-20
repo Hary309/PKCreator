@@ -13,6 +13,7 @@
 #include <Widget.h>
 
 #include <NodeMgr.h>
+#include <Node.h>
 #include <BlueprintEditor.h>
 
 #include <Wire.h>
@@ -24,10 +25,6 @@ WireMgr::WireMgr(NodeMgr *parent)
 {
 	m_pCurrentLine = nullptr;
 	m_type = ConnectTo(-1);
-}
-
-WireMgr::~WireMgr()
-{
 }
 
 WireData *WireMgr::ConnectData(sf::Vector2f startPos, ConnectTo type, VisualWidget *widget)
@@ -56,7 +53,7 @@ WireData *WireMgr::ConnectData(sf::Vector2f startPos, ConnectTo type, VisualWidg
 
 		m_dataWires.push_back(wire.dynamicCast<WireData>());
 
-		printf("New line from: (%f, %f)\n", startPos.x, startPos.y);
+		printf("[WireMgr] New line from widget: '%s'\n", widget->GetData()->GetName().toStdString().c_str());
 
 		return wire.data();
 	}
@@ -111,8 +108,8 @@ WireData *WireMgr::ConnectData(sf::Vector2f startPos, ConnectTo type, VisualWidg
 	m_pCurrentLine = nullptr;
 
 	wire->Connected();
-
-	printf("Connected to: (%f, %f)\n", startPos.x, startPos.y);
+	
+	printf("[WireMgr] Connected to widget: '%s'\n", widget->GetData()->GetName().toStdString().c_str());
 
 	return wire;
 }
@@ -142,7 +139,7 @@ WireExec *WireMgr::ConnectExec(sf::Vector2f startPos, ConnectTo type, VisualNode
 
 		m_execWires.push_back(wire.dynamicCast<WireExec>());
 
-		printf("New line from: (%f, %f)\n", startPos.x, startPos.y);
+		printf("[WireMgr] New line from node: '%s'\n", node->GetData()->GetName().toStdString().c_str());
 
 		return wire.data();
 	}
@@ -180,7 +177,7 @@ WireExec *WireMgr::ConnectExec(sf::Vector2f startPos, ConnectTo type, VisualNode
 
 	wire->Connected();
 
-	printf("Connected to: (%f, %f)\n", startPos.x, startPos.y);
+	printf("[WireMgr] Connected to node: '%s'\n", node->GetData()->GetName().toStdString().c_str());
 
 	return wire;
 }

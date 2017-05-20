@@ -20,10 +20,6 @@ Widget::Widget(Node *parent, const QString &name, ConnectionType connType, DataT
 	SetDataType(dataType);
 }
 
-Widget::~Widget()
-{
-}
-
 void Widget::SetDataType(DataType type)
 {
 	m_dataType = type;

@@ -12,14 +12,6 @@
 #include <QXmlStreamReader>
 #include <QTextStream>
 
-FunctionDefsMgr::FunctionDefsMgr()
-{
-}
-
-FunctionDefsMgr::~FunctionDefsMgr()
-{
-}
-
 void FunctionDefsMgr::LoadDefs(const QString &path)
 {
 	QDir dir(path);

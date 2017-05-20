@@ -75,7 +75,6 @@ public:
 	void Render(sf::RenderWindow *renderer);
 	void Event(sf::Event *e);
 
-
 	void MoveTo(sf::Vector2f pos) const;
 
 	void AddExecFrom();

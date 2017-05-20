@@ -61,10 +61,6 @@ ResourceView::ResourceView(QWidget *parent)
 	connect(this, &QTreeView::collapsed, this, &ResourceView::ResourceView_collapsed);
 }
 
-ResourceView::~ResourceView()
-{
-}
-
 void ResourceView::Setup()
 {
 	m_pTreeModel = QSharedPointer<QStandardItemModel>(new QStandardItemModel());

@@ -25,7 +25,7 @@ public:
 		m_pStartNode = m_pEndNode = nullptr;
 	}
 
-	virtual ~WireExec() { }
+	virtual ~WireExec() = default;
 
 	void Connected() override
 	{
