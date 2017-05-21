@@ -97,22 +97,25 @@ function CreateInstance(objectID, x, y)
 			var instance = new Instance(allObjects[i], x, y);
 
 			if (instance.events.createEvent)
-				instance.events.createEvent();
+				instance.events.createEvent(instance.id);
 
 			currentScene.instances.push(instance);
-			return instance;
+			return instance.id;
 		}
 	}
 }
 
 function DestroyInstance(instanceID)
 {
+	console.log("Destroying " + instanceID);
+
 	for (var i = 0; i < currentScene.instances.length; ++i)
 	{
-		if (currentScene.instances[i].id == instanceID)
+		var instance = currentScene.instances[i];
+		if (instance.id == instanceID)
 		{
 			if (instance.events.destroyEvent)
-				instance.events.destroyEvent();
+				instance.events.destroyEvent(instance.id);
 
 			currentScene.instances.splice(i, 1);
 		}
@@ -205,18 +208,27 @@ canvas.onmousemove = function(data) {
 	var y = data.y;
 
 	for (i = 0; i < currentScene.instances.length; i++)
-		if (currentScene.instances[i].events.mouseMovedEvent)
-			currentScene.instances[i].events.mouseMovedEvent(x,y);
+	{
+		var instance = currentScene.instances[i];
+
+		if (instance.events.mouseMovedEvent)
+			instance.events.mouseMovedEvent(instance.id,x,y);
+	}
 }
 
 // Mouse pressed
 canvas.onmousedown = function(data) { 
+	var button = data.button;
 	var x = data.x;
 	var y = data.y;
 
 	for (i = 0; i < currentScene.instances.length; i++)
-		if (currentScene.instances[i].events.mouseDownEvent)
-			currentScene.instances[i].events.mouseDownEvent(x,y);
+	{
+		var instance = currentScene.instances[i];
+
+		if (instance.events.mouseDownEvent)
+			instance.events.mouseDownEvent(instance.id,x,y,button);
+	}
 }
 
 // Mouse released
@@ -225,22 +237,34 @@ canvas.onmouseup = function(data) {
 	var y = data.y;
 
 	for (i = 0; i < currentScene.instances.length; i++)
-		if (currentScene.instances[i].events.mouseUpEvent)
-			currentScene.instances[i].events.mouseUpEvent(x,y);
+	{	
+		var instance = currentScene.instances[i];
+
+		if (instance.events.mouseUpEvent)
+			instance.events.mouseUpEvent(instance.id,x,y,button);	
+	}
 }
 
-canvas.onkeydown = function(data) { 
-	var key;
+window.onkeydown = function(data) { 
+	var key = data.keyCode;
 
 	for (i = 0; i < currentScene.instances.length; i++)
-		if (currentScene.instances[i].events.keyDownEvent)
-			currentScene.instances[i].events.keyDownEvent(key);
+	{
+		var instance = currentScene.instances[i];
+
+		if (instance.events.keyDownEvent)
+			instance.events.keyDownEvent(instance.id,key);
+	}
 }
 
-canvas.onkeyup = function(data) { 
-	var key;
+window.onkeyup = function(data) { 
+	var key = data.keyCode;
 
 	for (i = 0; i < currentScene.instances.length; i++)
-		if (currentScene.instances[i].events.keyUpEvent)
-			currentScene.instances[i].events.keyUpEvent(key);
+	{	
+		var instance = currentScene.instances[i];
+
+		if (instance.events.keyUpEvent)
+			instance.events.keyUpEvent(instance.id,key);
+	}
 }

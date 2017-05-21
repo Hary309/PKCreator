@@ -56,7 +56,7 @@ private:
 
 public:
 	EventDefsMgr();
-	~EventDefsMgr();
+	~EventDefsMgr() = default;
 
 	Event *GetEvent(Type type);
 	QVector<QSharedPointer<Event>> *GetEvents() { return &m_eventsDef; }
