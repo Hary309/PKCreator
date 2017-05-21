@@ -135,12 +135,12 @@ VisualNode *NodeMgr::AddNodeFromVar(Var *var, const sf::Vector2f &pos)
 	return AddNode(node);
 }
 
-VisualNode * NodeMgr::AddInlineVarNode(const QString &value, const QString &name, const sf::Vector2f &pos)
+VisualNode *NodeMgr::AddInlineVarNode(NodesWindow::InlineVarNodeItem *inlineVarNode, const sf::Vector2f &pos)
 {
-	Node *node = new Node(name, pos, Node::INLINE_VARIABLE);
-	node->m_defaultValue = value;
+	Node *node = new Node(inlineVarNode->name, pos, Node::INLINE_VARIABLE);
+	node->m_defaultValue = inlineVarNode->value;
 
-	node->AddWidget(new Widget(node, "Value", Widget::DATA, Widget::OUTPUT, DataType::DATA_INTEGER));
+	node->AddWidget(new Widget(node, "Value", Widget::DATA, Widget::OUTPUT, inlineVarNode->type));
 
 	return AddNode(node);
 }

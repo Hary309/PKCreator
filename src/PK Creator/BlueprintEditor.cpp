@@ -47,10 +47,6 @@ BlueprintEditor::BlueprintEditor(QWidget *parent)
 	connect(ResourceView::Get()->GetNodesWindow(), &QDialog::accepted, this, &BlueprintEditor::NodesWindow_accepted);
 }
 
-BlueprintEditor::~BlueprintEditor()
-{
-}
-
 void BlueprintEditor::Resize(QSize size)
 {
 	// prevent deformation
@@ -219,7 +215,7 @@ void BlueprintEditor::NodesWindow_accepted() const
 			if (!inlineVarNode)
 				return;
 
-			m_pNodeMgr->AddInlineVarNode(inlineVarNode->value, inlineVarNode->name, m_nodePos);
+			m_pNodeMgr->AddInlineVarNode(inlineVarNode, m_nodePos);
 		} break;
 		case Node::CONDITION:
 		{

@@ -56,7 +56,7 @@ protected:
 
 public:
 	explicit BlueprintEditor(QWidget *parent);
-	~BlueprintEditor();
+	~BlueprintEditor() = default;
 	
 	void Resize(QSize size);
 

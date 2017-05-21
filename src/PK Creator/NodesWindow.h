@@ -43,6 +43,7 @@ public:
 	class InlineVarNodeItem : public NodeItem
 	{
 	public:
+		DataType	type;
 		QString		value;
 		QString		name;
 	};

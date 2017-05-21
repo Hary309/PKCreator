@@ -51,7 +51,7 @@ public:
 
 	VisualNode *AddNodeFromFunctionDef(FunctionDefsMgr::FunctionDef *nodeDef, const sf::Vector2f &pos);
 	VisualNode *AddNodeFromVar(Var *var, const sf::Vector2f &pos);
-	VisualNode *AddInlineVarNode(const QString &value, const QString &name, const sf::Vector2f &pos);
+	VisualNode *AddInlineVarNode(NodesWindow::InlineVarNodeItem *inlineVarNode, const sf::Vector2f &pos);
 	VisualNode *AddConditionNode(const NodesWindow::ConditionItem *conditionItem, const sf::Vector2f &pos);
 
 	bool RemoveNode(Node *node);

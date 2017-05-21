@@ -208,6 +208,37 @@ void NodesWindow::AddInlineVarDefs()
 			AddKeyDef(topLevelItem, i, "Numpad " + QString::number(i - 96));
 	}
 
+	// Objects
+	{
+		for (int i = 0; i < nodesWidget->topLevelItemCount(); ++i)
+		{
+			if (nodesWidget->topLevelItem(i)->text(0) == "Objects")
+			{
+				delete nodesWidget->topLevelItem(i);
+			}
+		}
+
+		QTreeWidgetItem *topLevelItem = new QTreeWidgetItem();
+		topLevelItem->setText(0, "Objects");
+		nodesWidget->addTopLevelItem(topLevelItem);
+
+		auto objects = ResourceView::Get()->GetItemsByType(Item::OBJECT);
+
+		for (auto object : objects)
+		{
+			auto treeItemChild = new QTreeWidgetItem();
+			treeItemChild->setText(0, "Object " + object->GetName());
+			topLevelItem->addChild(treeItemChild);
+
+			auto nodeItem = QSharedPointer<InlineVarNodeItem>(new InlineVarNodeItem());
+			nodeItem->treeItem = treeItemChild;
+			nodeItem->type = DATA_OBJECTID;
+			nodeItem->value = QString::number(object->GetID());
+			nodeItem->name = "Object " + object->GetName();
+			m_inlineVarNodeWidgetItems.push_back(nodeItem);
+		}
+	}
+
 	// Scenes
 	{
 		for (int i = 0; i < nodesWidget->topLevelItemCount(); ++i)
@@ -232,7 +263,8 @@ void NodesWindow::AddInlineVarDefs()
 
 			auto nodeItem = QSharedPointer<InlineVarNodeItem>(new InlineVarNodeItem());
 			nodeItem->treeItem = treeItemChild;
-			nodeItem->value = scene->GetID();
+			nodeItem->type = DATA_OBJECTID;
+			nodeItem->value = QString::number(scene->GetID());
 			nodeItem->name = "Scene " + scene->GetName();
 			m_inlineVarNodeWidgetItems.push_back(nodeItem);
 		}
@@ -247,6 +279,7 @@ void NodesWindow::AddKeyDef(QTreeWidgetItem *topLevelItem, int key, const QStrin
 
 	auto nodeItem = QSharedPointer<InlineVarNodeItem>(new InlineVarNodeItem());
 	nodeItem->treeItem = treeItemChild;
+	nodeItem->type = DATA_INTEGER;
 	nodeItem->value = QString::number(key);
 	nodeItem->name = name + " key";
 	m_inlineVarNodeWidgetItems.push_back(nodeItem);
