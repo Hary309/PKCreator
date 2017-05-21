@@ -146,13 +146,13 @@ QString ObjectItem::GetInlineVarValue(qint64 widgetID, EventDefsMgr::Type eventT
 	}
 
 	if (!e)
-		return nullptr;
+		return QString();
 
 	for (auto node : *e->GetNodes())
 	{
 		if (node->GetType() == Node::INLINE_VARIABLE)
 		{
-			for (auto widget : node->m_inputs)
+			for (auto widget : node->m_outputs)
 			{
 				if (widgetID == widget->GetID())
 				{
