@@ -163,7 +163,7 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 	{
 		if (node->m_outputs.size() == 2 && (node->m_inputs.size() == 1 || node->m_inputs.size() == 2))
 		{
-			if (!node->m_outputs[0]->m_connected.isEmpty() && !node->m_outputs[1]->m_connected.isEmpty())
+			if (!node->m_outputs[0]->m_connected.isEmpty() || !node->m_outputs[1]->m_connected.isEmpty())
 			{
 				if (node->m_inputs.size() == 1)
 				{
