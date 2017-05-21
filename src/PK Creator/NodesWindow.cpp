@@ -72,7 +72,7 @@ void NodesWindow::AddFuncDefs(const QVector<QSharedPointer<FunctionDefsMgr::Func
 void NodesWindow::show(ObjectItem *objectItem)
 {
 	AddVarDefs(objectItem);
-	AddInlineVarDefs();
+	AddInlineVarDefs(objectItem);
 
 	QDialog::show();
 }
@@ -169,7 +169,7 @@ void NodesWindow::AddVarDefs(ObjectItem *objectItem)
 	}
 }
 
-void NodesWindow::AddInlineVarDefs()
+void NodesWindow::AddInlineVarDefs(ObjectItem *objectItem)
 {
 	m_inlineVarNodeWidgetItems.clear();
 
@@ -206,6 +206,25 @@ void NodesWindow::AddInlineVarDefs()
 		// Numpad
 		for (int i = 96; i <= 105; ++i)
 			AddKeyDef(topLevelItem, i, "Numpad " + QString::number(i - 96));
+	}
+
+	// Mouse
+	{
+		for (int i = 0; i < nodesWidget->topLevelItemCount(); ++i)
+		{
+			if (nodesWidget->topLevelItem(i)->text(0) == "Mouse")
+			{
+				delete nodesWidget->topLevelItem(i);
+			}
+		}
+
+		QTreeWidgetItem *topLevelItem = new QTreeWidgetItem();
+		topLevelItem->setText(0, "Mouse");
+		nodesWidget->addTopLevelItem(topLevelItem);
+
+		AddKeyDef(topLevelItem, 0, "Left", " button");
+		AddKeyDef(topLevelItem, 1, "Middle", " button");
+		AddKeyDef(topLevelItem, 2, "Right", " button");
 	}
 
 	// Objects
@@ -271,10 +290,10 @@ void NodesWindow::AddInlineVarDefs()
 	}
 }
 
-void NodesWindow::AddKeyDef(QTreeWidgetItem *topLevelItem, int key, const QString &name)
+void NodesWindow::AddKeyDef(QTreeWidgetItem *topLevelItem, int key, const QString &name, const QString &suffixe)
 {
 	auto treeItemChild = new QTreeWidgetItem();
-	treeItemChild->setText(0, name + " key");
+	treeItemChild->setText(0, name + suffixe);
 	topLevelItem->addChild(treeItemChild);
 
 	auto nodeItem = QSharedPointer<InlineVarNodeItem>(new InlineVarNodeItem());

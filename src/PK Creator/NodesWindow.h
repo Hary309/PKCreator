@@ -74,8 +74,8 @@ private:
 	void AddConditionDefs();
 	void AddConditionDef(QTreeWidgetItem *topLevelItem, const QString &name, const QString &type, int nInputs, DataType dataType);
 
-	void AddInlineVarDefs();
-	void AddKeyDef(QTreeWidgetItem *topLevelItem, int key, const QString &name);
+	void AddInlineVarDefs(ObjectItem *objectItem);
+	void AddKeyDef(QTreeWidgetItem *topLevelItem, int key, const QString &name, const QString &suffixe = QString(" key"));
 
 protected:
 	bool event(QEvent *e) override;
