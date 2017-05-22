@@ -31,6 +31,12 @@ function Sprite(imagePath, centerX, centerY)
 	this.centerY = centerY;
 }
 
+function CollisionEvent(objectID, func)
+{
+	this.objectID = objectID;
+	this.func = func;
+}
+
 // Object
 function Object(id, sprite)
 {
@@ -40,10 +46,26 @@ function Object(id, sprite)
 
 	this.events = [];
 
-	this.draw = function() {
-		if (this.events.pulseEvent)
-			this.events.pulseEvent();
+	this.collisions = [];
+	this.hspeed = 0;
+	this.vspeed = 0;
 
+	// 0 - none
+	// 1 - left
+	// 2 - right
+	this.collisionHor = 0;
+
+	// 0 - none
+	// 1 - top
+	// 2 - bottom 
+	this.collsionVer = 0;
+
+	this.addCollisionListener = function(objectID, func) {
+		var collEvent = new CollisionEvent(objectID, func);
+		this.collisions.push(collEvent);
+	}
+
+	this.draw = function() {
 		var rad = (this.angle) * Math.PI / 180;
 		
 		ctx.save();
@@ -54,6 +76,174 @@ function Object(id, sprite)
 
 		if (this.events.renderEvent)
 			this.events.renderEvent();
+	}
+
+	this.pulse = function() {
+		if (this.hspeed > 0 && this.collisionHor == 2 ||
+			this.hspeed < 0 && this.collisionHor == 1)
+		{
+			this.hspeed = 0;	
+		}
+
+		if (this.vspeed > 0 && this.collsionVer == 2 ||
+			this.vspeed < 0 && this.collsionVer == 1)
+		{
+			this.vspeed = 0;	
+		}
+
+		this.x += this.hspeed;
+		this.y += this.vspeed;
+
+		var thisX = this.x - this.sprite.centerX;
+		var thisY = this.y - this.sprite.centerY;
+
+		for (var i = 0; i < this.collisions.length; i++)
+		{
+			var coll = this.collisions[i];
+
+			var instances = GetInstance(coll.objectID);
+
+			var breakIt = false;
+
+			for (var j = 0; j < instances.length; j++)
+			{
+				var instance = instances[j];
+
+				var instanceX = instance.x - instance.sprite.centerX;
+				var instanceY = instance.y - instance.sprite.centerY;
+
+				// left && right
+				if (this.sprite.img.height < instance.sprite.img.height)
+				{
+					// left collide with right
+					if (thisX + this.hspeed + this.sprite.img.width > instanceX && thisX + this.sprite.img.width <= instanceX + instance.sprite.img.width / 2 &&
+					(
+						(thisY > instanceY &&
+						 thisY < instanceY + instance.sprite.img.height) ||
+						(thisY + this.sprite.img.height > instanceY &&
+						 thisY + this.sprite.img.height < instanceY + instance.sprite.img.height)
+					))
+					{
+						this.collisionHor = 2;
+					}
+					// right collide with left
+					else if (thisX + this.hspeed <= instanceX + instance.sprite.img.width && thisX >= instanceX - instance.sprite.img.width / 2 &&
+					(
+						(thisY > instanceY &&
+						 thisY < instanceY + instance.sprite.img.height) ||
+						(thisY + this.sprite.img.height > instanceY &&
+						 thisY + this.sprite.img.height < instanceY + instance.sprite.img.height)
+					))
+					{
+						this.collisionHor = 1;
+					}
+					else
+					{
+						this.collisionHor = 0;
+					}
+				}
+				else if (this.sprite.img.height > instance.sprite.img.height)
+				{
+					// left collide with right
+					if (thisX + this.hspeed + this.sprite.img.width > instanceX && thisX + this.sprite.img.width <= instanceX + instance.sprite.img.width / 2 &&
+					(
+						(thisY < instanceY &&
+						 thisY + this.sprite.img.height > instanceY) ||
+						(thisY < instanceY + instance.sprite.img.height &&
+						 thisY + this.sprite.img.height > instanceY + instance.sprite.img.height)
+					))
+					{
+						this.collisionHor = 2;
+					}
+					// right collide with left
+					else if (thisX + this.hspeed <= instanceX + instance.sprite.img.width && thisX >= instanceX - instance.sprite.img.width / 2 &&
+					(
+						(thisY < instanceY &&
+						 thisY + this.sprite.img.height > instanceY) ||
+						(thisY < instanceY + instance.sprite.img.height &&
+						 thisY + this.sprite.img.height > instanceY + instance.sprite.img.height)
+					))
+					{
+						this.collisionHor = 1;
+					}
+					else
+					{
+						this.collisionHor = 0;
+					}
+				}
+
+				// top && bottom
+				if (this.sprite.img.width < instance.sprite.img.width)
+				{
+					// bottom collide to top
+					if (thisY + vspeed + this.sprite.img.height >= instanceY && thisY + this.sprite.img.height <= instanceY + instance.sprite.img.height / 2 &&
+					(
+							(thisX > instanceX &&
+							 thisX < instanceX + instance.sprite.img.width) ||
+							(thisX + this.sprite.img.width > instanceX &&
+							 thisX + this.sprite.img.width < instanceX + instance.sprite.img.width)
+						))
+						{
+							this.collsionVer = 2;
+						}
+					// top collide to bottom
+					else if (thisY + vspeed <= instanceY + instance.sprite.img.height && thisY >= instanceY + instance.sprite.img.height / 2 &&
+					(
+							(thisX > instanceX &&
+							 thisX < instanceX + instance.sprite.img.width) ||
+							(thisX + this.sprite.img.width > instanceX &&
+							 thisX + this.sprite.img.width < instanceX + instance.sprite.img.width)
+						))
+						{
+							this.collsionVer = 1;
+						}
+					else
+					{
+						this.collsionVer = 0;
+					}
+				}
+				else if (this.sprite.img.width > instance.sprite.img.width)
+				{
+					// bottom collide to top
+					if (thisY + this.sprite.img.height >= instanceY && thisY + this.sprite.img.height <= instanceY + instance.sprite.img.height / 2 &&
+					(
+							(thisX < instanceX &&
+							 thisX + this.sprite.img.width > instanceX) ||
+							(thisX < instanceX + instance.sprite.img.width &&
+							 thisX + this.sprite.img.width > instanceX + instance.sprite.img.width)
+						))
+						{
+							this.collsionVer = 2;
+						}
+					// top collide to bottom
+					else if (thisY + this.vspeed <= instanceY + instance.sprite.img.height && thisY >= instanceY + instance.sprite.img.height / 2 &&
+					(
+							(thisX < instanceX &&
+							 thisX + this.sprite.img.width > instanceX) ||
+							(thisX < instanceX + instance.sprite.img.width &&
+							 thisX + this.sprite.img.width > instanceX + instance.sprite.img.width)
+						))
+						{
+							this.collsionVer = 1;
+						}
+					else
+					{
+						this.collsionVer = 0;
+					}
+				}
+
+				if (this.collisionHor > 0 || this.collsionVer >> 0)
+				{
+					breakIt = true;
+					break;
+				}
+			}
+
+			if (breakIt)
+				break;
+		}
+		if (this.events.pulseEvent)
+			this.events.pulseEvent();
 	}
 }
 
@@ -79,13 +269,18 @@ function Instance(object, x, y)
 	this.vars = object.vars;
 	this.events = object.events;
 
-	this.hspeed = 0;
-	this.x = x;
-	this.vspeed = 0;
+	this.collisions = object.collisions;
+
 	this.y = y;
+	this.x = x;
+
+	this.hspeed = 0;
+	this.vspeed = 0;
+
 	this.angle = 0;
 
 	this.draw = object.draw;
+	this.pulse = object.pulse;
 }
 
 function CreateInstance(objectID, x, y)
@@ -118,6 +313,60 @@ function DestroyInstance(instanceID)
 				instance.events.destroyEvent(instance.id);
 
 			currentScene.instances.splice(i, 1);
+		}
+	}
+}
+
+function GetInstance(objectID)
+{
+	var instances = [];
+
+	for (var i = 0; i < currentScene.instances.length; ++i)
+	{
+		var instance = currentScene.instances[i];
+
+		if (instance.object.id == objectID)
+		{
+			instances.push(instance);
+		}
+	}
+
+	return instances;
+}
+
+function SetInstancePos(instanceID, x, y)
+{
+	for (var i = 0; i < currentScene.instances.length; ++i)
+	{
+		var instance = currentScene.instances[i];
+		if (instance.id == instanceID)
+		{
+			instance.x = x;
+			instance.y = y; 
+		}
+	}
+}
+
+function SetInstanceHorSpeed(instanceID, hspeed)
+{
+	for (var i = 0; i < currentScene.instances.length; ++i)
+	{
+		var instance = currentScene.instances[i];
+		if (instance.id == instanceID)
+		{
+			instance.hspeed = hspeed;
+		}
+	}
+}
+
+function SetInstanceVerSpeed(instanceID, vspeed)
+{
+	for (var i = 0; i < currentScene.instances.length; ++i)
+	{
+		var instance = currentScene.instances[i];
+		if (instance.id == instanceID)
+		{
+			instance.vspeed = vspeed;
 		}
 	}
 }
@@ -233,6 +482,7 @@ canvas.onmousedown = function(data) {
 
 // Mouse released
 canvas.onmouseup = function(data) { 
+	var button = data.button;
 	var x = data.x;
 	var y = data.y;
 
