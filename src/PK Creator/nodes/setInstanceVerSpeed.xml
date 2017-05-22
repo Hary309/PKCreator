@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>SetInstanceVerSpeed</name>
+	<desc>Sets instance's vertical speed</desc>
+	<category>Instance</category>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	      <arg>
+	        <type>1</type>
+	        <name>speed</name>
+	    </arg>
+	</args>
+	<jsCode></jscode>
+</node>
+ 

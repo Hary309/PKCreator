@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>Negate</name>
+	<desc>Negate number (1 = -1 or -1 = 1)</desc>
+	<category>Math</category>
+	<args>
+	    <arg>
+	        <type>1</type>
+	        <name>number</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>negated</name>
+	</returnValue>
+	<jsCode>return -number;</jscode>
+</node>
+ 
