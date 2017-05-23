@@ -15,7 +15,7 @@ EventDefsMgr::EventDefsMgr()
 {
 	s_pInst = this;
 	QVector<Arg> basic;
-	basic.push_back(Arg(DataType::DATA_OBJECTID, "this"));
+	basic.push_back(Arg(DataType::DATA_ID, "this"));
 	
 	AddEvent(CREATE_EVENT, "Create Event", "createEvent", basic);
 	AddEvent(DESTROY_EVENT, "Destroy Event", "destroyEvent", basic);
@@ -24,7 +24,7 @@ EventDefsMgr::EventDefsMgr()
 
 
 	QVector<Arg> mouse;
-	mouse.push_back(Arg(DataType::DATA_OBJECTID, "this"));
+	mouse.push_back(Arg(DataType::DATA_ID, "this"));
 	mouse.push_back(Arg(DataType::DATA_NUMBER, "x"));
 	mouse.push_back(Arg(DataType::DATA_NUMBER, "y"));
 
@@ -35,7 +35,7 @@ EventDefsMgr::EventDefsMgr()
 
 
 	QVector<Arg> keyboard;
-	keyboard.push_back(Arg(DataType::DATA_OBJECTID, "this"));
+	keyboard.push_back(Arg(DataType::DATA_ID, "this"));
 	keyboard.push_back(Arg(DataType::DATA_INTEGER, "key"));
 
 	AddEvent(KEY_PRESSED_EVENT, "Key Pressed Event", "keyDownEvent", keyboard);

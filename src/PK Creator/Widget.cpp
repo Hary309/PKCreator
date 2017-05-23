@@ -27,7 +27,7 @@ void Widget::SetDataType(DataType type)
 	// colors source: https://material.io/guidelines/style/color.html
 	switch (type)
 	{
-	case DATA_OBJECTID:
+	case DATA_ID:
 		m_color = sf::Color(0xE57373FF);
 		break;
 	case DATA_BOOLEAN:

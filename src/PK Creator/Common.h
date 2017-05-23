@@ -16,10 +16,10 @@ enum DataType
 	DATA_NUMBER,
 	DATA_STRING,
 	DATA_BOOLEAN,
-	DATA_OBJECTID
+	DATA_ID
 };
 
-static const QStringList dataNames = { "Integer", "Number", "String", "Boolean", "ObjectID" };
+static const QStringList dataNames = { "Integer", "Number", "String", "Boolean", "ID" };
 
 inline DataType GetDataType(const QString &str)
 {
