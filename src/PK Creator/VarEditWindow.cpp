@@ -96,10 +96,10 @@ void VarEditWindow::TypeComboBox_currentIndexChanged(int index)
 	m_ui.valueEdit->setText("");
 
 	if (index == DATA_INTEGER)
-		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,10}")));
+		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[-][0-9]{0,10}")));
 	else if (index == DATA_NUMBER)
 	{
-		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,6}[.]{0,1}[0-9]{0,5}")));
+		m_ui.valueEdit->setValidator(new QRegExpValidator(QRegExp("[-]{0,1}[0-9]{0,6}[.]{0,1}[0-9]{0,5}")));
 	}
 	else if (index == DATA_STRING)
 	{
