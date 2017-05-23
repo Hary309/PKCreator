@@ -138,7 +138,7 @@ VisualNode *NodeMgr::AddNodeFromVar(Var *var, const sf::Vector2f &pos)
 VisualNode *NodeMgr::AddInlineVarNode(NodesWindow::InlineVarNodeItem *inlineVarNode, const sf::Vector2f &pos)
 {
 	Node *node = new Node(inlineVarNode->name, pos, Node::INLINE_VARIABLE);
-	node->m_defaultValue = inlineVarNode->value;
+	node->m_additionalData = inlineVarNode->value;
 
 	node->AddWidget(new Widget(node, "Value", Widget::DATA, Widget::OUTPUT, inlineVarNode->type));
 
@@ -148,9 +148,7 @@ VisualNode *NodeMgr::AddInlineVarNode(NodesWindow::InlineVarNodeItem *inlineVarN
 VisualNode *NodeMgr::AddConditionNode(const NodesWindow::ConditionItem *conditionItem, const sf::Vector2f &pos)
 {
 	Node *node = new Node(conditionItem->name, pos, Node::CONDITION);
-	node->m_defaultValue = conditionItem->conditionType;
-
-	printf("ConditionType: %s\n", conditionItem->conditionType.toStdString().c_str());
+	node->m_additionalData = conditionItem->conditionType;
 
 	if (conditionItem->nInputs == 1)
 	{

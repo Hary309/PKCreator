@@ -114,37 +114,76 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 			if (sharedEvent)
 			{
 				EventObjectItem *e = sharedEvent.data();
+				
+				if (!e)
+					continue;
+				
 				auto firstNode = e->GetFirstNode();
 
-				printf("\t\t%s...\n", EventDefsMgr::Get()->GetEvent(e->GetType())->name.toStdString().c_str());
-
-				if (firstNode->m_type != Node::EVENT)
-					continue;
-
-				auto eventDef = EventDefsMgr::Get()->GetEvent(e->GetType());
-
-				if (!eventDef)
-					continue;
-
-				QString declaration = objectName + ".events." + eventDef->functionName + " = function(";
-
-				for (int i = 0; i < firstNode->m_outputs.size(); ++i)
+				if (e->GetType() == EventDefsMgr::COLLISION_EVENT)
 				{
-					if (i > 0)
-						declaration += ",";
+					auto collideWith = ResourceView::Get()->GetItem(e->m_idCollideWith);
 
-					declaration += "v" + QString::number(firstNode->m_outputs[i]->m_id);
+					if (!collideWith)
+						continue;
+
+					printf("\t\tCollision with %s Event...\n", collideWith->GetName().toStdString().c_str());
+
+					if (firstNode->m_type != Node::EVENT)
+						continue;
+
+					QString declaration = objectName + ".addCollisionListener(" + QString::number(e->m_idCollideWith) + ", function(";
+
+					for (int i = 0; i < firstNode->m_outputs.size(); ++i)
+					{
+						if (i > 0)
+							declaration += ",";
+
+						declaration += "v" + QString::number(firstNode->m_outputs[i]->m_id);
+					}
+
+					declaration += ") {";
+
+					auto nextNode = e->GetNode(firstNode->m_idExecTo);
+
+					declaration += GenerateFunction(e, nextNode, "");
+
+					declaration += "});\n";
+
+					m_init += declaration;
 				}
+				else
+				{
+					printf("\t\t%s...\n", EventDefsMgr::Get()->GetEvent(e->GetType())->name.toStdString().c_str());
 
-				declaration += ") {";
+					if (firstNode->m_type != Node::EVENT)
+						continue;
 
-				auto nextNode = e->GetNode(firstNode->m_idExecTo);
+					auto eventDef = EventDefsMgr::Get()->GetEvent(e->GetType());
 
-				declaration += GenerateFunction(e, nextNode, "");
+					if (!eventDef)
+						continue;
 
-				declaration += "}\n";
+					QString declaration = objectName + ".events." + eventDef->functionName + " = function(";
 
-				m_init += declaration;
+					for (int i = 0; i < firstNode->m_outputs.size(); ++i)
+					{
+						if (i > 0)
+							declaration += ",";
+
+						declaration += "v" + QString::number(firstNode->m_outputs[i]->m_id);
+					}
+
+					declaration += ") {";
+
+					auto nextNode = e->GetNode(firstNode->m_idExecTo);
+
+					declaration += GenerateFunction(e, nextNode, "");
+
+					declaration += "}\n";
+
+					m_init += declaration;
+				}
 			}
 		}
 	}
@@ -175,7 +214,7 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 				{
 					result += "if (";
 					result += GetVar(e, node->m_inputs[0]->m_connected.first());
-					result += node->m_defaultValue;
+					result += node->m_additionalData;
 					result += GetVar(e, node->m_inputs[1]->m_connected.first());
 					result += ")";
 				}
@@ -254,7 +293,7 @@ QString HTML5Generator::GetVar(EventObjectItem *e, qint64 id)
 	auto inlineVar = e->GetParent()->GetInlineVarValue(id, e->GetType());
 
 	if (var)
-		result += e->GetParent()->GetName() + ".vars." + var->m_name;
+		result += "gameObject" + e->GetParent()->GetName() + ".vars." + var->m_name;
 	else if (!inlineVar.isEmpty())
 		result += inlineVar;
 	else
@@ -356,11 +395,12 @@ void HTML5Generator::Save()
 		"ctx.fillRect(0, 0, canvas.width, canvas.height);\n"
 		"currentScene.scene.draw();\n"
 		"for (i = 0; i < currentScene.instances.length; i++)\n"
+			"\tcurrentScene.instances[i].pulse();\n"
+		"for (i = 0; i < currentScene.instances.length; i++)\n"
 			"\tcurrentScene.instances[i].draw();\n"
-		"setTimeout(render, 10);\n"
 		"}";
 
-	stream << "\ninit();\nrender();\n\n";
+	stream << "\ninit();\nsetInterval(render, 20);\n\n";
 
 	auto functionsDefs = ResourceView::Get()->GetFunctionDefsMgr()->GetFunctionsDef();
 

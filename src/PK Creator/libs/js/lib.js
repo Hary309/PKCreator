@@ -232,7 +232,7 @@ function Object(id, sprite)
 					}
 				}
 
-				if (this.collisionHor > 0 || this.collsionVer >> 0)
+				if (this.collisionHor > 0 || this.collsionVer > 0)
 				{
 					breakIt = true;
 					break;
@@ -240,7 +240,17 @@ function Object(id, sprite)
 			}
 
 			if (breakIt)
+			{
+				if (this.collisionHor > 0)
+				{
+					coll.func(this.id, coll.objectID, this.collisionHor)
+				}
+				else if (this.collsionVer > 0)
+				{
+					coll.func(this.id, coll.objectID, this.collsionVer + 2);
+				}
 				break;
+			}
 		}
 		if (this.events.pulseEvent)
 			this.events.pulseEvent();

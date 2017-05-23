@@ -55,6 +55,8 @@ protected:
 	void changeEvent(QEvent *e) override;
 	void closeEvent(QCloseEvent *event) override;
 
+	void AddCollisionEvent();
+
 public:
 	explicit ObjectItemWindow(QWidget *parent);
 	virtual ~ObjectItemWindow();
@@ -71,6 +73,5 @@ private slots:
 	void EditSprButton_clicked() const;
 	void SpriteBox_activated(int index);
 	void VarsButton_clicked();
-
 };
 

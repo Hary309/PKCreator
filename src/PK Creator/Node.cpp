@@ -102,7 +102,7 @@ void Node::Load(QDataStream *const dataStream)
 	m_type = static_cast<Type>(type);
 
 	if (m_type == INLINE_VARIABLE || m_type == CONDITION)
-		*dataStream >> m_defaultValue;
+		*dataStream >> m_additionalData;
 
 	*dataStream >> nInputs;
 
@@ -130,7 +130,7 @@ void Node::Save(QDataStream *const dataStream)
 	*dataStream << m_id << m_pos.x << m_pos.y << m_name << m_type << m_execFrom << m_idExecFrom << m_execTo << m_idExecTo;
 
 	if (m_type == INLINE_VARIABLE || m_type == CONDITION)
-		*dataStream << m_defaultValue;
+		*dataStream << m_additionalData;
 
 	*dataStream << m_inputs.size();
 

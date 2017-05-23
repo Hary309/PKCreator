@@ -16,6 +16,9 @@ EventObjectItem::EventObjectItem(ObjectItem *parent, EventDefsMgr::Type type, QS
 {
 	m_new = false;
 	m_pItemWnd = nullptr;
+
+	m_idCurrentObject = 0;
+	m_idCollideWith = 0;
 }
 
 EventObjectItem::~EventObjectItem()
@@ -26,7 +29,7 @@ void EventObjectItem::Load(QDataStream *const dataStream)
 {
 	int n = 0;
 
-	*dataStream >> n;
+	*dataStream >> m_idCurrentObject >> m_idCollideWith >> n;
 
 	for (int i = 0; i < n; ++i)
 	{
@@ -39,7 +42,7 @@ void EventObjectItem::Load(QDataStream *const dataStream)
 
 void EventObjectItem::Save(QDataStream *const dataStream) const
 {
-	*dataStream << m_eventType << m_nodes.size();
+	*dataStream << m_eventType << m_idCurrentObject << m_idCollideWith << m_nodes.size();
 
 	for (auto node : m_nodes)
 	{

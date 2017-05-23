@@ -281,6 +281,15 @@
     <ClCompile Include="OutputDataWidget.cpp">
       <Filter>Source Files\Blueprint\Editor\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_CollisionWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_CollisionWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -372,6 +381,12 @@
     </CustomBuild>
     <CustomBuild Include="BackgroundItemWindow.h">
       <Filter>Header Files\Items\Windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CollisionWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CollisionWindow.h">
+      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -470,6 +485,9 @@
     </ClInclude>
     <ClInclude Include="OutputExecWidget.h">
       <Filter>Header Files\Blueprint\Editor\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_CollisionWindow.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

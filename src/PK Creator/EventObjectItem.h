@@ -18,6 +18,8 @@ class EventObjectItemWindow;
 
 class BlueprintEditor;
 class Node;
+class ObjectItemWindow;
+class HTML5Generator;
 
 class EventObjectItem
 {
@@ -33,7 +35,13 @@ protected:
 
 	bool									m_new;
 
-	friend									BlueprintEditor;
+	// for collision type
+	qint64									m_idCurrentObject; // this
+	qint64									m_idCollideWith;
+
+	friend BlueprintEditor;
+	friend ObjectItemWindow;
+	friend HTML5Generator;
 
 public:
 	EventObjectItem(ObjectItem *parent, EventDefsMgr::Type type, QStandardItem *item);

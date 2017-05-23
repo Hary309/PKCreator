@@ -66,18 +66,32 @@ void BlueprintEditor::FillData(EventObjectItem *item)
 	if (item->m_new)
 	{
 		item->m_new = false;
-	
-		auto eventDef = EventDefsMgr::Get()->GetEvent(item->m_eventType);
 
-		Node *node = new Node(eventDef->name, sf::Vector2f(0.f, 0.f), Node::EVENT);
-	
-		for (auto arg : eventDef->args)
+
+		if (item->GetType() >= EventDefsMgr::COLLISION_EVENT)
 		{
-			Widget *widget = new Widget(node, arg.name, Widget::DATA, Widget::OUTPUT, arg.type);
-			node->AddWidget(widget);
-		}
+			Node *node = new Node("Collision event", sf::Vector2f(0.f, 0.f), Node::EVENT);
 
-		m_pNodeMgr->AddNode(node);
+			node->AddWidget(new Widget(node, "this", Widget::DATA, Widget::OUTPUT, DataType::DATA_ID));
+			node->AddWidget(new Widget(node, "Collide with", Widget::DATA, Widget::OUTPUT, DataType::DATA_ID));
+			node->AddWidget(new Widget(node, "direction", Widget::DATA, Widget::OUTPUT, DataType::DATA_INTEGER));
+
+			m_pNodeMgr->AddNode(node);
+		}
+		else
+		{
+			auto eventDef = EventDefsMgr::Get()->GetEvent(item->m_eventType);
+
+			Node *node = new Node(eventDef->name, sf::Vector2f(0.f, 0.f), Node::EVENT);
+
+			for (auto arg : eventDef->args)
+			{
+				Widget *widget = new Widget(node, arg.name, Widget::DATA, Widget::OUTPUT, arg.type);
+				node->AddWidget(widget);
+			}
+
+			m_pNodeMgr->AddNode(node);
+		}
 	}
 }
 

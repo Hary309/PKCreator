@@ -132,8 +132,6 @@ Var *ObjectItem::GetVarByWidget(qint64 widgetID, EventDefsMgr::Type eventType) c
 
 QString ObjectItem::GetInlineVarValue(qint64 widgetID, EventDefsMgr::Type eventType) const
 {
-	qint64 id = 0;
-
 	EventObjectItem *e = nullptr;
 
 	for (auto e_ : m_events)

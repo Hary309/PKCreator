@@ -17,7 +17,7 @@
 #include <EventObjectItem.h>
 #include <SpriteItem.h>
 #include <ObjectItem.h>
-
+#include <CollisionWindow.h>
 #include <VariablesWindow.h>
 
 ObjectItemWindow::ObjectItemWindow(QWidget *parent)
@@ -86,7 +86,21 @@ bool ObjectItemWindow::FillData(Item *item)
 	{
 		auto type = eventItem->GetType();
 
-		auto treeItem = new QStandardItem(EventDefsMgr::Get()->GetEvent(type)->name);
+		QStandardItem *treeItem = nullptr;
+
+		if (type >= EventDefsMgr::COLLISION_EVENT)
+		{
+			auto collideWith = ResourceView::Get()->GetItem(eventItem->m_idCollideWith);
+
+			if (!collideWith)
+				continue;
+
+			treeItem = new QStandardItem("Collision with " + collideWith->GetName() + " Event");
+		}
+		else
+		{
+			treeItem = new QStandardItem(EventDefsMgr::Get()->GetEvent(type)->name);
+		}
 
 		eventItem->SetItem(treeItem);
 
@@ -114,6 +128,12 @@ void ObjectItemWindow::CreateContextMenu()
 		m_actionList.push_back(action);
 	}
 
+	// Collision
+	{
+		auto action = QSharedPointer<QAction>(new QAction("Collision event", this));
+		m_actionList.push_back(action);
+	}
+
 	connect(m_actionList[0].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(0); });
 	connect(m_actionList[1].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(1); });
 	connect(m_actionList[2].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(2); });
@@ -123,7 +143,8 @@ void ObjectItemWindow::CreateContextMenu()
 	connect(m_actionList[6].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(6); });
 	connect(m_actionList[7].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(7); });
 	connect(m_actionList[8].data(), &QAction::triggered, this, [this] { AddEventAction_triggered(8); });
-	
+	connect(m_actionList[9].data(), &QAction::triggered, this, [this] { AddCollisionEvent(); });
+
 	for (auto actionItem : m_actionList)
 	{
 		m_pContextMenu->addAction(actionItem.data());
@@ -168,6 +189,54 @@ void ObjectItemWindow::changeEvent(QEvent *e)
 void ObjectItemWindow::closeEvent(QCloseEvent *e)
 {
 	m_pItemParent->Close();
+}
+
+void ObjectItemWindow::AddCollisionEvent()
+{
+	CollisionWindow colWindow(this);
+
+	colWindow.exec(m_pItemParent);
+
+	ObjectItem *selectedObject = static_cast<ObjectItem*>(colWindow.GetSelectedItem());
+
+	if (!selectedObject)
+		return;
+
+	auto events = m_pItemParent->GetEvents();
+
+	for (auto e : *events)
+	{
+		if (e->m_idCollideWith == selectedObject->GetID())
+		{
+			QMessageBox::information(this, "PK Creator", "Collision with " + selectedObject->GetName() + " already exists!");
+			return;
+		}
+	}
+
+	int id = 0;
+
+	for (; id <= 100; ++id)
+	{
+		auto e = m_pItemParent->GetEvent(EventDefsMgr::COLLISION_EVENT + id);
+
+		if (!e)
+			break;
+
+		if (id == 100)
+			return;
+	}
+
+	QStandardItem *item = new QStandardItem("Collision with " + selectedObject->GetName() + " Event");
+	item->setEditable(false);
+	m_pModel->appendRow(item);
+
+	auto objEvent = QSharedPointer<EventObjectItem>(new EventObjectItem(m_pItemParent, EventDefsMgr::Type(EventDefsMgr::COLLISION_EVENT + id), item));
+	objEvent->m_idCurrentObject = m_pItemParent->GetID();
+	objEvent->m_idCollideWith = selectedObject->GetID();
+	objEvent->SetAsNew();
+	objEvent->Show(this);
+
+	m_pItemParent->m_events.push_back(objEvent);
 }
 
 void ObjectItemWindow::OkButton_clicked()

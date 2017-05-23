@@ -39,7 +39,7 @@ protected:
 
 	Type								m_type;
 
-	QString								m_defaultValue; // only for INLINE_VARIABLE and CONDITION
+	QString								m_additionalData; // for INLINE_VARIABLE, CONDITION
 
 	sf::Vector2f						m_pos;
 
@@ -68,7 +68,7 @@ public:
 	const QString &GetName() const { return m_name; }
 	Type GetType() const { return m_type; }
 
-	const QString &GetDefaultValue() const { return m_defaultValue; }
+	const QString &GetDefaultValue() const { return m_additionalData; }
 
 	void Load(QDataStream *const dataStream);
 	void Save(QDataStream *const dataStream);
