@@ -38,7 +38,7 @@ function CollisionEvent(objectID, func)
 }
 
 // Object
-function Object(id, sprite)
+function Object(id, sprite, solid)
 {
 	this.id = id;
 	this.sprite = sprite;
@@ -49,6 +49,8 @@ function Object(id, sprite)
 	this.collisions = [];
 	this.hspeed = 0;
 	this.vspeed = 0;
+
+	this.solid = solid;
 
 	// 0 - none
 	// 1 - left
@@ -176,7 +178,7 @@ function Object(id, sprite)
 				if (this.sprite.img.width < instance.sprite.img.width)
 				{
 					// bottom collide to top
-					if (thisY + vspeed + this.sprite.img.height >= instanceY && thisY + this.sprite.img.height <= instanceY + instance.sprite.img.height / 2 &&
+					if (thisY + this.vspeed + this.sprite.img.height >= instanceY && thisY + this.sprite.img.height <= instanceY + instance.sprite.img.height / 2 &&
 					(
 							(thisX > instanceX &&
 							 thisX < instanceX + instance.sprite.img.width) ||
@@ -187,7 +189,7 @@ function Object(id, sprite)
 							this.collsionVer = 2;
 						}
 					// top collide to bottom
-					else if (thisY + vspeed <= instanceY + instance.sprite.img.height && thisY >= instanceY + instance.sprite.img.height / 2 &&
+					else if (thisY + this.vspeed <= instanceY + instance.sprite.img.height && thisY >= instanceY + instance.sprite.img.height / 2 &&
 					(
 							(thisX > instanceX &&
 							 thisX < instanceX + instance.sprite.img.width) ||
@@ -243,12 +245,19 @@ function Object(id, sprite)
 			{
 				if (this.collisionHor > 0)
 				{
-					coll.func(this.id, coll.objectID, this.collisionHor)
+					coll.func(this.id, instance.id, this.collisionHor)
 				}
 				else if (this.collsionVer > 0)
 				{
-					coll.func(this.id, coll.objectID, this.collsionVer + 2);
+					coll.func(this.id, instance.id, this.collsionVer + 2);
 				}
+
+				if (!instance.solid)
+				{
+					this.collisionHor = 0;
+					this.collsionVer = 0;
+				}
+
 				break;
 			}
 		}
@@ -280,6 +289,8 @@ function Instance(object, x, y)
 	this.events = object.events;
 
 	this.collisions = object.collisions;
+
+	this.solid = object.solid;
 
 	this.y = y;
 	this.x = x;
