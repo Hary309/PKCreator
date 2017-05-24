@@ -71,6 +71,8 @@ private:
 private:
 	void AddVarDefs(ObjectItem *objectItem);
 
+	void AddGlobalVarDefs();
+
 	void AddConditionDefs();
 	void AddConditionDef(QTreeWidgetItem *topLevelItem, const QString &name, const QString &type, int nInputs, DataType dataType);
 

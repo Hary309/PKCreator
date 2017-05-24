@@ -25,32 +25,34 @@ class EventDefsMgr;
 class CodeGenerator;
 
 class Config;
+class GlobalVariablesWindow;
 
 class ResourceView : public QTreeView
 {
 	Q_OBJECT
 
 private:
-	QStringList							m_defaultModel;
+	QStringList								m_defaultModel;
 
-	QString								m_mainDir;
+	QString									m_mainDir;
 
-	QSharedPointer<FunctionDefsMgr>		m_pFunctionDefsMgr;
-	QSharedPointer<EventDefsMgr>		m_pEventDefsMgr;
-	QSharedPointer<NodesWindow>			m_pNodesWindow;
+	QSharedPointer<FunctionDefsMgr>			m_pFunctionDefsMgr;
+	QSharedPointer<EventDefsMgr>			m_pEventDefsMgr;
+	QSharedPointer<NodesWindow>				m_pNodesWindow;
 
-	QSharedPointer<QStandardItemModel>  m_pTreeModel;
+	QSharedPointer<QStandardItemModel>		m_pTreeModel;
 	
-	QVector<QSharedPointer<Item>>		m_items;
+	QVector<QSharedPointer<Item>>			m_items;
 	
-	QSharedPointer<Config>				m_pProConfig;
+	QSharedPointer<Config>					m_pProConfig;
+	QSharedPointer<GlobalVariablesWindow>	m_pGlobalVarsWindow;
 
-	int									m_lastSpriteID;
-	int									m_lastBackgroundID;
-	int									m_lastObjectID;
-	int									m_lastSceneID;
+	int										m_lastSpriteID;
+	int										m_lastBackgroundID;
+	int										m_lastObjectID;
+	int										m_lastSceneID;
 	
-	static ResourceView					*s_pInst;
+	static ResourceView						*s_pInst;
 
 private:
 	void mousePressEvent(QMouseEvent * mouseEvent) override;

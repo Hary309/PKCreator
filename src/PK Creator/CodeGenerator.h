@@ -14,6 +14,7 @@
 class SpriteItem;
 class ObjectItem;
 class SceneItem;
+class GlobalVariablesWindow;
 
 class CodeGenerator
 {
@@ -25,6 +26,7 @@ public:
 	virtual ~CodeGenerator() { }
 
 	virtual void GenerateCanvas(const QString &title, const QSize &windowSize) = 0;
+	virtual void GenerateGlobalVars(const GlobalVariablesWindow *globalVarsWnd) = 0;
 	virtual void GenerateObject(ObjectItem *object) = 0;
 	virtual void GenerateSprite(SpriteItem *sprite) = 0;
 	virtual void GenerateScene(SceneItem *scene) = 0;

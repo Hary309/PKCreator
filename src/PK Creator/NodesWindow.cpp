@@ -12,6 +12,7 @@
 #include <ObjectItem.h>
 #include <Var.h>
 #include <Node.h>
+#include <GlobalVariablesWindow.h>
 
 #include <QEvent>
 
@@ -68,6 +69,7 @@ void NodesWindow::AddFuncDefs(const QVector<QSharedPointer<FunctionDefsMgr::Func
 void NodesWindow::show(ObjectItem *objectItem)
 {
 	AddVarDefs(objectItem);
+	AddGlobalVarDefs();
 	AddInlineVarDefs(objectItem);
 
 	QDialog::show();
@@ -208,6 +210,7 @@ void NodesWindow::AddInlineVarDefs(ObjectItem *objectItem)
 				AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(i), "Numpad " + QString::number(i - 96));
 		}
 	}
+
 	// Mouse
 	{
 		QTreeWidgetItem *topLevelItem = nullptr;
@@ -357,6 +360,37 @@ void NodesWindow::AddConditionDef(QTreeWidgetItem *topLevelItem, const QString &
 	nodeItem->nInputs = nInputs;
 	nodeItem->dataType = dataType;
 	m_conditionNodeWidgetItems.push_back(nodeItem);
+}
+
+void NodesWindow::AddGlobalVarDefs()
+{
+	auto nodesWidget = m_ui.nodesWidget;
+
+	for (int i = 0; i < nodesWidget->topLevelItemCount(); ++i)
+	{
+		if (nodesWidget->topLevelItem(i)->text(0) == "Global variables")
+		{
+			delete nodesWidget->topLevelItem(i);
+		}
+	}
+
+	QTreeWidgetItem *topLevelItem = new QTreeWidgetItem();
+	topLevelItem->setText(0, "Global variables");
+	nodesWidget->addTopLevelItem(topLevelItem);
+
+	auto vars = GlobalVariablesWindow::Get()->GetAllVars();
+
+	for (auto var : *vars)
+	{
+		auto treeItemChild = new QTreeWidgetItem();
+		treeItemChild->setText(0, var->m_name);
+		topLevelItem->addChild(treeItemChild);
+
+		auto nodeItem = QSharedPointer<VarNodeItem>(new VarNodeItem());
+		nodeItem->treeItem = treeItemChild;
+		nodeItem->var = var.data();
+		m_varNodeWidgetItems.push_back(nodeItem);
+	}
 }
 
 bool NodesWindow::event(QEvent *e)

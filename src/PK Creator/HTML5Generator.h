@@ -22,6 +22,7 @@ private:
 	QString	m_htmlCode;
 
 	// javascript
+	QString m_global;
 	QString m_init;
 	QString m_render;
 
@@ -34,6 +35,7 @@ public:
 	~HTML5Generator();
 
 	void GenerateCanvas(const QString &title, const QSize &windowSize) override;
+	void GenerateGlobalVars(const GlobalVariablesWindow *globalVarsWnd) override;
 	void GenerateObject(ObjectItem *object) override;
 	void GenerateSprite(SpriteItem *sprite) override;
 	void GenerateScene(SceneItem *item) override;

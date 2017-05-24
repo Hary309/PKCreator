@@ -21,6 +21,7 @@
 #include <Node.h>
 #include <Widget.h>
 #include <FunctionDefsMgr.h>
+#include <GlobalVariablesWindow.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -50,6 +51,35 @@ void HTML5Generator::GenerateCanvas(const QString &title, const QSize &windowSiz
 
 	// scripts
 	m_htmlCode += "<script src='lib.js'></script>\r<script src='script.js'></script>\r</body>\r</html>";
+}
+
+void HTML5Generator::GenerateGlobalVars(const GlobalVariablesWindow *globalVarsWnd)
+{
+	auto vars = globalVarsWnd->m_vars;
+
+	for (auto var : vars)
+	{
+		m_global += "var globalVar" + var->m_name + " = ";
+
+		switch (var->m_type)
+		{
+		case DATA_INTEGER:
+			m_global += QString::number(var->m_data.integer);
+			break;
+		case DATA_NUMBER:
+			m_global += QString::number(var->m_data.number, 'f', 10);
+			break;
+		case DATA_STRING:
+			m_global += "'" + *var->m_data.string + "'";
+			break;
+		case DATA_BOOLEAN:
+			m_global += var->m_data.boolean ? "true" : "false";
+			break;
+		default:;
+		}
+
+		m_global += ";\n";
+	}
 }
 
 void HTML5Generator::GenerateSprite(SpriteItem *sprite)
@@ -273,8 +303,17 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 			{
 				auto var = e->GetParent()->GetVarByWidget(connID, e->GetType());
 
+				auto globalVarNode = e->GetParent()->GetNodeByWidget(connID, e->GetType());
+				Var *globalVar = nullptr;
+
+				if (globalVarNode)
+					globalVar = GlobalVariablesWindow::Get()->GetVar(globalVarNode->GetID());
+
 				if (var)
 					result += e->GetParent()->GetName() + ".vars." + var->m_name + " = v" + QString::number(node->m_outputs.first()->m_id) + ";";
+				else if (globalVar)
+					result += "globalVar" + globalVar->m_name + " = v" + QString::number(node->m_outputs.first()->m_id) + ";";
+
 			}
 		}
 
@@ -292,10 +331,18 @@ QString HTML5Generator::GetVar(EventObjectItem *e, qint64 id)
 	auto var = e->GetParent()->GetVarByWidget(id, e->GetType());
 	auto inlineVar = e->GetParent()->GetInlineVarValue(id, e->GetType());
 
+	auto globalVarNode = e->GetParent()->GetNodeByWidget(id, e->GetType());
+	Var *globalVar = nullptr;
+
+	if (globalVarNode)
+		globalVar = GlobalVariablesWindow::Get()->GetVar(globalVarNode->GetID());
+
 	if (var)
 		result += "gameObject" + e->GetParent()->GetName() + ".vars." + var->m_name;
 	else if (!inlineVar.isEmpty())
 		result += inlineVar;
+	else if (globalVar)
+		result += "globalVar" + globalVar->m_name;
 	else
 		result += "v" + QString::number(id);
 
@@ -385,7 +432,7 @@ void HTML5Generator::Save()
 	stream << "/*=================================================*/\n\n";
 
 	// init
-	stream << "\nfunction init()\n{\n" << m_init << "}";
+	stream << m_global << "\nfunction init()\n{\n" << m_init << "}";
 
 	// render
 	stream <<

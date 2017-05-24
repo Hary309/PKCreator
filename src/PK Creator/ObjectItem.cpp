@@ -130,6 +130,41 @@ Var *ObjectItem::GetVarByWidget(qint64 widgetID, EventDefsMgr::Type eventType) c
 	return nullptr;
 }
 
+Node *ObjectItem::GetNodeByWidget(qint64 widgetID, EventDefsMgr::Type eventType) const
+{
+	EventObjectItem *e = nullptr;
+
+	for (auto e_ : m_events)
+	{
+		if (e_->GetType() == eventType)
+		{
+			e = e_.data();
+			break;
+		}
+	}
+
+	if (!e)
+		return nullptr;
+
+	for (auto node : *e->GetNodes())
+	{
+		for (auto widget : node->m_inputs)
+		{
+			if (widgetID == widget->GetID())
+				return node.data();
+		}
+
+
+		for (auto widget : node->m_outputs)
+		{
+			if (widgetID == widget->GetID())
+				return node.data();
+		}
+	}
+
+	return nullptr;
+}
+
 QString ObjectItem::GetInlineVarValue(qint64 widgetID, EventDefsMgr::Type eventType) const
 {
 	EventObjectItem *e = nullptr;

@@ -233,15 +233,6 @@
     <ClCompile Include="HTML5Generator.cpp">
       <Filter>Source Files\CodeGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Debug\moc_VariablesWindow.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\QtFiles\Release\moc_VariablesWindow.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="VariablesWindow.cpp">
-      <Filter>Source Files\Variable</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\QtFiles\Debug\moc_VarEditWindow.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -289,6 +280,24 @@
     </ClCompile>
     <ClCompile Include="..\..\QtFiles\Release\moc_CollisionWindow.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_LocalVariablesWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_LocalVariablesWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalVariablesWindow.cpp">
+      <Filter>Source Files\Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_GlobalVariablesWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_GlobalVariablesWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVariablesWindow.cpp">
+      <Filter>Source Files\Variable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -367,9 +376,6 @@
     <CustomBuild Include="VariablesWindow.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="VariablesWindow.h">
-      <Filter>Header Files\Variable</Filter>
-    </CustomBuild>
     <CustomBuild Include="VarEditWindow.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
@@ -387,6 +393,12 @@
     </CustomBuild>
     <CustomBuild Include="CollisionWindow.h">
       <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="LocalVariablesWindow.h">
+      <Filter>Header Files\Variable</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GlobalVariablesWindow.h">
+      <Filter>Header Files\Variable</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

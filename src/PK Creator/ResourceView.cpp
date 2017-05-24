@@ -23,6 +23,7 @@
 #include <Config.h>
 #include <FunctionDefsMgr.h>
 #include <EventDefsMgr.h>
+#include <GlobalVariablesWindow.h>
 
 #include <CodeGenerator.h>
 
@@ -51,6 +52,7 @@ ResourceView::ResourceView(QWidget *parent)
 	m_pEventDefsMgr = QSharedPointer<EventDefsMgr>(new EventDefsMgr());
 
 	m_pProConfig = QSharedPointer<Config>(new Config(this));
+	m_pGlobalVarsWindow = QSharedPointer<GlobalVariablesWindow>(new GlobalVariablesWindow(this));
 
 	s_pInst = this;
 
@@ -84,13 +86,27 @@ void ResourceView::Setup()
 		m_pTreeModel->appendRow(item);
 	}
 
-	QStandardItem *item = new QStandardItem("Config");
-	QIcon icon;
-	icon.addFile(":/ResourceView/res/configIcon.png");
-	item->setIcon(icon);
-	item->setEditable(false);
+	// Config
+	{
+		QStandardItem *item = new QStandardItem("Config");
+		QIcon icon;
+		icon.addFile(":/ResourceView/res/configIcon.png");
+		item->setIcon(icon);
+		item->setEditable(false);
+		m_pTreeModel->appendRow(item);
+	}
 
-	m_pTreeModel->appendRow(item);
+
+	// Global vars
+	{
+		QStandardItem *item = new QStandardItem("Global variables");
+		QIcon icon;
+		icon.addFile(":/ResourceView/res/globalVarsIcon.png");
+		item->setIcon(icon);
+		item->setEditable(false);
+		m_pTreeModel->appendRow(item);
+	}
+
 }
 
 void ResourceView::mousePressEvent(QMouseEvent *mouseEvent)
@@ -102,7 +118,7 @@ void ResourceView::mousePressEvent(QMouseEvent *mouseEvent)
 		QModelIndex index = selectionModel()->currentIndex();
 		QStandardItem *treeItem = m_pTreeModel->itemFromIndex(index);
 
-		if (treeItem->text() == QString("Config"))
+		if (treeItem->text() == QString("Config") || treeItem->text() == QString("Global variables"))
 			return;
 
 		int type = treeItem->parent() ? treeItem->parent()->row() : treeItem->row();
@@ -145,6 +161,8 @@ void ResourceView::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 		{
 			if (treeItem->text() == QString("Config"))
 				m_pProConfig->show();
+			else if (treeItem->text() == QString("Global variables"))
+				m_pGlobalVarsWindow->show();
 			
 			return;
 		}
@@ -314,7 +332,7 @@ void ResourceView::InsertItem(Item *item)
 bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 {
 	m_pProConfig->Load(dataStream);
-
+	m_pGlobalVarsWindow->Load(dataStream);
 
 	*dataStream >> m_lastSpriteID >> m_lastObjectID >> m_lastObjectID >> m_lastSceneID;
 
@@ -341,7 +359,7 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 
 		treeItem = InsertRow(treeItem, name);
 
-		Item *item = nullptr;
+		Item *item;
 
 		switch (type)
 		{
@@ -384,6 +402,7 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 void ResourceView::Save(QDataStream *const dataStream)
 {
 	m_pProConfig->Save(dataStream);
+	m_pGlobalVarsWindow->Save(dataStream);
 
 	*dataStream << m_lastSpriteID << m_lastBackgroundID << m_lastObjectID << m_lastSceneID;
 
@@ -402,6 +421,9 @@ void ResourceView::GenerateCode(CodeGenerator *codeGenerator)
 {
 	printf("Generating Canvas...\n");
 	codeGenerator->GenerateCanvas(m_pProConfig->GetWndTitle(), m_pProConfig->GetWndSize());
+
+	printf("Generating global variables...\n");
+	codeGenerator->GenerateGlobalVars(m_pGlobalVarsWindow.data());
 
 	printf("Generating sprites:\n");
 	auto sprites = GetItemsByType(Item::Type::SPRITE);
