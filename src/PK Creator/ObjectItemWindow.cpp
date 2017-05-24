@@ -18,7 +18,7 @@
 #include <SpriteItem.h>
 #include <ObjectItem.h>
 #include <CollisionWindow.h>
-#include <VariablesWindow.h>
+#include <LocalVariablesWindow.h>
 
 ObjectItemWindow::ObjectItemWindow(QWidget *parent)
 	: ItemWindow(parent)
@@ -45,10 +45,7 @@ ObjectItemWindow::ObjectItemWindow(QWidget *parent)
 	connect(m_ui.editSprButton, &QPushButton::clicked, this, &ObjectItemWindow::EditSprButton_clicked);
 	connect(m_ui.spriteBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &ObjectItemWindow::SpriteBox_activated);
 	connect(m_ui.varsButton, &QPushButton::clicked, this, &ObjectItemWindow::VarsButton_clicked);
-}
-
-ObjectItemWindow::~ObjectItemWindow()
-{
+	connect(m_ui.solidBox, &QCheckBox::stateChanged, this, [this](int state) { m_pItemParent->m_solid = state / 2; });
 }
 
 bool ObjectItemWindow::FillData(Item *item)
@@ -64,6 +61,9 @@ bool ObjectItemWindow::FillData(Item *item)
 	setWindowTitle(item->GetName());
 
 	m_ui.nameEdit->setText(m_pItemParent->GetName());
+
+	if (m_pItemParent->m_solid)
+		m_ui.solidBox->setChecked(true);
 
 	RefreshSpriteBox();
 
@@ -107,7 +107,7 @@ bool ObjectItemWindow::FillData(Item *item)
 		m_pModel->appendRow(treeItem);
 	}
 
-	m_varsWindow = QSharedPointer<VariablesWindow>(new VariablesWindow());
+	m_varsWindow = QSharedPointer<LocalVariablesWindow>(new LocalVariablesWindow());
 	m_varsWindow->SetSource(&m_pItemParent->m_vars);
 
 	CreateContextMenu();

@@ -18,7 +18,7 @@
 class SpriteItem;
 class ObjectItem;
 class QStandardItemModel;
-class VariablesWindow;
+class LocalVariablesWindow;
 
 
 class ObjectItemWindow : public ItemWindow
@@ -41,7 +41,7 @@ private:
 	QSharedPointer<QMenu>					m_pContextMenu;
 	QVector<QSharedPointer<QAction>>		m_actionList;
 
-	QSharedPointer<VariablesWindow>			m_varsWindow;
+	QSharedPointer<LocalVariablesWindow>	m_varsWindow;
 
 	QVector<QSharedPointer<ComboBoxItem>>	m_sprites;
 
@@ -59,7 +59,7 @@ protected:
 
 public:
 	explicit ObjectItemWindow(QWidget *parent);
-	virtual ~ObjectItemWindow();
+	virtual ~ObjectItemWindow() = default;
 
 	bool FillData(Item *item) override;
 

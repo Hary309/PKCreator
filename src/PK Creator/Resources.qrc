@@ -3,5 +3,6 @@
         <file>res/configIcon.png</file>
         <file>res/folderCloseIcon.png</file>
         <file>res/folderOpenIcon.png</file>
+        <file>res/globalVarsIcon.png</file>
     </qresource>
 </RCC>

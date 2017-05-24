@@ -10,8 +10,6 @@
 
 #include "ui_VarEditWindow.h"
 
-#include <VariablesWindow.h>
-
 class Var;
 
 class VarEditWindow : public QDialog

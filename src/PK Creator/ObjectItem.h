@@ -18,6 +18,7 @@ class ObjectItemWindow;
 class CodeGenerator;
 class QTreeWidgetItem;
 class Var;
+class Node;
 
 class ObjectItem : public Item
 {
@@ -26,11 +27,13 @@ protected:
 	QVector<QSharedPointer<EventObjectItem>>	m_events;
 	QVector<QSharedPointer<Var>>				m_vars;
 
-	friend										ObjectItemWindow;
+	bool										m_solid;
+
+	friend ObjectItemWindow;
 
 public:
 	ObjectItem(QStandardItem *item, const QString &itemName);
-	virtual ~ObjectItem();
+	virtual ~ObjectItem() = default;
 
 	void SetName(const QString &name) override;
 
@@ -40,6 +43,7 @@ public:
 
 	Var *GetVar(qint64 id) const;
 	Var *GetVarByWidget(qint64 widgetID, EventDefsMgr::Type eventType) const;
+	Node *GetNodeByWidget(qint64 widgetID, EventDefsMgr::Type eventType) const;
 	QString GetInlineVarValue(qint64 widgetID, EventDefsMgr::Type eventType) const;
 
 	auto GetVars() const { return &m_vars; }
@@ -51,4 +55,6 @@ public:
 
 	void Show(QWidget *wndParent)	override;
 	void Close()				 	override;
+
+	bool IsSolid() const { return m_solid; }
 };
