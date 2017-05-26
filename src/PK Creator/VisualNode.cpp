@@ -31,21 +31,21 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 	: m_pNodeMgr(nodeMgr), m_pData(data), m_boxWidth(width), m_defaultColor(defaultColor), m_pFont(m_pNodeMgr->GetFont())
 {
 	if (m_pData->m_type == Node::FUNCTION)
-		m_defaultColor = sf::Color(0x388E3CFF);
+		m_defaultColor = sf::Color(0x388E3CAA);
 	else if (m_pData->m_type == Node::EVENT)
-		m_defaultColor = sf::Color(0x0288D1FF);
+		m_defaultColor = sf::Color(0x0288D1AA);
 	else if (m_pData->m_type == Node::VARIABLE)
-		m_defaultColor = sf::Color(0xD32F2FFF);
+		m_defaultColor = sf::Color(0xD32F2FAA);
 	else if (m_pData->m_type == Node::INLINE_VARIABLE)
-		m_defaultColor = sf::Color(0xB71C1CFF);
+		m_defaultColor = sf::Color(0xB71C1CAA);
 	else if (m_pData->m_type == Node::CONDITION)
-		m_defaultColor = sf::Color(0x6D4C41FF);
+		m_defaultColor = sf::Color(0x6D4C41AA);
 	
 	m_pHeader = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_boxWidth, 20)));
 	m_pBody = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_boxWidth, 0)));
 
 	m_pHeader->setFillColor(m_defaultColor);
-	m_pBody->setFillColor(sf::Color(0x424242FF));
+	m_pBody->setFillColor(sf::Color(0x424242AA));
 
 	m_pHeader->setOutlineColor(m_defaultColor);
 	m_pHeader->setOutlineThickness(2.f);

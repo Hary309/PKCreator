@@ -231,6 +231,9 @@ VisualNode *NodeMgr::GetNode(Node *node)
 
 void NodeMgr::Render(sf::RenderWindow *renderer)
 {
+	if (m_pWireMgr)
+		m_pWireMgr->Render(renderer);
+
 	for (auto node : m_visualNodes)
 	{
 		if (node)
@@ -239,8 +242,6 @@ void NodeMgr::Render(sf::RenderWindow *renderer)
 
 	if (m_pTooltip)
 		m_pTooltip->Render(renderer);
-
-	m_pWireMgr->Render(renderer);
 }
 
 void NodeMgr::Event(sf::Event *e)
