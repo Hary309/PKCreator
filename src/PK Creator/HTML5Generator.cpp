@@ -392,9 +392,6 @@ void HTML5Generator::GenerateScene(SceneItem *scene)
 	}
 
 	m_init += "AddScene(" + sceneName + ");\n";
-
-	// for debug
-	m_init += "LoadScene(" + QString::number(scene->GetID()) + ");\n";
 }
 
 void HTML5Generator::Save()
@@ -432,7 +429,7 @@ void HTML5Generator::Save()
 	stream << "/*=================================================*/\n\n";
 
 	// init
-	stream << m_global << "\nfunction init()\n{\n" << m_init << "}";
+	stream << m_global << "\nfunction init()\n{\n" << m_init << "LoadScene(allScenes[0].id)\n" << "}";
 
 	// render
 	stream <<
