@@ -53,6 +53,7 @@ protected:
 	void wheelEvent(QWheelEvent *e) override;
 	void keyPressEvent(QKeyEvent *e) override;
 	void keyReleaseEvent(QKeyEvent *e) override;
+	void paintEvent(QPaintEvent *e) override;
 
 public:
 	explicit BlueprintEditor(QWidget *parent);
@@ -77,6 +78,6 @@ public:
 	NodeMgr *GetNodeMgr() const { return m_pNodeMgr.data(); }
 
 private slots:
-	void NodesWindow_accepted() const;
+	void NodesWindow_accepted();
 };
 

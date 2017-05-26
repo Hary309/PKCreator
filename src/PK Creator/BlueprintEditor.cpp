@@ -40,6 +40,8 @@ BlueprintEditor::BlueprintEditor(QWidget *parent)
 	m_viewMoving = false;
 	m_viewMoved = false;
 
+	setAttribute(Qt::WA_PaintOnScreen);
+	setAttribute(Qt::WA_NoSystemBackground);
 	setMouseTracking(true);
 	setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 
@@ -188,7 +190,7 @@ void BlueprintEditor::ShowNodesWindow(const sf::Vector2f &nodePos)
 	nodeWnd->show(m_pData->GetParent());
 }
 
-void BlueprintEditor::NodesWindow_accepted() const
+void BlueprintEditor::NodesWindow_accepted()
 {
 	auto nodesWindow = ResourceView::Get()->GetNodesWindow();
 
@@ -243,6 +245,9 @@ void BlueprintEditor::NodesWindow_accepted() const
 		} break;
 	default: ;
 	}
+
+	setFocus();
+
 }
 
 sf::Vector2f BlueprintEditor::GetViewOffset() const
@@ -324,4 +329,9 @@ void BlueprintEditor::keyReleaseEvent(QKeyEvent *e)
 	sfEvent.type = sf::Event::KeyReleased;
 	sfEvent.key.code = static_cast<sf::Keyboard::Key>(e->key());
 	Event(&sfEvent);
+}
+
+void BlueprintEditor::paintEvent(QPaintEvent * e)
+{
+	Render();
 }
