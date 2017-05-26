@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>LoadPreviousScene</name>
+	<desc>Loads previous scene</desc>
+	<jsCode>
+		if (idxCurrentScene &gt; 0)
+		{
+			idxCurrentScene--;
+			
+			var scene = allScenes[idxCurrentScene];
+
+			if (scene)
+				LoadScene(scene.id);
+		}
+	</jscode>
+</node>
+ 

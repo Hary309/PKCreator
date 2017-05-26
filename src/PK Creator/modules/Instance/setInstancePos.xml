@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>SetInstancePos</name>
+	<desc>Sets instance's position</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>x</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>y</name>
+	    </arg>
+	</args>
+	<jsCode>
+		var instance = GetInstanceByInstanceID(InstanceID); 
+		
+		if (instance)
+		{
+			instance.x = x; 
+			instance.y = y;
+		}
+</jscode>
+</node>
+ 

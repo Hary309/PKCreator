@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetInstanceVerSpeed</name>
+	<desc>Returns instance's vertical speed</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>speed</name>
+	</returnValue>
+	<jsCode>
+		var instance = GetInstanceByInstanceID(InstanceID);
+		
+		if (instance)
+			return instance.vspeed;
+
+		return 0.0;
+	</jscode>
+</node>
+ 

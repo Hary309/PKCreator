@@ -2,7 +2,6 @@
 <node>
 	<name>PointDir</name>
 	<desc>Returns the direction</desc>
-	<category>Math</category>
 	<args>
 	    <arg>
 	        <type>1</type>

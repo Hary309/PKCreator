@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>SetInstanceMoveInDirection</name>
+	<desc>Sets instance's move in specified direction (in degrees)</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>direction</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>speed</name>
+	    </arg>
+	</args>
+	<jsCode>
+		var instance = GetInstanceByInstanceID(InstanceID);
+		if (instance)
+		{
+			var radian = (-direction + 180) * Math.PI / 180;
+
+			instance.vspeed = Math.cos(radian) * speed;
+			instance.hspeed = Math.sin(radian) * speed;
+		}
+	</jscode>
+</node>
+ 

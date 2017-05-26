@@ -50,7 +50,7 @@ public:
 	FunctionDefsMgr() = default;
 	~FunctionDefsMgr() = default;
 
-	void LoadDefs(const QString &path = "nodes");
+	void LoadDefs(const QString &path = "modules");
 
 	auto GetFunctionsDef() const { return &m_nodesDef; }
 };

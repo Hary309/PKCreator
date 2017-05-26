@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetInstanceSpriteHeight</name>
+	<desc>Returns instance's sprite height</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>height</name>
+	</returnValue>
+	<jsCode>
+		var instance = GetInstanceByInstanceID(InstanceID);
+		
+		if (instance)
+		{
+			if (instance.sprite)
+			{
+				if (instance.sprite.img)
+				{
+					return instance.sprite.img.height;
+				}
+			}
+		}
+
+		return 0.0;
+	</jscode>
+</node>
+ 

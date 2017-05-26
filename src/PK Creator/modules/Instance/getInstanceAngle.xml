@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetInstanceAngle</name>
+	<desc>Gets instance's angle</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+		<name>angle</name>
+	</returnValue>
+	<jsCode>
+		var instance = GetInstanceByInstanceID(InstanceID); 
+		
+		if (instance)
+		{
+			return instance.angle;
+		}
+</jscode>
+</node>
+ 

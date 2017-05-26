@@ -7,6 +7,7 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
 var allObjects = [];
+var idxCurrentScene;
 var allScenes = [];
 
 // CurrentScene object
@@ -71,9 +72,9 @@ function Object(id, sprite, solid)
 		var rad = (this.angle) * Math.PI / 180;
 		
 		ctx.save();
-		ctx.translate(this.x + this.sprite.centerX, this.y + this.sprite.centerY)
+		ctx.translate(this.x, this.y);
 		ctx.rotate(rad);
-		ctx.drawImage(this.sprite.img,-this.sprite.centerX * 2, -this.sprite.centerY * 2, this.sprite.img.width, this.sprite.img.height);
+		ctx.drawImage(this.sprite.img, -this.sprite.centerX, -this.sprite.centerY, this.sprite.img.width, this.sprite.img.height);
 		ctx.restore();
 
 		if (this.events.renderEvent)
@@ -103,7 +104,7 @@ function Object(id, sprite, solid)
 		{
 			var coll = this.collisions[i];
 
-			var instances = GetInstance(coll.objectID);
+			var instances = GetInstancesByObjectID(coll.objectID);
 
 			var breakIt = false;
 
@@ -338,7 +339,7 @@ function DestroyInstance(instanceID)
 	}
 }
 
-function GetInstance(objectID)
+function GetInstancesByObjectID(objectID)
 {
 	var instances = [];
 
@@ -355,39 +356,15 @@ function GetInstance(objectID)
 	return instances;
 }
 
-function SetInstancePos(instanceID, x, y)
+function GetInstanceByInstanceID(instanceID, x, y)
 {
-	for (var i = 0; i < currentScene.instances.length; ++i)
+	for (var i = 0; i < currentScene.instances.length; i++)
 	{
 		var instance = currentScene.instances[i];
-		if (instance.id == instanceID)
-		{
-			instance.x = x;
-			instance.y = y; 
-		}
-	}
-}
 
-function SetInstanceHorSpeed(instanceID, hspeed)
-{
-	for (var i = 0; i < currentScene.instances.length; ++i)
-	{
-		var instance = currentScene.instances[i];
 		if (instance.id == instanceID)
 		{
-			instance.hspeed = hspeed;
-		}
-	}
-}
-
-function SetInstanceVerSpeed(instanceID, vspeed)
-{
-	for (var i = 0; i < currentScene.instances.length; ++i)
-	{
-		var instance = currentScene.instances[i];
-		if (instance.id == instanceID)
-		{
-			instance.vspeed = vspeed;
+			return instance;
 		}
 	}
 }
@@ -458,6 +435,7 @@ function LoadScene(sceneID)
 	{
 		if (allScenes[i].id == sceneID)
 		{
+			idxCurrentScene = i;
 			currentScene = new CurrentScene(allScenes[i]);
 
 			for (var j = 0; j < allScenes[i].sceneObjects.length; j++)

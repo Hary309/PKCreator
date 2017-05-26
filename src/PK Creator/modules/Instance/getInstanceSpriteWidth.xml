@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetInstanceSpriteWidth</name>
+	<desc>Returns instance's sprite width</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>width</name>
+	</returnValue>
+	<jsCode>
+		var instance = GetInstanceByInstanceID(InstanceID);
+		
+		if (instance)
+		{
+			if (instance.sprite)
+			{
+				if (instance.sprite.img)
+				{
+					return instance.sprite.img.width;
+				}
+			}
+		}
+
+		return 0.0;
+	</jscode>
+</node>
+ 

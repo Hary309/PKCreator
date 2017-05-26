@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>RandomNumber</name>
+	<desc>Return a random number between 'min' (inclusive) and 'max' (exclusive)</desc>
+	<args>
+	    <arg>
+	        <type>1</type>
+	        <name>min</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>max</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>result</name>
+	</returnValue>
+	<jsCode>return (Math.random() * max) + min;</jscode>
+</node>
+ 

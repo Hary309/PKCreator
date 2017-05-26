@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>Sin</name>
+	<desc>Return the sine of a number</desc>
+	<args>
+	    <arg>
+	        <type>1</type>
+	        <name>angle</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>result</name>
+	</returnValue>
+	<jsCode>return Math.sin(angle);</jscode>
+</node>
+ 

@@ -2,7 +2,6 @@
 <node>
 	<name>CreateInstance</name>
 	<desc>Creates an instance on current scene</desc>
-	<category>Instance</category>
 	<args>
 	    <arg>
 	        <type>4</type>

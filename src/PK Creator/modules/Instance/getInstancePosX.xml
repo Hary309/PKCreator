@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetInstancePosX</name>
+	<desc>Returns instance's position X</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>x</name>
+	</returnValue>
+	<jsCode>
+		var instance = GetInstanceByInstanceID(InstanceID);
+		
+		if (instance)
+		{
+			return instance.x;
+		}
+
+		return 0.0;
+	</jscode>
+</node>
+ 

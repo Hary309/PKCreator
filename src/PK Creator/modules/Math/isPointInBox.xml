@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>IsPointInBox</name>
+	<desc>Returns true if the point is in the box or false if not</desc>
+	<args>
+	    <arg>
+	        <type>1</type>
+	        <name>pointX</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>pointY</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>boxX</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>boxY</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>boxWidth</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>boxHeight</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>3</type>
+	    <name>result</name>
+	</returnValue>
+	<jsCode>
+		if (pointX &gt; boxX &amp;&amp; pointX &lt; boxX + boxWidth &amp;&amp;
+			pointY &gt; boxY &amp;&amp; pointY &lt; boxY + boxHeight)
+		{
+			return true;
+		}
+		return false;
+	</jscode>
+</node>
+ 

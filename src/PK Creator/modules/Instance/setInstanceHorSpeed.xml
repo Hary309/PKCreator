@@ -2,7 +2,6 @@
 <node>
 	<name>SetInstanceHorSpeed</name>
 	<desc>Sets instance's horizontal speed</desc>
-	<category>Instance</category>
 	<args>
 	    <arg>
 	        <type>4</type>
@@ -13,6 +12,10 @@
 	        <name>speed</name>
 	    </arg>
 	</args>
-	<jsCode></jscode>
+	<jsCode>
+		var instance = GetInstanceByInstanceID(InstanceID);
+		if (instance)
+			instance.hspeed = speed;
+	</jscode>
 </node>
  

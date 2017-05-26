@@ -16,77 +16,86 @@ void FunctionDefsMgr::LoadDefs(const QString &path)
 {
 	QDir dir(path);
 
-	auto list = dir.entryList(QDir::Files);
+	
+	auto dirs = dir.entryList(QDir::Dirs | QDir::NoDotDot);
 
-	printf("Functions list:\n");
+	printf("Loading modules...");
 
-	for (auto item : list)
+	for (auto currentDirPath : dirs)
 	{
-		printf("%s\n", item.toStdString().c_str());
+		printf("%s\n", currentDirPath.toStdString().c_str());
 
-		QFile file(path + "\\" + item);
+		QDir currentDir(path + "\\" + currentDirPath);
+		auto files = currentDir.entryList(QDir::Files);
 
-		if (!file.open(QIODevice::ReadOnly))
-			continue;
-
-		QXmlStreamReader reader(&file);
-
-		if (reader.readNextStartElement()) 
+		for (auto currentFileName : files)
 		{
-			if (reader.name() == "node")
+			printf("\t%s\n", currentFileName.toStdString().c_str());
+
+			QFile file(path + "\\" + currentDirPath + "\\" + currentFileName);
+
+			if (!file.open(QIODevice::ReadOnly))
+				continue;
+
+			QXmlStreamReader reader(&file);
+
+			if (reader.readNextStartElement())
 			{
-				auto def = QSharedPointer<FunctionDef>(new FunctionDef());
-
-				while (reader.readNextStartElement())
+				if (reader.name() == "node")
 				{
-					if (reader.name() == "name")
-						def->name = reader.readElementText();
-					else if (reader.name() == "desc")
-						def->desc = reader.readElementText();
-					else if (reader.name() == "category")
-						def->category = reader.readElementText();
-					else if (reader.name() == "args")
+					auto def = QSharedPointer<FunctionDef>(new FunctionDef());
+					def->category = currentDirPath;
+
+					while (reader.readNextStartElement())
 					{
-						while (reader.readNextStartElement())
+						if (reader.name() == "name")
+							def->name = reader.readElementText();
+						else if (reader.name() == "desc")
+							def->desc = reader.readElementText();
+						else if (reader.name() == "args")
 						{
-							if (reader.name() == "arg")
+							while (reader.readNextStartElement())
 							{
-								Arg arg;
-
-								while (reader.readNextStartElement())
+								if (reader.name() == "arg")
 								{
-									if (reader.name() == "type")
-										arg.type = static_cast<DataType>(reader.readElementText().toInt());
-									else if (reader.name() == "name")
-										arg.name = reader.readElementText();
-								}
+									Arg arg;
 
-								def->args.push_back(arg);
+									while (reader.readNextStartElement())
+									{
+										if (reader.name() == "type")
+											arg.type = static_cast<DataType>(reader.readElementText().toInt());
+										else if (reader.name() == "name")
+											arg.name = reader.readElementText();
+									}
+
+									def->args.push_back(arg);
+								}
 							}
 						}
-					}
-					else if (reader.name() == "returnValue")
-					{
-						Arg ret;
-
-						while (reader.readNextStartElement())
+						else if (reader.name() == "returnValue")
 						{
-							if (reader.name() == "type")
-								ret.type = static_cast<DataType>(reader.readElementText().toInt());
-							else if (reader.name() == "name")
-								ret.name = reader.readElementText();
+							Arg ret;
+
+							while (reader.readNextStartElement())
+							{
+								if (reader.name() == "type")
+									ret.type = static_cast<DataType>(reader.readElementText().toInt());
+								else if (reader.name() == "name")
+									ret.name = reader.readElementText();
+							}
+
+							def->returnValue = ret;
 						}
-
-						def->returnValue = ret;
+						else if (reader.name() == "jsCode")
+							def->jsCode = reader.readElementText();
 					}
-					else if (reader.name() == "jsCode")
-						def->jsCode = reader.readElementText();
-				}
 
-				m_nodesDef.push_back(def);
+					m_nodesDef.push_back(def);
+				}
+				else
+					printf("\tCannot read %s", currentFileName.toStdString().c_str());
 			}
-			else
-				printf("Cannot read %s", item.toStdString().c_str());
+
 		}
 	}
 

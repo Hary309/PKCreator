@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetInstanceSpriteOriginY</name>
+	<desc>Returns instance's sprite origin y</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>InstanceID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>originY</name>
+	</returnValue>
+	<jsCode>
+		var instance = GetInstanceByInstanceID(InstanceID);
+		
+		if (instance)
+		{
+			if (instance.sprite)
+			{
+				return instance.sprite.centerY;
+			}
+		}
+
+		return 0.0;
+	</jscode>
+</node>
+ 

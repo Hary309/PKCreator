@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>Cos</name>
+	<desc>Return the cosine of a number</desc>
+	<args>
+	    <arg>
+	        <type>1</type>
+	        <name>angle</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>result</name>
+	</returnValue>
+	<jsCode>return Math.cos(angle);</jscode>
+</node>
+ 

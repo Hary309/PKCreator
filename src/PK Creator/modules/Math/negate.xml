@@ -2,7 +2,6 @@
 <node>
 	<name>Negate</name>
 	<desc>Negate number (1 = -1 or -1 = 1)</desc>
-	<category>Math</category>
 	<args>
 	    <arg>
 	        <type>1</type>

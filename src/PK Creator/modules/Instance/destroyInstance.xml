@@ -2,7 +2,6 @@
 <node>
 	<name>DestroyInstance</name>
 	<desc>Removes instance from the scene</desc>
-	<category>Instance</category>
 	<args>
 	    <arg>
 	        <type>4</type>

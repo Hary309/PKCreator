@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>ReloadCurrentScene</name>
+	<desc>Reloads current scene</desc>
+	<jsCode>
+		var scene = allScenes[idxCurrentScene];
+		
+		if (scene)
+			LoadScene(scene.id);
+	</jscode>
+</node>
+ 

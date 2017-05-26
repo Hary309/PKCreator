@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>LoadNextScene</name>
+	<desc>Loads next scene</desc>
+	<jsCode>
+		if (idxCurrentScene &lt; allScenes.length)
+		{
+			idxCurrentScene++;
+			var scene = allScenes[idxCurrentScene];
+
+			if (scene)
+				LoadScene(scene.id);
+		}
+	</jscode>
+</node>
+ 
