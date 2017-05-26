@@ -11,9 +11,15 @@
 
 int main(int argc, char **argv)
 {
-	AllocConsole();
-	freopen("CONOUT$", "w", stdout);
-
+	for (int i = 0; i < argc; ++i)
+	{
+		if (strcmp(argv[i], "-show-console") == 0)
+		{
+			AllocConsole();
+			freopen("CONOUT$", "w", stdout);
+		}
+	}
+	
 	QApplication app(argc, argv);
 	WelcomeWindow window;
 	window.show();
