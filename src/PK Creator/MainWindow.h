@@ -35,7 +35,7 @@ public:
 	bool Load(Project *project);
 	void Save() const;
 
-	void GenerateCode();
+	void GenerateCode(bool showInformation);
 
 	static MainWindow *Get() { return s_pInst; }
 
@@ -43,4 +43,5 @@ private slots:
 	void ActionOpenProject_triggered();
 	void ActionOpenContainingFolder_triggered();
 	void ActionConfig_triggered();
+	void ActionRun_triggered();
 };

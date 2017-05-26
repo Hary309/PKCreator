@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 	m_pResView->setMaximumSize(QSize(200, 16777215));
 	m_pResView->setMinimumSize(QSize(200, 400));
 	m_pResView->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
-	m_ui.verticalLayout->addWidget(m_pResView);
+	m_ui.verticalLayout_2->addWidget(m_pResView);
 
 	setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::Dialog);
 
@@ -40,7 +40,8 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(m_ui.actionSaveProject, &QAction::triggered, this, [this] { Save(); });
 	connect(m_ui.actionExit, &QAction::triggered, this, [this] { close(); });
 	connect(m_ui.actionOpenContainingFolder, &QAction::triggered, this, &MainWindow::ActionOpenContainingFolder_triggered);
-	connect(m_ui.actionGenerateCode, &QAction::triggered, this, [this] { GenerateCode(); });
+	connect(m_ui.actionGenerateCode, &QAction::triggered, this, [this] { GenerateCode(true); });
+	connect(m_ui.actionRun, &QAction::triggered, this, &MainWindow::ActionRun_triggered);
 	connect(m_ui.actionConfig, &QAction::triggered, this, &MainWindow::ActionConfig_triggered);
 
 	s_pInst = this;
@@ -125,7 +126,7 @@ void MainWindow::Save() const
 	printf("Saved in: %d ms\n", timer.elapsed());
 }
 
-void MainWindow::GenerateCode()
+void MainWindow::GenerateCode(bool showInformation)
 {
 	QTime timer;
 	timer.start();
@@ -149,7 +150,8 @@ void MainWindow::GenerateCode()
 
 	printf("Generated in: %d ms\n", timer.elapsed());
 
-	QMessageBox::information(this, "Code generator", "Code successfully generated!");
+	if (showInformation)
+		QMessageBox::information(this, "Code generator", "Code successfully generated!");
 }
 
 void MainWindow::ActionOpenProject_triggered()
@@ -170,5 +172,15 @@ void MainWindow::ActionConfig_triggered()
 	{
 		if (m_pResView->GetConfig())
 			m_pResView->GetConfig()->show();
+	}
+}
+
+void MainWindow::ActionRun_triggered()
+{
+	if (m_proInfo)
+	{
+		GenerateCode(false);
+
+		ShellExecuteA(0, 0, QString(m_proInfo->path + "\\Generated\\HTML5\\index.html").toStdString().c_str(), 0, 0, SW_SHOW);
 	}
 }
