@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>ConvertBooleanToString</name>
+	<desc>Returns string</desc>
+	<args>
+	    <arg>
+	        <type>3</type>
+	        <name>boolean</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>2</type>
+	    <name>string</name>
+	</returnValue>
+	<jsCode>return String(boolean);</jscode>
+</node>
+ 

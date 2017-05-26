@@ -36,6 +36,7 @@ public:
 
 	void GenerateCanvas(const QString &title, const QSize &windowSize) override;
 	void GenerateGlobalVars(const GlobalVariablesWindow *globalVarsWnd) override;
+	void GenerateFont(FontItem *fontItem) override;
 	void GenerateObject(ObjectItem *object) override;
 	void GenerateSprite(SpriteItem *sprite) override;
 	void GenerateScene(SceneItem *item) override;

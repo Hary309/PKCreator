@@ -95,6 +95,8 @@ void NodesWindow::NodesWidget_itemDoubleClicked(QTreeWidgetItem *item, int colum
 	{
 		if (nodesWidgetItem->treeItem == item)
 		{
+			printf("To ten 1!\n");
+
 			m_pSelectedItem = nodesWidgetItem.data();
 			m_type = Node::VARIABLE;
 
@@ -105,7 +107,21 @@ void NodesWindow::NodesWidget_itemDoubleClicked(QTreeWidgetItem *item, int colum
 		m_pSelectedItem = nullptr;
 	}
 
-	for (auto nodesWidgetItem : m_inlineVarNodeWidgetItems)
+	for (auto nodesWidgetItem : m_staticInlineVarNodeWidgetItems)
+	{
+		if (nodesWidgetItem->treeItem == item)
+		{
+			m_pSelectedItem = nodesWidgetItem.data();
+			m_type = Node::INLINE_VARIABLE;
+
+			accept();
+			return;
+		}
+
+		m_pSelectedItem = nullptr;
+	}
+
+	for (auto nodesWidgetItem : m_dynamicInlineVarNodeWidgetItems)
 	{
 		if (nodesWidgetItem->treeItem == item)
 		{
@@ -157,7 +173,7 @@ void NodesWindow::AddVarDefs(ObjectItem *objectItem)
 	for (auto var : *vars)
 	{
 		auto treeItemChild = new QTreeWidgetItem();
-		treeItemChild->setText(0, var->m_name);
+		treeItemChild->setText(0, var->m_name + " ["  + dataNames[var->m_type] + "]");
 		topLevelItem->addChild(treeItemChild);
 
 		auto nodeItem = QSharedPointer<VarNodeItem>(new VarNodeItem());
@@ -169,7 +185,7 @@ void NodesWindow::AddVarDefs(ObjectItem *objectItem)
 
 void NodesWindow::AddInlineVarDefs(ObjectItem *objectItem)
 {
-	m_inlineVarNodeWidgetItems.clear();
+	m_dynamicInlineVarNodeWidgetItems.clear();
 
 	auto nodesWidget = m_ui.nodesWidget;
 
@@ -192,22 +208,22 @@ void NodesWindow::AddInlineVarDefs(ObjectItem *objectItem)
 			nodesWidget->addTopLevelItem(topLevelItem);
 
 			// Arrows
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(37), "Left arrow");
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(38), "Up arrow");
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(39), "Right arrow");
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(40), "Down arrow");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(37), "Left arrow");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(38), "Up arrow");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(39), "Right arrow");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(40), "Down arrow");
 
 			// Numbers
 			for (int i = 48; i <= 57; ++i)
-				AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(i), QString(i));
+				AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(i), QString(i));
 
 			// Alpabet
 			for (int i = 65; i <= 90; ++i)
-				AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(i), QString(i));
+				AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(i), QString(i));
 
 			// Numpad
 			for (int i = 96; i <= 105; ++i)
-				AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(i), "Numpad " + QString::number(i - 96));
+				AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(i), "Numpad " + QString::number(i - 96));
 		}
 	}
 
@@ -229,9 +245,56 @@ void NodesWindow::AddInlineVarDefs(ObjectItem *objectItem)
 			topLevelItem->setText(0, "Mouse");
 			nodesWidget->addTopLevelItem(topLevelItem);
 
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(0), "Left", " button");
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(1), "Middle", " button");
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(2), "Right", " button");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(0), "Left", " button");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(1), "Middle", " button");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(2), "Right", " button");
+		}
+	}
+
+	// Collision directions
+	{
+		QTreeWidgetItem *topLevelItem = nullptr;
+
+		for (int i = 0; i < nodesWidget->topLevelItemCount(); ++i)
+		{
+			if (nodesWidget->topLevelItem(i)->text(0) == "Collision")
+			{
+				topLevelItem = nodesWidget->topLevelItem(i);
+			}
+		}
+
+		if (!topLevelItem)
+		{
+			topLevelItem = new QTreeWidgetItem();
+			topLevelItem->setText(0, "Collision");
+			nodesWidget->addTopLevelItem(topLevelItem);
+
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(1), "Left", " Side");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(2), "Right", " Side");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(3), "Top", " Side");
+			AddInlineVarDef(topLevelItem, DATA_INTEGER, STATIC, QString::number(4), "Bottom", " Side");
+		}
+	}
+
+	// Fonts
+	{
+		for (int i = 0; i < nodesWidget->topLevelItemCount(); ++i)
+		{
+			if (nodesWidget->topLevelItem(i)->text(0) == "Fonts")
+			{
+				delete nodesWidget->topLevelItem(i);
+			}
+		}
+
+		QTreeWidgetItem *topLevelItem = new QTreeWidgetItem();
+		topLevelItem->setText(0, "Fonts");
+		nodesWidget->addTopLevelItem(topLevelItem);
+
+		auto fonts = ResourceView::Get()->GetItemsByType(Item::FONT);
+
+		for (auto font : fonts)
+		{
+			AddInlineVarDef(topLevelItem, DATA_ID, DYNAMIC, QString::number(font->GetID()), "Font ", font->GetName());
 		}
 	}
 
@@ -253,7 +316,7 @@ void NodesWindow::AddInlineVarDefs(ObjectItem *objectItem)
 
 		for (auto object : objects)
 		{
-			AddInlineVarDef(topLevelItem, DATA_ID, QString::number(object->GetID()), "Object ", object->GetName());
+			AddInlineVarDef(topLevelItem, DATA_ID, DYNAMIC, QString::number(object->GetID()), "Object ", object->GetName());
 		}
 	}
 
@@ -275,37 +338,12 @@ void NodesWindow::AddInlineVarDefs(ObjectItem *objectItem)
 
 		for (auto scene : scenes)
 		{
-			AddInlineVarDef(topLevelItem, DATA_ID, QString::number(scene->GetID()), "Scene ", scene->GetName());
-		}
-	}
-	
-	// Collision directions
-	{
-		QTreeWidgetItem *topLevelItem = nullptr;
-
-		for (int i = 0; i < nodesWidget->topLevelItemCount(); ++i)
-		{
-			if (nodesWidget->topLevelItem(i)->text(0) == "Collision")
-			{
-				topLevelItem = nodesWidget->topLevelItem(i);
-			}
-		}
-
-		if (!topLevelItem)
-		{
-			topLevelItem = new QTreeWidgetItem();
-			topLevelItem->setText(0, "Collision");
-			nodesWidget->addTopLevelItem(topLevelItem);
-
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(1), "Left", " Side Collision");
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(2), "Right", " Side Collision");
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(3), "Top", " Side Collision");
-			AddInlineVarDef(topLevelItem, DATA_INTEGER, QString::number(4), "Bottom", " Side Collision");
+			AddInlineVarDef(topLevelItem, DATA_ID, DYNAMIC, QString::number(scene->GetID()), "Scene ", scene->GetName());
 		}
 	}
 }
 
-void NodesWindow::AddInlineVarDef(QTreeWidgetItem *topLevelItem, DataType dataType, const QString &value, const QString &name, const QString &suffixe)
+void NodesWindow::AddInlineVarDef(QTreeWidgetItem *topLevelItem, DataType dataType, Type type, const QString &value, const QString &name, const QString &suffixe)
 {
 	auto treeItemChild = new QTreeWidgetItem();
 	treeItemChild->setText(0, name + suffixe);
@@ -316,12 +354,16 @@ void NodesWindow::AddInlineVarDef(QTreeWidgetItem *topLevelItem, DataType dataTy
 	nodeItem->type = dataType;
 	nodeItem->value = value;
 	nodeItem->name = name + suffixe;
-	m_inlineVarNodeWidgetItems.push_back(nodeItem);
+
+	if (type == STATIC)
+		m_staticInlineVarNodeWidgetItems.push_back(nodeItem);
+	else if (type == DYNAMIC)
+		m_dynamicInlineVarNodeWidgetItems.push_back(nodeItem);
 }
 
 void NodesWindow::AddConditionDefs()
 {
-	m_inlineVarNodeWidgetItems.clear();
+	m_conditionNodeWidgetItems.clear();
 
 	auto nodesWidget = m_ui.nodesWidget;
 
@@ -344,7 +386,7 @@ void NodesWindow::AddConditionDefs()
 	AddConditionDef(topLevelItem, "Is 'a' is bigger than 'b' (n)", ">", 2, DataType::DATA_NUMBER);
 	AddConditionDef(topLevelItem, "Is 'a' is smaller than 'b' (n)", "<", 2, DataType::DATA_NUMBER);
 
-	AddConditionDef(topLevelItem, "Is 'a' is equal to 'b' (OID)", "==", 2, DataType::DATA_ID);
+	AddConditionDef(topLevelItem, "Is 'a' is equal to 'b' (ID)", "==", 2, DataType::DATA_ID);
 }
 
 void NodesWindow::AddConditionDef(QTreeWidgetItem *topLevelItem, const QString &name, const QString &type, int nInputs, DataType dataType)
@@ -383,7 +425,7 @@ void NodesWindow::AddGlobalVarDefs()
 	for (auto var : *vars)
 	{
 		auto treeItemChild = new QTreeWidgetItem();
-		treeItemChild->setText(0, var->m_name);
+		treeItemChild->setText(0, var->m_name + " [" + dataNames[var->m_type] + "]");
 		topLevelItem->addChild(treeItemChild);
 
 		auto nodeItem = QSharedPointer<VarNodeItem>(new VarNodeItem());

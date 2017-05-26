@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>ConvertIntegerToString</name>
+	<desc>Returns string</desc>
+	<args>
+	    <arg>
+	        <type>0</type>
+	        <name>integer</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>2</type>
+	    <name>string</name>
+	</returnValue>
+	<jsCode>return String(integer);</jscode>
+</node>
+ 

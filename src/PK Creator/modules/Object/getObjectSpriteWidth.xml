@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetObjectSpriteWidth</name>
+	<desc>Returns object's sprite width</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>objectID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>width</name>
+	</returnValue>
+	<jsCode>
+		var object = GetObjectById(objectID);
+		
+		if (object)
+		{
+			if (object.sprite)
+			{
+				if (object.sprite.img)
+				{
+					return object.sprite.img.width;
+				}
+			}
+		}
+
+		return 0.0;
+	</jscode>
+</node>
+ 

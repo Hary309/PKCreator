@@ -24,6 +24,7 @@ public:
 	{
 		SPRITE = 0,
 		BACKGROUND,
+		FONT,
 		OBJECT,
 		SCENE
 	};

@@ -18,6 +18,7 @@
 
 #include <SpriteItem.h>
 #include <BackgroundItem.h>
+#include <FontItem.h>
 #include <ObjectItem.h>
 #include <SceneItem.h>
 #include <Config.h>
@@ -36,13 +37,14 @@ ResourceView *ResourceView::s_pInst;
 ResourceView::ResourceView(QWidget *parent)
 	: QTreeView(parent)
 {
-	m_defaultModel << QString("Sprites") << QString("Backgrounds") 
+	m_defaultModel << QString("Sprites") << QString("Backgrounds") << QString("Font")
 				   << QString("Objects") << QString("Scenes");
 
 	Setup();
 
 	m_lastSpriteID = 0;
 	m_lastBackgroundID = 0;
+	m_lastFontID = 0;
 	m_lastObjectID = 0;
 	m_lastSceneID = 0;
 
@@ -106,7 +108,6 @@ void ResourceView::Setup()
 		item->setEditable(false);
 		m_pTreeModel->appendRow(item);
 	}
-
 }
 
 void ResourceView::mousePressEvent(QMouseEvent *mouseEvent)
@@ -163,7 +164,7 @@ void ResourceView::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 				m_pProConfig->show();
 			else if (treeItem->text() == QString("Global variables"))
 				m_pGlobalVarsWindow->show();
-			
+
 			return;
 		}
 
@@ -226,6 +227,21 @@ void ResourceView::ActionAdd_triggered()
 			treeItem = InsertRow(treeItem, name);
 
 			auto item = QSharedPointer<BackgroundItem>(new BackgroundItem(treeItem, name));
+			item->Show(this);
+			m_items.push_back(item);
+		} break;
+		case Item::FONT:
+		{
+			while (true)
+			{
+				name.sprintf("font%d", m_lastFontID++);
+
+				if (!IsNameExists(name))
+					break;
+			}
+			treeItem = InsertRow(treeItem, name);
+
+			auto item = QSharedPointer<FontItem>(new FontItem(treeItem, name));
 			item->Show(this);
 			m_items.push_back(item);
 		} break;
@@ -334,11 +350,11 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 	m_pProConfig->Load(dataStream);
 	m_pGlobalVarsWindow->Load(dataStream);
 
-	*dataStream >> m_lastSpriteID >> m_lastObjectID >> m_lastObjectID >> m_lastSceneID;
+	*dataStream >> m_lastSpriteID >> m_lastBackgroundID >> m_lastFontID >> m_lastObjectID >> m_lastSceneID;
 
 	m_mainDir = currPath;
 
-	printf("%d %d %d\n", m_lastSpriteID, m_lastObjectID, m_lastSceneID);
+	printf("%d %d %d %d %d\n", m_lastSpriteID, m_lastBackgroundID, m_lastFontID, m_lastObjectID, m_lastSceneID);
 
 	int size = 0;
 
@@ -370,6 +386,10 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 			case Item::BACKGROUND:
 			{
 				item = new BackgroundItem(treeItem, name);
+			} break;
+			case Item::FONT:
+			{
+				item = new FontItem(treeItem, name);
 			} break;
 			case Item::OBJECT:
 			{
@@ -404,7 +424,7 @@ void ResourceView::Save(QDataStream *const dataStream)
 	m_pProConfig->Save(dataStream);
 	m_pGlobalVarsWindow->Save(dataStream);
 
-	*dataStream << m_lastSpriteID << m_lastBackgroundID << m_lastObjectID << m_lastSceneID;
+	*dataStream << m_lastSpriteID << m_lastBackgroundID << m_lastFontID << m_lastObjectID << m_lastSceneID;
 
 	qSort(m_items.begin(), m_items.end(), Item::SavingComparison);
 
@@ -424,6 +444,15 @@ void ResourceView::GenerateCode(CodeGenerator *codeGenerator)
 
 	printf("Generating global variables...\n");
 	codeGenerator->GenerateGlobalVars(m_pGlobalVarsWindow.data());
+
+	printf("Generating font...\n");
+	auto fonts = GetItemsByType(Item::Type::FONT);
+	for (auto font : fonts)
+	{
+		printf("\t%s...\n", font->GetName().toStdString().c_str());
+
+		codeGenerator->GenerateFont(static_cast<FontItem*>(font));
+	}
 
 	printf("Generating sprites:\n");
 	auto sprites = GetItemsByType(Item::Type::SPRITE);

@@ -9,6 +9,7 @@ var ctx = canvas.getContext('2d');
 var allObjects = [];
 var idxCurrentScene;
 var allScenes = [];
+var allFonts = [];
 
 // CurrentScene object
 var currentScene;
@@ -20,6 +21,39 @@ function GetID()
 {
 	currentId++;
 	return currentId;
+}
+
+function Font(id, family, size, color, align)
+{
+	this.id = id;
+	this.family = family;
+	this.size = size;
+	this.color = color;
+	this.align = align;
+
+	this.draw = function() {
+		 ctx.font = this.size + 'px ' + this.family;
+		 ctx.fillStyle = this.color;
+		 ctx.textAlign = this.align;
+
+		 console.log(ctx.font);
+	}
+}
+
+function AddFont(font)
+{
+	allFonts.push(font);
+}
+
+function GetFont(fontID)
+{
+	for (var i = 0; i < allFonts.length; i++)
+	{
+		if (allFonts[i].id == fontID)
+		{
+			return allFonts[i];
+		}
+	}
 }
 
 // Sprite
@@ -78,7 +112,7 @@ function Object(id, sprite, solid)
 		ctx.restore();
 
 		if (this.events.renderEvent)
-			this.events.renderEvent();
+			this.events.renderEvent(this.id);
 	}
 
 	this.pulse = function() {
@@ -263,13 +297,22 @@ function Object(id, sprite, solid)
 			}
 		}
 		if (this.events.pulseEvent)
-			this.events.pulseEvent();
+			this.events.pulseEvent(this.id);
 	}
 }
 
 function AddObject(object)
 {
 	allObjects.push(object);
+}
+
+function GetObjectById(objectID)
+{
+	for (var i = 0; i < allObjects.length; i++)
+	{
+		if (allObjects[i].id == allObjects)
+			return allObjects[i];
+	}
 }
 
 // CurrentScene && Instance

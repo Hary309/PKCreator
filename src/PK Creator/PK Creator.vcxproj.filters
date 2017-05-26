@@ -299,6 +299,18 @@
     <ClCompile Include="GlobalVariablesWindow.cpp">
       <Filter>Source Files\Variable</Filter>
     </ClCompile>
+    <ClCompile Include="FontItem.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_FontItemWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_FontItemWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="FontItemWindow.cpp">
+      <Filter>Source Files\Items\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -400,6 +412,12 @@
     <CustomBuild Include="GlobalVariablesWindow.h">
       <Filter>Header Files\Variable</Filter>
     </CustomBuild>
+    <CustomBuild Include="FontWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FontItemWindow.h">
+      <Filter>Header Files\Items\Windows</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
@@ -500,6 +518,12 @@
     </ClInclude>
     <ClInclude Include="..\..\QtFiles\ui_CollisionWindow.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_FontWindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FontItem.h">
+      <Filter>Header Files\Items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

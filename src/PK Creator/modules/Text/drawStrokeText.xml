@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>DrawStrokeText</name>
+	<desc>Draws stroke text</desc>
+	<args>
+		<arg>
+			<type>4</type>
+			<name>fontID</name>
+		</arg>
+	    <arg>
+	        <type>2</type>
+	        <name>text</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>x</name>
+	    </arg>
+	    <arg>
+	        <type>1</type>
+	        <name>y</name>
+	    </arg>
+	</args>
+	<jsCode>
+		var font = GetFont(fontID);
+
+		if (font)
+		{
+			font.draw();
+		 	ctx.strokeText(text,x,y);
+		}
+	</jscode>
+</node>
+ 

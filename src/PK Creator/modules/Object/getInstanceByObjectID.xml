@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetInstanceSpriteWidth</name>
+	<desc>Returns first instance id with specified object id</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>objectID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>instanceID</name>
+	</returnValue>
+	<jsCode>
+		var instance = GetInstancesByObjectID(InstanceID)[0];
+		
+		if (instance)
+		{
+			return instance.id;
+		}
+		return -1;
+	</jscode>
+</node>
+ 

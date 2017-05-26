@@ -12,9 +12,10 @@
 #include <QTextStream>
 
 #include <ResourceView.h>
-#include <ObjectItem.h>
 #include <SpriteItem.h>
 #include <BackgroundItem.h>
+#include <FontItem.h>
+#include <ObjectItem.h>
 #include <SceneItem.h>
 #include <Var.h>
 #include <EventObjectItem.h>
@@ -80,6 +81,27 @@ void HTML5Generator::GenerateGlobalVars(const GlobalVariablesWindow *globalVarsW
 
 		m_global += ";\n";
 	}
+}
+
+void HTML5Generator::GenerateFont(FontItem *fontItem)
+{
+	QString fontName = "gameFont" + fontItem->GetName();
+
+	QString strColor = "rgb(" + QString::number(fontItem->GetColor().red()) + "," + QString::number(fontItem->GetColor().green()) + "," + QString::number(fontItem->GetColor().blue()) + ")";
+
+	m_init += "AddFont(new Font(" + QString::number(fontItem->GetID()) + ",'" + fontItem->GetFontFamily() +
+		"'," + QString::number(fontItem->GetSize()) + ",'" + strColor + "','";
+
+	auto textAlign = fontItem->GetTextAlign();
+
+	if (textAlign == FontItem::LEFT)
+		m_init += "left";
+	else if (textAlign == FontItem::CENTER)
+		m_init += "center";
+	else if (textAlign == FontItem::RIGHT)
+		m_init += "right";
+
+	m_init += "'));\n";
 }
 
 void HTML5Generator::GenerateSprite(SpriteItem *sprite)

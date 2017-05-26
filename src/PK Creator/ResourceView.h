@@ -49,6 +49,7 @@ private:
 
 	int										m_lastSpriteID;
 	int										m_lastBackgroundID;
+	int										m_lastFontID;
 	int										m_lastObjectID;
 	int										m_lastSceneID;
 	

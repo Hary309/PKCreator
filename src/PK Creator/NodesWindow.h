@@ -62,7 +62,8 @@ private:
 
 	QVector <QSharedPointer<FunctionNodeItem>>	m_funcitonNodesWidgetItems;
 	QVector <QSharedPointer<VarNodeItem>>		m_varNodeWidgetItems;
-	QVector <QSharedPointer<InlineVarNodeItem>> m_inlineVarNodeWidgetItems;
+	QVector <QSharedPointer<InlineVarNodeItem>> m_staticInlineVarNodeWidgetItems;
+	QVector <QSharedPointer<InlineVarNodeItem>> m_dynamicInlineVarNodeWidgetItems;
 	QVector <QSharedPointer<ConditionItem>>		m_conditionNodeWidgetItems;
 
 	int m_type;
@@ -77,7 +78,9 @@ private:
 	void AddConditionDef(QTreeWidgetItem *topLevelItem, const QString &name, const QString &type, int nInputs, DataType dataType);
 
 	void AddInlineVarDefs(ObjectItem *objectItem);
-	void AddInlineVarDef(QTreeWidgetItem *topLevelItem, DataType type, const QString &name, const QString &value, const QString &suffixe = QString(" key"));
+
+	enum Type { STATIC, DYNAMIC };
+	void AddInlineVarDef(QTreeWidgetItem *topLevelItem, DataType dataType, Type type, const QString &name, const QString &value, const QString &suffixe = QString(" key"));
 
 protected:
 	bool event(QEvent *e) override;

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetObjectSpriteOriginX</name>
+	<desc>Returns object's sprite origin x</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>objectID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+	    <name>originX</name>
+	</returnValue>
+	<jsCode>
+		var object = GetObjectById(objectID);
+		
+		if (object)
+		{
+			if (object.sprite)
+			{
+				return sprite.sprite.centerX;
+			}
+		}
+
+		return 0.0;
+	</jscode>
+</node>
+ 
