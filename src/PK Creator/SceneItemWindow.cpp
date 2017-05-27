@@ -46,6 +46,8 @@ SceneItemWindow::SceneItemWindow(QWidget* parent)
 
 	int menuViewWidth = 180, statusBarHeight = 20, margin = 16;
 
+	setWindowFlags(windowFlags() | Qt::WindowContextHelpButtonHint);
+
 	resize(size.height() + menuViewWidth + margin * 2, size.height() + statusBarHeight + margin * 2);
 
 	connect(m_ui.okButton, &QPushButton::clicked, this, &SceneItemWindow::OkButton_clicked);
@@ -208,6 +210,18 @@ void SceneItemWindow::closeEvent(QCloseEvent *e)
 void SceneItemWindow::showEvent(QShowEvent *e)
 {
 	RefreshObjectList();
+}
+
+bool SceneItemWindow::event(QEvent *e)
+{
+	QDialog::event(e);
+
+	if (e->type() == QEvent::EnterWhatsThisMode)
+	{
+		QMessageBox::information(this, "Help", "Editor shortcuts:\nHold shift for multiple adding\nWhile holding shift use scroll to change the frequency");
+	}
+
+	return false;
 }
 
 void SceneItemWindow::OkButton_clicked()

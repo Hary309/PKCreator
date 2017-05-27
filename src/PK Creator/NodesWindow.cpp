@@ -26,6 +26,8 @@ NodesWindow::NodesWindow(QWidget *parent)
 
 	AddConditionDefs();
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 	connect(m_ui.nodesWidget, &QTreeWidget::itemDoubleClicked, this, &NodesWindow::NodesWidget_itemDoubleClicked);
 }
 

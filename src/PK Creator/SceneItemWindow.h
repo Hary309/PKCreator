@@ -59,9 +59,10 @@ private:
 	void RefreshBgBox();
 
 protected:
-	void enterEvent(QEvent *event) override;
-	void closeEvent(QCloseEvent *event) override;
-	void showEvent(QShowEvent *event) override;
+	void enterEvent(QEvent *e)		override;
+	void closeEvent(QCloseEvent *e) override;
+	void showEvent(QShowEvent *e)	override;
+	bool event(QEvent *e)			override;
 
 public:
 	explicit SceneItemWindow(QWidget *parent);

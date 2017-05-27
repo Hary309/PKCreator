@@ -22,6 +22,8 @@ LocalVariablesWindow::LocalVariablesWindow(QWidget *parent)
 
 	m_pVars = nullptr;
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 	connect(m_ui.addButton, &QPushButton::clicked, this, &LocalVariablesWindow::AddVarButton_clicked);
 	connect(m_ui.editButton, &QPushButton::clicked, this, &LocalVariablesWindow::EditVarButton_clicked);
 	connect(m_ui.removeButton, &QPushButton::clicked, this, &LocalVariablesWindow::RemoveVarButton_clicked);

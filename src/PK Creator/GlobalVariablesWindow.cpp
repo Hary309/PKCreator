@@ -24,6 +24,8 @@ GlobalVariablesWindow::GlobalVariablesWindow(QWidget *parent)
 
 	m_ui.setupUi(this);
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 	connect(m_ui.addButton, &QPushButton::clicked, this, &GlobalVariablesWindow::AddVarButton_clicked);
 	connect(m_ui.editButton, &QPushButton::clicked, this, &GlobalVariablesWindow::EditVarButton_clicked);
 	connect(m_ui.removeButton, &QPushButton::clicked, this, &GlobalVariablesWindow::RemoveVarButton_clicked);
