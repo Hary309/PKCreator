@@ -26,6 +26,7 @@ ObjectItem::ObjectItem(QStandardItem *item, const QString &itemName)
 	m_type = Item::OBJECT;
 
 	m_solid = false;
+	m_visible = true;
 
 	m_pCurrSpr = nullptr;
 }
@@ -204,7 +205,7 @@ void ObjectItem::Load(QDataStream *const dataStream)
 
 	int size;
 
-	*dataStream >> id >> m_solid >> size;
+	*dataStream >> id >> m_solid >> m_visible >> size;
 
 	if (id)
 		m_pCurrSpr = static_cast<SpriteItem*>(ResourceView::Get()->GetItem(id));
@@ -266,7 +267,7 @@ void ObjectItem::Save(QDataStream *const dataStream)
 {
 	Item::Save(dataStream);
 
-	*dataStream << (m_pCurrSpr ? m_pCurrSpr->GetID() : static_cast<long long>(-1)) << m_solid << m_events.size();
+	*dataStream << (m_pCurrSpr ? m_pCurrSpr->GetID() : static_cast<long long>(-1)) << m_solid << m_visible << m_events.size();
 
 	for (auto e : m_events)
 	{

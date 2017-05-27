@@ -46,6 +46,7 @@ ObjectItemWindow::ObjectItemWindow(QWidget *parent)
 	connect(m_ui.spriteBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &ObjectItemWindow::SpriteBox_activated);
 	connect(m_ui.varsButton, &QPushButton::clicked, this, &ObjectItemWindow::VarsButton_clicked);
 	connect(m_ui.solidBox, &QCheckBox::stateChanged, this, [this](int state) { m_pItemParent->m_solid = state / 2; });
+	connect(m_ui.visibleBox, &QCheckBox::stateChanged, this, [this](int state) { m_pItemParent->m_visible = state / 2; });
 }
 
 bool ObjectItemWindow::FillData(Item *item)
@@ -64,6 +65,9 @@ bool ObjectItemWindow::FillData(Item *item)
 
 	if (m_pItemParent->m_solid)
 		m_ui.solidBox->setChecked(true);
+
+	if (!m_pItemParent->m_visible)
+		m_ui.visibleBox->setChecked(false);
 
 	RefreshSpriteBox();
 

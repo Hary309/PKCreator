@@ -28,6 +28,7 @@ protected:
 	QVector<QSharedPointer<Var>>				m_vars;
 
 	bool										m_solid;
+	bool										m_visible;
 
 	friend ObjectItemWindow;
 
@@ -57,4 +58,5 @@ public:
 	void Close()				 	override;
 
 	bool IsSolid() const { return m_solid; }
+	bool IsVisible() const { return m_visible; }
 };

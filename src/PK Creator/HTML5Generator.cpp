@@ -130,7 +130,7 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 
 	QString objectName = "gameObject" + object->GetName();
 
-	m_init += "var " + objectName + " = new Object(" + QString::number(object->GetID()) + ", gameSprite" + object->GetSprite()->GetName() + ", " + (object->IsSolid() ? "true" : "false") +");\n";
+	m_init += "var " + objectName + " = new Object(" + QString::number(object->GetID()) + ", gameSprite" + object->GetSprite()->GetName() + ", " + (object->IsSolid() ? "true" : "false") + ", " + (object->IsVisible() ? "true" : "false") + ");\n";
 
 	for (auto var : *object->GetVars())
 	{
