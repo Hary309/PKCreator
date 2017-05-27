@@ -173,7 +173,7 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 				
 				auto firstNode = e->GetFirstNode();
 
-				if (e->GetType() == EventDefsMgr::COLLISION_EVENT)
+				if (e->GetType() >= EventDefsMgr::COLLISION_EVENT)
 				{
 					auto collideWith = ResourceView::Get()->GetItem(e->m_idCollideWith);
 
