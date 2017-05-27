@@ -354,10 +354,11 @@ function CreateInstance(objectID, x, y)
 		{
 			var instance = new Instance(allObjects[i], x, y);
 
+			currentScene.instances.push(instance);
+
 			if (instance.events.createEvent)
 				instance.events.createEvent(instance.id);
 
-			currentScene.instances.push(instance);
 			return instance.id;
 		}
 	}
