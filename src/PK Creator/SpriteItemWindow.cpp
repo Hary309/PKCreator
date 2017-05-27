@@ -124,6 +124,8 @@ void SpriteItemWindow::OkButton_clicked()
 		return;
 	}
 
+	m_pItemParent->m_pTreeItem->setIcon(QIcon(ResourceView::Get()->GetMainDir() + "\\" + m_pItemParent->GetTexPath()));
+
 	m_pItemParent->SetName(name);
 	m_pItemParent->Close();
 }

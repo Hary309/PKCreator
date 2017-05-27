@@ -421,7 +421,6 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 
 			if (spriteItem)
 				treeItem->setIcon(QIcon(GetMainDir() + "\\" + spriteItem->GetTexPath()));
-
 		}
 
 		QSharedPointer<Item> sharedItem(item);

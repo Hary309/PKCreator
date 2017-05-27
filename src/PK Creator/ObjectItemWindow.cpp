@@ -163,7 +163,7 @@ void ObjectItemWindow::RefreshSpriteBox()
 
 	spriteBox->insertItem(0, "None");
 
-	const QVector<Item*> sprites = ResourceView::Get()->GetItemsByType(Item::SPRITE);
+	auto sprites = ResourceView::Get()->GetItemsByType(Item::SPRITE);
 
 	for (int i = 0; i < sprites.size(); ++i)
 	{
@@ -247,6 +247,11 @@ void ObjectItemWindow::OkButton_clicked()
 	{
 		QMessageBox::information(this, "PK Creator", "This name already exists!");
 		return;
+	}
+
+	if (m_pItemParent->m_pCurrSpr)
+	{
+		m_pItemParent->m_pTreeItem->setIcon(QIcon(ResourceView::Get()->GetMainDir() + "\\" + m_pItemParent->m_pCurrSpr->GetTexPath()));
 	}
 
 	m_pItemParent->SetName(name);
