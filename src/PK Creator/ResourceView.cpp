@@ -411,6 +411,19 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 
 		item->Load(dataStream);
 
+		if (item->GetType() == Item::SPRITE)
+		{
+			treeItem->setIcon(QIcon(GetMainDir() + "\\" + static_cast<SpriteItem*>(item)->GetTexPath()));
+		}
+		else if (item->GetType() == Item::OBJECT)
+		{
+			SpriteItem *spriteItem = static_cast<ObjectItem*>(item)->GetSprite();
+
+			if (spriteItem)
+				treeItem->setIcon(QIcon(GetMainDir() + "\\" + spriteItem->GetTexPath()));
+
+		}
+
 		QSharedPointer<Item> sharedItem(item);
 
 		m_items.push_back(sharedItem);

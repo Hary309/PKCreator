@@ -331,7 +331,7 @@ void BlueprintEditor::keyReleaseEvent(QKeyEvent *e)
 	Event(&sfEvent);
 }
 
-void BlueprintEditor::paintEvent(QPaintEvent * e)
+void BlueprintEditor::paintEvent(QPaintEvent *e)
 {
 	Render();
 }
