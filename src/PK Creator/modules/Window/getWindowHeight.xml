@@ -2,6 +2,10 @@
 <node>
 	<name>GetWindowHeight</name>
 	<desc>Returns height of window(canvas)</desc>
+	<returnValue>
+		<type>1</type>
+		<name>height</name>
+	</returnValue>
 	<jsCode>
 		return canvas.height;
 	</jscode>

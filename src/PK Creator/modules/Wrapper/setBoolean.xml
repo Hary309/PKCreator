@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>SetBoolean</name>
+	<desc>Returns boolean to set variable</desc>
+	<args>
+		<arg>
+			<type>3</type>
+			<name>boolean</name>
+		</arg>
+	</args>
+	<returnValue>
+		<type>3</type>
+		<name>boolean</name>
+	</returnValue>
+	<jsCode>
+		return boolean;
+	</jscode>
+</node>
+ 

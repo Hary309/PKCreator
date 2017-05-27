@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>StrCat</name>
+	<desc>Appends the source string to the destination string ("hello " + "world" = "hello world")</desc>
+	<args>
+		<arg>
+			<type>2</type>
+			<name>dest</name>
+		</arg>
+	    <arg>
+	        <type>2</type>
+	        <name>src</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>2</type>
+		<name>result</name>
+	</returnValue>
+	<jsCode>
+		return String(dest) + String(src);
+	</jscode>
+</node>
+ 

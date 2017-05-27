@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>SetNumber</name>
+	<desc>Return number to set variable</desc>
+	<args>
+		<arg>
+			<type>1</type>
+			<name>number</name>
+		</arg>
+	</args>
+	<returnValue>
+		<type>1</type>
+		<name>number</name>
+	</returnValue>
+	<jsCode>
+		return number;
+	</jscode>
+</node>
+ 

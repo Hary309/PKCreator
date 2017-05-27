@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>SetInteger</name>
+	<desc>Returns integer to set variable</desc>
+	<args>
+		<arg>
+			<type>0</type>
+			<name>integer</name>
+		</arg>
+	</args>
+	<returnValue>
+		<type>0</type>
+		<name>integer</name>
+	</returnValue>
+	<jsCode>
+		return integer;
+	</jscode>
+</node>
+ 

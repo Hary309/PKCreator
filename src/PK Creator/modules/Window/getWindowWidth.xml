@@ -2,6 +2,10 @@
 <node>
 	<name>GetWindowWidth</name>
 	<desc>Returns width of window(canvas)</desc>
+	<returnValue>
+		<type>1</type>
+		<name>width</name>
+	</returnValue>
 	<jsCode>
 		return canvas.width;
 	</jscode>
