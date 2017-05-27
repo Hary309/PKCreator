@@ -37,7 +37,7 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 	else if (m_pData->m_type == Node::VARIABLE)
 		m_defaultColor = sf::Color(0xD32F2FAA);
 	else if (m_pData->m_type == Node::INLINE_VARIABLE)
-		m_defaultColor = sf::Color(0xB71C1CAA);
+		m_defaultColor = sf::Color(0xE65100AA);
 	else if (m_pData->m_type == Node::CONDITION)
 		m_defaultColor = sf::Color(0x6D4C41AA);
 	
