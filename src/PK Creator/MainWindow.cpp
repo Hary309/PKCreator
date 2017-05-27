@@ -16,6 +16,7 @@
 #include <ResourceView.h>
 #include <HTML5Generator.h>
 #include <WelcomeWindow.h>
+#include <Item.h>
 
 MainWindow *MainWindow::s_pInst;
 
@@ -132,9 +133,15 @@ void MainWindow::GenerateCode(bool showInformation)
 	timer.start();
 
 	printf("Generating code...\n");
-
+	
 	if (m_pResView && m_proInfo)
 	{
+		if (m_pResView->GetItemsByType(Item::SCENE).isEmpty())
+		{
+			QMessageBox::information(this, "Info", "Please create scene before generating code!");
+			return;
+		}
+
 		printf("Creating folder...\n");
 		HTML5Generator codeGenerator(m_proInfo->path + "\\Generated");
 		m_pResView->GenerateCode(&codeGenerator);
