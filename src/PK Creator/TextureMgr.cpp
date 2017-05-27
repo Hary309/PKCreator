@@ -15,14 +15,6 @@
 #include <ResourceView.h>
 #include <SpriteItem.h>
 
-TextureMgr::TextureMgr()
-{
-}
-
-TextureMgr::~TextureMgr()
-{
-}
-
 bool TextureMgr::LoadTexture(SpriteItem *sprite)
 {
 	if (!sprite)

@@ -173,6 +173,9 @@ void SceneEditor::Render()
 				if (len == 0)
 					break;
 
+				if (i == 0)
+					continue;
+
 				float alpha = static_cast<float>(i) / len;
 
 				int x = alpha * offsetPos.x();
@@ -281,6 +284,9 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 				break;
 
 			float alpha = static_cast<float>(i) / len;
+
+			if (i == 0)
+				continue;
 
 			int x = startPos.x() - (alpha * offsetPos.x()) / m_snapX * m_snapX;
 			int y = startPos.y() - (alpha * offsetPos.y()) / m_snapY * m_snapY;

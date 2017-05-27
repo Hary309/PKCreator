@@ -34,8 +34,8 @@ private:
 	QVector <QSharedPointer<TexInfo>> m_textures;
 
 public:
-	TextureMgr();
-	~TextureMgr();
+	TextureMgr() = default;
+	~TextureMgr() = default;
 
 	bool LoadTexture(SpriteItem *sprite);
 	bool LoadTexture(const QString &name, const QString &path, const QSize &size, const QPoint &center);
