@@ -44,6 +44,8 @@ private:
 
 	float									m_scale;
 
+	bool									m_waitingForNewNode;
+
 	sf::Vector2f							m_nodePos;
 
 protected:

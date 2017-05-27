@@ -40,6 +40,8 @@ BlueprintEditor::BlueprintEditor(QWidget *parent)
 	m_viewMoving = false;
 	m_viewMoved = false;
 
+	m_waitingForNewNode = false;
+
 	setAttribute(Qt::WA_PaintOnScreen);
 	setAttribute(Qt::WA_NoSystemBackground);
 	setMouseTracking(true);
@@ -188,6 +190,8 @@ void BlueprintEditor::ShowNodesWindow(const sf::Vector2f &nodePos)
 {
 	m_nodePos = nodePos;
 
+	m_waitingForNewNode = true;
+
 	NodesWindow *nodeWnd = ResourceView::Get()->GetNodesWindow();
 
 	nodeWnd->show(m_pData->GetParent());
@@ -195,6 +199,9 @@ void BlueprintEditor::ShowNodesWindow(const sf::Vector2f &nodePos)
 
 void BlueprintEditor::NodesWindow_accepted()
 {
+	if (!m_waitingForNewNode)
+		return;
+
 	auto nodesWindow = ResourceView::Get()->GetNodesWindow();
 
 	Node::Type type = static_cast<Node::Type>(nodesWindow->GetNodeType());
