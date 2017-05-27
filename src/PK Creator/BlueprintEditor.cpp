@@ -155,7 +155,7 @@ void BlueprintEditor::Event(sf::Event *e)
 		{
 			sf::View view = m_pRenderer->getView();
 
-			if (e->mouseWheel.delta > 0 && m_scale > 1.f)
+			if (e->mouseWheel.delta > 0 && m_scale > 0.75f)
 				view.zoom(0.9f);
 			else if (e->mouseWheel.delta < 0 && m_scale < 4.f)
 				view.zoom(1.1f);
