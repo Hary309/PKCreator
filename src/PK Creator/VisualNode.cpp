@@ -177,17 +177,16 @@ void VisualNode::Event(sf::Event *e)
 				sf::Vector2f size = m_pHeader->getSize();
 				sf::Vector2f mousePos = sf::Vector2f(e->mouseButton.x, e->mouseButton.y) * scale - viewOffset;
 
-
 				if (mousePos.x > nodePos.x &&
 					mousePos.x < nodePos.x + size.x &&
 					mousePos.y > nodePos.y &&
 					mousePos.y < nodePos.y + size.y)
 				{
-					if (mousePos.x < nodePos.x + 14.f)
+					if (mousePos.x < nodePos.x + 14.f && m_pData->m_execFrom)
 					{
 						Connect(ExecType::ExecFrom);
 					}
-					else if (mousePos.x > nodePos.x + m_boxWidth - 14.f)
+					else if (mousePos.x > nodePos.x + m_boxWidth - 14.f && m_pData->m_execTo)
 					{
 						Connect(ExecType::ExecTo);
 					}
