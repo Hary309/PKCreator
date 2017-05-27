@@ -49,6 +49,7 @@ private:
 	QVector<QSharedPointer<VisualWidget>>	m_visualInputs;
 	QVector<QSharedPointer<VisualWidget>>	m_visualOutputs;
 
+	int										m_headerHeight;
 	int										m_boxWidth;
 	sf::Color								m_defaultColor;
 

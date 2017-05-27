@@ -49,7 +49,7 @@ void Node::SetType(Type type)
 		m_execFrom = false;
 		m_execTo = true;
 	}
-	else if (type == VARIABLE)
+	else if (type == VARIABLE || type == COMMENT)
 	{
 		m_execFrom = false;
 		m_execTo = false;

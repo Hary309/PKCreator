@@ -29,7 +29,8 @@ public:
 		FUNCTION,
 		VARIABLE,
 		INLINE_VARIABLE,
-		CONDITION
+		CONDITION,
+		COMMENT
 	};
 
 protected:
@@ -39,7 +40,7 @@ protected:
 
 	Type								m_type;
 
-	QString								m_additionalData; // for INLINE_VARIABLE, CONDITION
+	QString								m_additionalData; // for INLINE_VARIABLE, CONDITION, COMMENT
 
 	sf::Vector2f						m_pos;
 

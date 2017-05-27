@@ -30,6 +30,14 @@
 VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int width)
 	: m_pNodeMgr(nodeMgr), m_pData(data), m_boxWidth(width), m_defaultColor(defaultColor), m_pFont(m_pNodeMgr->GetFont())
 {
+	m_headerHeight = 20;
+
+	m_pTitle = QSharedPointer<sf::Text>(new sf::Text());
+	m_pTitle->setFont(*m_pFont);
+	m_pTitle->setCharacterSize(15);
+
+	m_pTitle->setString(m_pData->m_name.toStdString());
+
 	if (m_pData->m_type == Node::FUNCTION)
 		m_defaultColor = sf::Color(0x388E3CAA);
 	else if (m_pData->m_type == Node::EVENT)
@@ -40,8 +48,20 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 		m_defaultColor = sf::Color(0xE65100AA);
 	else if (m_pData->m_type == Node::CONDITION)
 		m_defaultColor = sf::Color(0x6D4C41AA);
+	else if (m_pData->m_type == Node::COMMENT)
+	{
+		m_defaultColor = sf::Color(0x424242AA);
+
+		sf::FloatRect bounds = m_pTitle->getLocalBounds();
+		
+		float margin = 8.f;
+
+		m_boxWidth = bounds.width + margin * 2;
+		m_headerHeight = bounds.height + margin * 2;
+	}
 	
-	m_pHeader = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_boxWidth, 20)));
+
+	m_pHeader = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_boxWidth, m_headerHeight)));
 	m_pBody = QSharedPointer<sf::RectangleShape>(new sf::RectangleShape(sf::Vector2f(m_boxWidth, 0)));
 
 	m_pHeader->setFillColor(m_defaultColor);
@@ -52,12 +72,6 @@ VisualNode::VisualNode(NodeMgr *nodeMgr, Node *data, sf::Color defaultColor, int
 
 	m_pBody->setOutlineColor(m_defaultColor);
 	m_pBody->setOutlineThickness(2.f);
-
-	m_pTitle = QSharedPointer<sf::Text>(new sf::Text());
-	m_pTitle->setFont(*m_pFont);
-	m_pTitle->setCharacterSize(15);
-
-	m_pTitle->setString(m_pData->m_name.toStdString());
 
 	m_moving = false;
 
@@ -228,7 +242,12 @@ void VisualNode::Event(sf::Event *e)
 				{
 					if (!m_pData->m_type == Node::EVENT)
 					{
-						auto result = QMessageBox::question(m_pNodeMgr->GetBpEditor(), "PK Creator", "Are your sure you want to remove " + m_pData->GetName() + " node?");
+						QString name = m_pData->GetName();
+
+						if (m_pData->m_type == Node::COMMENT)
+							name = "this comment";
+
+						auto result = QMessageBox::question(m_pNodeMgr->GetBpEditor(), "PK Creator", "Are your sure you want to remove " + name + " node?");
 
 						if (result == QMessageBox::Yes)
 						{

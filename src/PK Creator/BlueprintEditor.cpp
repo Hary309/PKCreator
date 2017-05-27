@@ -15,7 +15,7 @@
 
 #include <NodesWindow.h>
 #include <ResourceView.h>
-
+#include <CommentWindow.h>
 #include <EventObjectItem.h>
 
 #include <NodeMgr.h>
@@ -68,7 +68,6 @@ void BlueprintEditor::FillData(EventObjectItem *item)
 	if (item->m_new)
 	{
 		item->m_new = false;
-
 
 		if (item->GetType() >= EventDefsMgr::COLLISION_EVENT)
 		{
@@ -166,12 +165,16 @@ void BlueprintEditor::Event(sf::Event *e)
 		} break;
 		case sf::Event::KeyPressed:
 		{
-			if (e->key.code == Qt::Key::Key_A)
+			if (e->key.code == Qt::Key::Key_C)
 			{
-				Node *node = new Node("Is true", sf::Vector2f(), Node::CONDITION);
-				node->AddWidget(new Widget(node, "true", Widget::Type::EXEC, Widget::ConnectionType::OUTPUT, DataType::DATA_INTEGER));
-				node->AddWidget(new Widget(node, "false", Widget::Type::EXEC, Widget::ConnectionType::OUTPUT, DataType::DATA_INTEGER));
-				m_pNodeMgr->AddNode(node);
+				CommentWindow commentWindow(this);
+				commentWindow.exec();
+
+				if (commentWindow.Accepted())
+				{
+					Node *node = new Node(commentWindow.GetComment(), m_pRenderer->getView().getCenter(), Node::COMMENT);
+					m_pNodeMgr->AddNode(node);
+				}
 			}
 		} break;
 	default: ;

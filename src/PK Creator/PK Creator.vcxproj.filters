@@ -311,6 +311,15 @@
     <ClCompile Include="FontItemWindow.cpp">
       <Filter>Source Files\Items\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="CommentWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Debug\moc_CommentWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\QtFiles\Release\moc_CommentWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -418,6 +427,12 @@
     <CustomBuild Include="FontItemWindow.h">
       <Filter>Header Files\Items\Windows</Filter>
     </CustomBuild>
+    <CustomBuild Include="CommentWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CommentWindow.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\QtFiles\ui_MainWindow.h">
@@ -524,6 +539,9 @@
     </ClInclude>
     <ClInclude Include="FontItem.h">
       <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\QtFiles\ui_CommentWindow.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
