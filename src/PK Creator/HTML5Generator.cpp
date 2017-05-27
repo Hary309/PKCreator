@@ -23,6 +23,7 @@
 #include <Widget.h>
 #include <FunctionDefsMgr.h>
 #include <GlobalVariablesWindow.h>
+#include <Config.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -450,8 +451,17 @@ void HTML5Generator::Save()
 	stream << " // Date: " + date.toString("HH:mm dd.MM.yyyy") + " \n";
 	stream << "/*=================================================*/\n\n";
 
+	auto startingSceneId = ResourceView::Get()->GetConfig()->GetStartingSceneId();
+
+	QString startingSceneStr;
+
+	if (startingSceneId)
+		startingSceneStr = QString::number(startingSceneId);
+	else
+		startingSceneStr = QString("allScenes[0].id");
+
 	// init
-	stream << m_global << "\nfunction init()\n{\n" << m_init << "LoadScene(allScenes[0].id)\n" << "}";
+	stream << m_global << "\nfunction init()\n{\n" << m_init << "LoadScene(" + startingSceneStr + ")\n" << "}";
 
 	// render
 	stream <<

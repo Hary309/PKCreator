@@ -35,8 +35,6 @@ function Font(id, family, size, color, align)
 		 ctx.font = this.size + 'px ' + this.family;
 		 ctx.fillStyle = this.color;
 		 ctx.textAlign = this.align;
-
-		 console.log(ctx.font);
 	}
 }
 
