@@ -25,23 +25,15 @@ CollisionWindow::CollisionWindow(QWidget *parent)
 
 void CollisionWindow::exec(Item *item)
 {
-	printf("1\n");
-
 	m_ui.objectsWidget->clear();
 	m_objectList.clear();
 
-	printf("2\n");
 	auto objects = ResourceView::Get()->GetItemsByType(Item::OBJECT);
-	printf("3\n");
 
 	for (auto object : objects)
 	{
-		printf("4\n");
-
 		if (item == object)
 			continue;
-
-		printf("5\n");
 
 		QListWidgetItem *listWidgetItem = new QListWidgetItem(object->GetName());
 
