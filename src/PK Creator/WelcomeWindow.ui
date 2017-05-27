@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>465</width>
-    <height>308</height>
+    <width>556</width>
+    <height>297</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PK Creator - Welcone screen</string>
+  </property>
+  <property name="locale">
+   <locale language="English" country="UnitedStates"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -26,6 +29,26 @@
        </property>
        <property name="text">
         <string>Create project</string>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="openExistingProjectButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Add an
+existing project</string>
        </property>
       </widget>
      </item>

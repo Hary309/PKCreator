@@ -56,6 +56,7 @@ public:
 
 private slots:
 	void CreateButton_clicked();
+	void OpenExistingProjectButton_clicked();
 	void OpenButton_clicked();
 	void DeleteButton_clicked();
 	void OpenFolderButton_clicked();

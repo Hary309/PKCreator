@@ -29,6 +29,7 @@ WelcomeWindow::WelcomeWindow(QWidget *parent)
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 	connect(m_ui.createButton, &QPushButton::clicked, this, &WelcomeWindow::CreateButton_clicked);
+	connect(m_ui.openExistingProjectButton, &QPushButton::clicked, this, &WelcomeWindow::OpenExistingProjectButton_clicked);
 	connect(m_ui.openButton, &QPushButton::clicked, this, &WelcomeWindow::OpenButton_clicked);
 	connect(m_ui.deleteButton, &QPushButton::clicked, this, &WelcomeWindow::DeleteButton_clicked);
 	connect(m_ui.openFolderButton, &QPushButton::clicked, this, &WelcomeWindow::OpenFolderButton_clicked);
@@ -130,38 +131,69 @@ void WelcomeWindow::CreateButton_clicked()
 
 	QFile projectFile(filePath);
 
-	bool isFileValid = false;
-
 	if (projectFile.exists())
+		return;
+
+	projectFile.open(QFile::WriteOnly);
+
+	QDataStream stream(&projectFile);
+
+	stream << QString("PKP1") << projectName << QString("Game") << QString("800") << QString("600");
+
+	projectFile.close();
+
+	QDateTime currDateTime = QDateTime::currentDateTime();
+
+	QTreeWidgetItem *treeItem = new QTreeWidgetItem();
+	treeItem->setText(0, projectName);
+	treeItem->setText(1, currDateTime.toString("h:mm:ss dd.MM.yy"));
+	treeItem->setText(2, folderPath);
+
+	auto pro = QSharedPointer<Project>(new Project);
+
+	pro->name = projectName;
+	pro->timestamp = currDateTime.toSecsSinceEpoch();
+	pro->path = folderPath;
+	pro->item = treeItem;
+
+	m_projectList.push_back(pro);
+
+	m_ui.projectView->insertTopLevelItem(m_ui.projectView->topLevelItemCount(), treeItem);
+
+	QDir currDir(folderPath);
+	currDir.mkdir("resources");
+
+	SaveList();
+}
+
+void WelcomeWindow::OpenExistingProjectButton_clicked()
+{
+	QString filePath = QFileDialog::getOpenFileName(this, "Choose location and name of project", QDir::currentPath(), "PK Project (*.pkp)");
+
+	if (filePath.isEmpty())
+		return;
+
+	QString fileName = filePath.split("/").last();
+	QString projectName = fileName.split(".").first();
+	QString folderPath = filePath.left(filePath.length() - fileName.length());
+
+	QFile projectFile(filePath);
+
+	// check version
+	projectFile.open(QFile::ReadOnly);
+
+	QDataStream stream(&projectFile);
+
+	QString version, name;
+
+	stream >> version >> name;
+
+	if (version != QString("PKP1") || name.isEmpty())
 	{
-		// check version
-		projectFile.open(QFile::ReadOnly);
-
-		QDataStream stream(&projectFile);
-
-		QString version, name;
-
-		stream >> version >> name;
-
-		if (version == QString("PKP1") && !name.isEmpty())
-		{
-			isFileValid = true;
-		}
-
-		projectFile.close();
+		return;
 	}
 
-	if (!isFileValid)
-	{
-		projectFile.open(QFile::WriteOnly);
-
-		QDataStream stream(&projectFile);
-
-		stream << QString("PKP1") << projectName << QString("Game") << QString("800") << QString("600");
-
-		projectFile.close();
-	}
-
+	projectFile.close();
 
 	QDateTime currDateTime = QDateTime::currentDateTime();
 
