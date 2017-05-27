@@ -12,6 +12,7 @@
 #include <QTimer>
 #include <QVector>
 #include <QSharedPointer>
+#include <SFML/Graphics/Texture.hpp>
 
 namespace sf
 {
@@ -55,17 +56,27 @@ private:
 
 	QTimer									m_timer;
 
+	QPoint									m_cursorPos;
+	bool									m_multipleAdding;
+	int										m_freq;
+
 	friend									SceneItemWindow;
 
 protected:
 	void mouseMoveEvent(QMouseEvent *e)		override;
 	void mousePressEvent(QMouseEvent *e)	override;
 	void mouseReleaseEvent(QMouseEvent *e)	override;
+	void keyPressEvent(QKeyEvent *e)		override;
+	void keyReleaseEvent(QKeyEvent *e)		override;
+	void wheelEvent(QWheelEvent *e)			override;
 	void resizeEvent(QResizeEvent *e)		override;
+
+private:
+	SceneObject *AddObject(const QPoint &pos, sf::Texture *texture, const QPoint &center);
 
 public:
 	explicit SceneEditor(QWidget *parent);
-	~SceneEditor();
+	~SceneEditor() = default;
 
 	void SetSource(SceneItem *sceneItem);
 

@@ -38,11 +38,16 @@ SceneEditor::SceneEditor(QWidget *parent)
 
 	m_pBackground = nullptr;
 
-	m_timer.setInterval(10);
+	m_multipleAdding = false;
+
+	m_timer.setInterval(30);
 	m_timer.start();
 
 	setAttribute(Qt::WA_PaintOnScreen);
 	setAttribute(Qt::WA_NoSystemBackground);
+
+	setMouseTracking(true);
+	setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 
 	m_pRenderer = QSharedPointer<sf::RenderWindow>(new sf::RenderWindow(HWND(winId())));
 	m_pTexMgr = QSharedPointer<TextureMgr>(new TextureMgr());
@@ -54,10 +59,6 @@ SceneEditor::SceneEditor(QWidget *parent)
 	m_vLine->setFillColor(sf::Color(0, 0, 0));
 
 	connect(&m_timer, &QTimer::timeout, this, &SceneEditor::Render);
-}
-
-SceneEditor::~SceneEditor()
-{
 }
 
 void SceneEditor::SetSource(SceneItem *sceneItem)
@@ -152,23 +153,55 @@ void SceneEditor::Render()
 			}
 		}
 
+		if (m_multipleAdding)
+		{
+			auto lastObject = m_pObjects->last();
+
+			QPoint startPos = lastObject->pos;
+			QPoint endPos = m_cursorPos;
+
+			QPoint startSector = QPoint(startPos.x() / m_snapX, startPos.y() / m_snapY);
+			QPoint endSector = QPoint(endPos.x() / m_snapX, endPos.y() / m_snapY);
+
+			QPoint offsetPos = startPos - endPos;
+			QPoint offsetSector = startSector - endSector;
+
+			int len = abs(int(sqrt(pow(double(offsetSector.x()), 2) + pow(double(offsetSector.y()), 2))));
+
+			for (int i = 0; i <= len; i += m_freq)
+			{
+				if (len == 0)
+					break;
+
+				float alpha = static_cast<float>(i) / len;
+
+				int x = alpha * offsetPos.x();
+				int y = alpha * offsetPos.y();
+
+				lastObject->pSpr->setPosition(startPos.x() - x / m_snapX * m_snapX, startPos.y() - y / m_snapY * m_snapY);
+
+				m_pRenderer->draw(*lastObject->pSpr);
+			}
+			lastObject->pSpr->setPosition(lastObject->pos.x(), lastObject->pos.y());
+		}
+
 		if (m_drawGrid)
 		{
-			if (m_snapX > 1)
-			{
-				for (int i = 0; i < m_windowSize.height() / m_snapY + 1; ++i)
-				{
-					m_hLine->setPosition(0, i * m_snapY);
-					m_pRenderer->draw(*m_hLine);
-				}
-			}
-
-			if (m_snapY > 1)
+			if (m_snapX > 3)
 			{
 				for (int i = 0; i < m_windowSize.width() / m_snapX + 1; ++i)
 				{
 					m_vLine->setPosition(i * m_snapX, 0);
 					m_pRenderer->draw(*m_vLine);
+				}
+			}
+
+			if (m_snapY > 3)
+			{
+				for (int i = 0; i < m_windowSize.height() / m_snapY + 1; ++i)
+				{
+					m_hLine->setPosition(0, i * m_snapY);
+					m_pRenderer->draw(*m_hLine);
 				}
 			}
 		}
@@ -179,6 +212,8 @@ void SceneEditor::Render()
 
 void SceneEditor::mouseMoveEvent(QMouseEvent *e)
 {
+	m_cursorPos = e->pos();
+
 	if (m_pCurrObj && m_pCurrObj->pSpr)
 	{
 		QPoint pos;
@@ -189,11 +224,71 @@ void SceneEditor::mouseMoveEvent(QMouseEvent *e)
 		m_pCurrObj->pSpr->setPosition(pos.x(), pos.y());
 
 		m_pCurrObj->pos = pos;
+
+		if (!m_pCurrObj->pObj)
+			return;
+
+		SceneItemWindow *sceneItemWindow = static_cast<SceneItemWindow*>(parent());
+		QString text = m_pCurrObj->pObj->GetName() + " pos: (" + QString::number(pos.x()) + ", " + QString::number(pos.y()) + ")";
+		
+		sceneItemWindow->SetLabelText(text);
 	}
+}
+
+SceneObject *SceneEditor::AddObject(const QPoint &pos, sf::Texture *texture, const QPoint &center)
+{
+	auto sharedObj = QSharedPointer<SceneObject>(new SceneObject());
+
+	sharedObj->pObj = m_pSelectedObj;
+	sharedObj->pSpr = QSharedPointer<sf::Sprite>(new sf::Sprite(*texture));
+	sharedObj->pSpr->setOrigin(center.x(), center.y());
+
+	QPoint objectPos;
+
+	objectPos.setX(pos.x() / m_snapX * m_snapX);
+	objectPos.setY(pos.y() / m_snapY * m_snapY);
+
+	sharedObj->pos = objectPos;
+	sharedObj->pSpr->setPosition(objectPos.x(), objectPos.y());
+
+	m_pObjects->push_back(sharedObj);
+
+	return sharedObj.data();
 }
 
 void SceneEditor::mousePressEvent(QMouseEvent *e)
 {
+	if (m_multipleAdding)
+	{
+		auto lastObject = m_pObjects->last();
+
+		QPoint startPos = lastObject->pos;
+		QPoint endPos = m_cursorPos;
+
+		QPoint startSector = QPoint(startPos.x() / m_snapX, startPos.y() / m_snapY);
+		QPoint endSector = QPoint(endPos.x() / m_snapX, endPos.y() / m_snapY);
+
+		QPoint offsetPos = startPos - endPos;
+		QPoint offsetSector = startSector - endSector;
+
+		int len = abs(int(sqrt(pow(double(offsetSector.x()), 2) + pow(double(offsetSector.y()), 2))));
+
+		TextureMgr::TexInfo *texInfo = m_pTexMgr->GetTexture(lastObject->pObj->GetSprite()->GetName());
+
+		for (int i = 0; i <= len; i += m_freq)
+		{
+			if (len == 0)
+				break;
+
+			float alpha = static_cast<float>(i) / len;
+
+			int x = startPos.x() - (alpha * offsetPos.x()) / m_snapX * m_snapX;
+			int y = startPos.y() - (alpha * offsetPos.y()) / m_snapY * m_snapY;
+
+			AddObject(QPoint(x, y), texInfo->pTex.data(), texInfo->center);
+		}
+	}
+
 	for (int i = 0; i < m_pObjects->size(); ++i)
 	{
 		auto obj = m_pObjects->at(i);
@@ -240,28 +335,43 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 	if (!texInfo)
 		return;
 
-	auto sharedObj = QSharedPointer<SceneObject>(new SceneObject());
+	if (!texInfo->pTex)
+		return;
 
-	sharedObj->pObj = m_pSelectedObj;
-	sharedObj->pSpr = QSharedPointer<sf::Sprite>(new sf::Sprite(*texInfo->pTex));
-	sharedObj->pSpr->setOrigin(texInfo->center.x(), texInfo->center.y());
-
-	QPoint pos;
-
-	pos.setX(e->pos().x() / m_snapX * m_snapX);
-	pos.setY(e->pos().y() / m_snapY * m_snapY);
-
-	sharedObj->pos = pos;
-	sharedObj->pSpr->setPosition(pos.x(), pos.y());
-
-	m_pObjects->push_back(sharedObj);
-
-	m_pCurrObj = sharedObj.data();
+	m_pCurrObj = AddObject(e->pos(), texInfo->pTex.data(), texInfo->center);
 }
 
 void SceneEditor::mouseReleaseEvent(QMouseEvent *e)
 {
 	m_pCurrObj = nullptr;
+}
+
+void SceneEditor::keyPressEvent(QKeyEvent *e)
+{
+	if (e->key() == Qt::Key_Shift)
+	{
+		m_multipleAdding = true;
+		m_freq = 1;
+	}
+}
+
+void SceneEditor::keyReleaseEvent(QKeyEvent *e)
+{
+	if (e->key() == Qt::Key_Shift)
+	{
+		m_multipleAdding = false;
+	}
+}
+
+void SceneEditor::wheelEvent(QWheelEvent *e)
+{
+	if (m_multipleAdding)
+	{
+		if (e->delta() > 0)
+			m_freq++;
+		else if (e->delta() < 0 && m_freq > 1)
+			m_freq--;
+	}
 }
 
 void SceneEditor::resizeEvent(QResizeEvent *e)
