@@ -333,7 +333,7 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 					globalVar = GlobalVariablesWindow::Get()->GetVar(globalVarNode->GetID());
 
 				if (var)
-					result += e->GetParent()->GetName() + ".vars." + var->m_name + " = v" + QString::number(node->m_outputs.first()->m_id) + ";";
+					result += "gameObject" + e->GetParent()->GetName() + ".vars." + var->m_name + " = v" + QString::number(node->m_outputs.first()->m_id) + ";";
 				else if (globalVar)
 					result += "globalVar" + globalVar->m_name + " = v" + QString::number(node->m_outputs.first()->m_id) + ";";
 
