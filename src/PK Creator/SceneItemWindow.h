@@ -65,13 +65,15 @@ protected:
 
 public:
 	explicit SceneItemWindow(QWidget *parent);
-	virtual ~SceneItemWindow();
+	virtual ~SceneItemWindow() = default;
 
 	void RefreshObjectList();
 
 	ObjectListItem *GetObjectListItem(QListWidgetItem *item);
 
 	bool FillData(Item *item) override;
+
+	void SetLabelText(const QString &text);
 
 	auto GetBgImage() { return &m_pBgSprite; }
 
@@ -86,6 +88,5 @@ private slots:
 	void snapYBox_valueChanged(int i);
 
 	void DrawGrid_stateChanged(int state);
-
 };
 

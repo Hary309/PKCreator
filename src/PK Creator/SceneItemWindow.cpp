@@ -61,10 +61,6 @@ SceneItemWindow::SceneItemWindow(QWidget* parent)
 	connect(m_ui.drawGrid, &QCheckBox::stateChanged, this, &SceneItemWindow::DrawGrid_stateChanged);
 }
 
-SceneItemWindow::~SceneItemWindow()
-{
-}
-
 bool SceneItemWindow::FillData(Item *item)
 {
 	m_pItemParent = reinterpret_cast<SceneItem*>(item);
@@ -111,6 +107,11 @@ bool SceneItemWindow::FillData(Item *item)
 	m_ui.tileVerCheckBox->setChecked(m_pItemParent->m_tileVer);
 
 	return true;
+}
+
+void SceneItemWindow::SetLabelText(const QString &text)
+{
+	m_ui.cursorPosLabel->setText(text);
 }
 
 void SceneItemWindow::RefreshObjectList()
