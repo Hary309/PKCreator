@@ -387,6 +387,9 @@ void NodesWindow::AddConditionDefs()
 	AddConditionDef(topLevelItem, "Is 'a' is smaller than 'b' (n)", "<", 2, DataType::DATA_NUMBER);
 
 	AddConditionDef(topLevelItem, "Is 'a' is equal to 'b' (ID)", "==", 2, DataType::DATA_ID);
+
+	AddInlineVarDef(topLevelItem, DATA_BOOLEAN, Type::STATIC, "true", "true", "");
+	AddInlineVarDef(topLevelItem, DATA_BOOLEAN, Type::STATIC, "false", "false", "");
 }
 
 void NodesWindow::AddConditionDef(QTreeWidgetItem *topLevelItem, const QString &name, const QString &type, int nInputs, DataType dataType)
