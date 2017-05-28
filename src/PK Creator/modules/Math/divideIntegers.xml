@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>DivideIntegers</name>
+	<desc>Return result of integer1 / integer2</desc>
+	<args>
+	    <arg>
+	        <type>0</type>
+	        <name>integer1</name>
+	    </arg>
+	    <arg>
+	        <type>0</type>
+	        <name>integer2</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>0</type>
+	    <name>result</name>
+	</returnValue>
+	<jsCode>
+		if (integer2 != 0)
+			return integer1 / integer2;
+		else
+			return 0;
+	</jscode>
+</node>
+ 
