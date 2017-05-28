@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QProcess>
 
+#include <QDebug>
+
 #include <MainWindow.h>
 
 WelcomeWindow *WelcomeWindow::s_pInst;
@@ -62,17 +64,22 @@ void WelcomeWindow::SaveList()
 	}
 
 	file.close();
+
+	qInfo() << "Saved list.pkb";
 }
 
 void WelcomeWindow::LoadList()
 {
 	QFile file("list.pkb");
 
+	qInfo() << "Opening list.pkb...";
+
 	if (!file.exists())
 		return;
 
 	if (file.error() != QFile::NoError)
 	{
+		qCritical() << "File read error!";
 		QMessageBox::critical(this, "File read error!", file.errorString());
 		return;
 	}
@@ -84,6 +91,8 @@ void WelcomeWindow::LoadList()
 	int size = 0;
 
 	stream >> size;
+
+	qInfo() << "Reading projects...";
 
 	for (int i = 0; i < size; ++i)
 	{
@@ -107,15 +116,12 @@ void WelcomeWindow::LoadList()
 		pro->item = treeItem;
 		m_projectList.push_back(pro);
 
+		qInfo() << "- Project" << name;
+
 		m_ui.projectView->insertTopLevelItem(m_ui.projectView->topLevelItemCount(), treeItem);
 	}
 
 	file.close();
-}
-
-void WelcomeWindow::showEvent(QShowEvent *e)
-{
-
 }
 
 void WelcomeWindow::CreateButton_clicked()
@@ -162,6 +168,8 @@ void WelcomeWindow::CreateButton_clicked()
 
 	QDir currDir(folderPath);
 	currDir.mkdir("resources");
+
+	qInfo() << "Added project " << projectName << " at: " << folderPath;
 
 	SaveList();
 }
@@ -215,6 +223,8 @@ void WelcomeWindow::OpenExistingProjectButton_clicked()
 
 	QDir currDir(folderPath);
 	currDir.mkdir("resources");
+
+	qInfo() << "Added existing project " << projectName << " at: " << folderPath;
 
 	SaveList();
 }
@@ -283,6 +293,8 @@ void WelcomeWindow::DeleteButton_clicked()
 				// remove main project file
 				QFile file(projectListItem->path + projectListItem->name + ".pkp");
 				file.remove();
+
+				qInfo() << "Removed project " << projectListItem->name;
 
 				m_projectList.removeAt(i);
 			

@@ -13,6 +13,7 @@
 #include <QMouseEvent>
 #include <QMenu>
 #include <QCursor>
+#include <QDebug>
 
 #include <NodesWindow.h>
 
@@ -354,13 +355,13 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 
 	m_mainDir = currPath;
 
-	printf("%d %d %d %d %d\n", m_lastSpriteID, m_lastBackgroundID, m_lastFontID, m_lastObjectID, m_lastSceneID);
+	qInfo() << QString().asprintf("Last id: %d %d %d %d %d", m_lastSpriteID, m_lastBackgroundID, m_lastFontID, m_lastObjectID, m_lastSceneID);
 
 	int size = 0;
 
 	*dataStream >> size;
 
-	printf("Size: %d\n", size);
+	qInfo() << "Item number:" << QString::number(size);
 
 	for (int i = 0; i < size; ++i)
 	{
@@ -369,7 +370,7 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 
 		*dataStream >> type >> name;
 
-		printf("[%d] Type: %d Name: \"%s\"\n", i, type, name.toStdString().c_str());
+		qInfo() << QString("[" + QString::number(i) + "] Type: " + QString::number(type) + " Name: '" + name + "'");
 
 		QStandardItem *treeItem = m_pTreeModel->item(type);
 
@@ -401,6 +402,7 @@ bool ResourceView::Load(QDataStream *const dataStream, const QString &currPath)
 			} break;
 			default: 
 			{
+				qCritical() << "Project file is invalid!";
 				QMessageBox::critical(this, "Error", "Project file is invalid!");
 				return false;
 			}
@@ -451,45 +453,45 @@ void ResourceView::Save(QDataStream *const dataStream)
 
 void ResourceView::GenerateCode(CodeGenerator *codeGenerator)
 {
-	printf("Generating Canvas...\n");
+	qInfo() << "Generating Canvas...";
 	codeGenerator->GenerateCanvas(m_pProConfig->GetWndTitle(), m_pProConfig->GetWndSize());
 
-	printf("Generating global variables...\n");
+	qInfo() << "Generating global variables...";
 	codeGenerator->GenerateGlobalVars(m_pGlobalVarsWindow.data());
 
-	printf("Generating font...\n");
+	qInfo() << "Generating font...";
 	auto fonts = GetItemsByType(Item::Type::FONT);
 	for (auto font : fonts)
 	{
-		printf("\t%s...\n", font->GetName().toStdString().c_str());
+		qInfo() << QString(" %1...").arg(font->GetName());
 
 		codeGenerator->GenerateFont(static_cast<FontItem*>(font));
 	}
 
-	printf("Generating sprites:\n");
+	qInfo() << "Generating sprites:";
 	auto sprites = GetItemsByType(Item::Type::SPRITE);
 	for (auto sprite : sprites)
 	{
-		printf("\t%s...\n", sprite->GetName().toStdString().c_str());
-		
+		qInfo() << QString(" %1...").arg(sprite->GetName());
+
 		codeGenerator->GenerateSprite(static_cast<SpriteItem*>(sprite));
 	}
 
-	printf("Generating objects:\n");
+	qInfo() << "Generating objects:";
 	auto objects = GetItemsByType(Item::Type::OBJECT);
 	for (auto object : objects)
 	{
-		printf("\t%s...\n", object->GetName().toStdString().c_str());
+		qInfo() << QString(" %1...").arg(object->GetName());
 
 		codeGenerator->GenerateObject(static_cast<ObjectItem*>(object));
 	}
 
 
-	printf("Generating scenes:\n");
+	qInfo() << "Generating scenes:";
 	auto scenes = GetItemsByType(Item::Type::SCENE);
 	for (auto scene : scenes)
 	{
-		printf("\t%s...\n", scene->GetName().toStdString().c_str());
+		qInfo() << QString(" %1...").arg(scene->GetName());
 
 		codeGenerator->GenerateScene(static_cast<SceneItem*>(scene));
 	}

@@ -97,8 +97,6 @@ void NodesWindow::NodesWidget_itemDoubleClicked(QTreeWidgetItem *item, int colum
 	{
 		if (nodesWidgetItem->treeItem == item)
 		{
-			printf("To ten 1!\n");
-
 			m_pSelectedItem = nodesWidgetItem.data();
 			m_type = Node::VARIABLE;
 

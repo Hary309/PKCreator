@@ -11,6 +11,7 @@
 #include <QResizeEvent>
 #include <QTime>
 #include <QMessageBox>
+#include <QDebug>
 
 #include <Config.h>
 #include <ResourceView.h>
@@ -62,7 +63,7 @@ bool MainWindow::Load(Project *project)
 
 	if (m_proInfo)
 	{
-		printf("Opening...\n");
+		qInfo() << "Opening...";
 
 		QFile file(m_proInfo->path + m_proInfo->name + QString(".pkp"));
 		
@@ -74,18 +75,18 @@ bool MainWindow::Load(Project *project)
 		if (file.error() != QFile::NoError)
 			return false;
 
-		printf("Opened!\n");
+		qInfo() << "Opened!";
 
 		QDataStream stream(&file);
 
 		QString version, name;
 		stream >> version >> name;
-		printf("Version: \"%s\"\n", version.toStdString().c_str());
+		qInfo() << QString("Version: '%1'").arg(version);
 
 		if (version != "PKP1")
 			return false;
 
-		printf("Version checked!\n");
+		qInfo() << "Version checked!";
 
 		if (!m_pResView->Load(&stream, project->path))
 		{
@@ -97,9 +98,9 @@ bool MainWindow::Load(Project *project)
 	}
 
 	if (m_proInfo)
-		printf("Loaded \"%s\" in %d ms \n", m_proInfo->name.toStdString().c_str(), timer.elapsed());
+		qInfo() << QString("Loaded '" + m_proInfo->name + "' in " + QString::number(timer.elapsed()) + " ms");
 	else
-		printf("Cannot load!\n");
+		qCritical() << "Cannot load!";
 
 	return true;
 }
@@ -124,7 +125,7 @@ void MainWindow::Save() const
 		file.close();
 	}
 
-	printf("Saved in: %d ms\n", timer.elapsed());
+	qInfo() << QString("Saved in: %1 ms").arg(timer.elapsed());
 }
 
 void MainWindow::GenerateCode(bool showInformation)
@@ -132,7 +133,7 @@ void MainWindow::GenerateCode(bool showInformation)
 	QTime timer;
 	timer.start();
 
-	printf("Generating code...\n");
+	qInfo() << "Generating code...";
 	
 	if (m_pResView && m_proInfo)
 	{
@@ -142,20 +143,20 @@ void MainWindow::GenerateCode(bool showInformation)
 			return;
 		}
 
-		printf("Creating folder...\n");
+		qInfo() << "Creating folder...";
 		HTML5Generator codeGenerator(m_proInfo->path + "\\Generated");
 		m_pResView->GenerateCode(&codeGenerator);
 
-		printf("Saving...\n");
+		qInfo() << "Saving...";
 		codeGenerator.Save();
 	}
 	else
 	{
-		printf("Fail!\n");
+		qCritical() << "Fail!";
 		return;
 	}
 
-	printf("Generated in: %d ms\n", timer.elapsed());
+	qInfo() << QString("Generated in: %1 ms").arg(timer.elapsed());
 
 	if (showInformation)
 		QMessageBox::information(this, "Code generator", "Code successfully generated!");

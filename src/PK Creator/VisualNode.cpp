@@ -341,8 +341,6 @@ void VisualNode::AddExecTo()
 
 void VisualNode::ConnectAllWires()
 {
-	printf("\n\n");
-
 	auto allNodes = m_pNodeMgr->GetAllNodes();
 
 	for (auto inputWidget : m_visualInputs)

@@ -10,6 +10,7 @@
 
 #include <QDir>
 #include <QTextStream>
+#include <QDebug>
 
 #include <ResourceView.h>
 #include <SpriteItem.h>
@@ -160,7 +161,7 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 
 	if (!events->isEmpty())
 	{
-		printf("\tGenerating events logic...\n");
+		qInfo() << " Generating events logic...";
 
 		for (auto sharedEvent : *events)
 		{
@@ -180,7 +181,7 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 					if (!collideWith)
 						continue;
 
-					printf("\t\tCollision with %s Event...\n", collideWith->GetName().toStdString().c_str());
+					qInfo() << "  Collision with " + collideWith->GetName() + " Event...";
 
 					if (firstNode->m_type != Node::EVENT)
 						continue;
@@ -207,7 +208,7 @@ void HTML5Generator::GenerateObject(ObjectItem *object)
 				}
 				else
 				{
-					printf("\t\t%s...\n", EventDefsMgr::Get()->GetEvent(e->GetType())->name.toStdString().c_str());
+					qInfo() << "  " + EventDefsMgr::Get()->GetEvent(e->GetType())->name + "...\n";
 
 					if (firstNode->m_type != Node::EVENT)
 						continue;

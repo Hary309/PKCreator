@@ -11,6 +11,7 @@
 #include <SFML/Graphics/Texture.hpp>
 
 #include <QFile>
+#include <QDebug>
 
 #include <ResourceView.h>
 #include <SpriteItem.h>
@@ -27,13 +28,13 @@ bool TextureMgr::LoadTexture(SpriteItem *sprite)
 
 bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSize &size, const QPoint &center)
 {
-	printf("Loading texture \"%s\" \"%s\"... ", name.toStdString().c_str(), path.toStdString().c_str());
-
+	qInfo() << QString("Loading texture '%1'...").arg(name);
 	for (auto tex : m_textures)
 	{
 		if (tex->name == name)
 		{
-			printf("[EXIST]\n");
+			qInfo() << "Texture already is loaded!";
+
 			return false;
 		}
 	}
@@ -42,14 +43,14 @@ bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSi
 	
 	if (!pTex->create(size.width(), size.height()))
 	{
-		printf("[FAIL]\n");
+		qCritical() << "Cannot create texture!";
 
 		return false;
 	}
 	
 	if (!pTex->loadFromFile(path.toStdString()))
 	{
-		printf("[FAIL]\n");
+		qCritical() << "Cannot load texture from file";
 
 		return false;
 	}
@@ -62,7 +63,7 @@ bool TextureMgr::LoadTexture(const QString &name, const QString &path, const QSi
 
 	m_textures.push_back(pTexItem);
 
-	printf("[OK]\n");
+	qInfo() << "Texture loaded!";
 
 	return true;
 }

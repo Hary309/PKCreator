@@ -6,8 +6,9 @@
 *********************************************************************
 */
 
-
 #include "EventDefsMgr.h"
+
+#include <QDebug>
 
 EventDefsMgr *EventDefsMgr::s_pInst;
 
@@ -40,6 +41,8 @@ EventDefsMgr::EventDefsMgr()
 
 	AddEvent(KEY_PRESSED_EVENT, "Key Pressed Event", "keyDownEvent", keyboard);
 	AddEvent(KEY_RELEASED_EVENT, "Key Released Event", "keyUpEvent", keyboard);
+
+	qInfo() << "Loaded events";
 }
 
 EventDefsMgr::Event *EventDefsMgr::GetEvent(Type type)

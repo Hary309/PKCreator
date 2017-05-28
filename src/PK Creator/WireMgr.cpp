@@ -8,6 +8,8 @@
 
 #include "WireMgr.h"
 
+#include <QDebug>
+
 #include <SFML/Graphics.hpp>
 
 #include <Widget.h>
@@ -53,7 +55,7 @@ WireData *WireMgr::ConnectData(sf::Vector2f startPos, ConnectTo type, VisualWidg
 
 		m_dataWires.push_back(wire.dynamicCast<WireData>());
 
-		printf("[WireMgr] New line from widget: '%s'\n", widget->GetData()->GetName().toStdString().c_str());
+		qInfo() << "New line from widget:" << widget->GetData()->GetName();
 
 		return wire.data();
 	}
@@ -109,8 +111,7 @@ WireData *WireMgr::ConnectData(sf::Vector2f startPos, ConnectTo type, VisualWidg
 
 	wire->Connected();
 	
-	printf("[WireMgr] Connected to widget: '%s'\n", widget->GetData()->GetName().toStdString().c_str());
-
+	qInfo() << "Connected to widget:" << widget->GetData()->GetName();
 	return wire;
 }
 
@@ -139,7 +140,7 @@ WireExec *WireMgr::ConnectExec(sf::Vector2f startPos, ConnectTo type, VisualNode
 
 		m_execWires.push_back(wire.dynamicCast<WireExec>());
 
-		printf("[WireMgr] New line from node: '%s'\n", node->GetData()->GetName().toStdString().c_str());
+		qInfo() << "New line from node:" << node->GetData()->GetName();
 
 		return wire.data();
 	}
@@ -177,7 +178,7 @@ WireExec *WireMgr::ConnectExec(sf::Vector2f startPos, ConnectTo type, VisualNode
 
 	wire->Connected();
 
-	printf("[WireMgr] Connected to node: '%s'\n", node->GetData()->GetName().toStdString().c_str());
+	qInfo() << "Connected to node:" << node->GetData()->GetName();
 
 	return wire;
 }

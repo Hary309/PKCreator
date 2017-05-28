@@ -42,9 +42,6 @@ private:
 
 	static WelcomeWindow				*s_pInst;
 
-protected:
-	virtual void showEvent(QShowEvent *e) override;
-
 public:
 	explicit WelcomeWindow(QWidget *parent = nullptr);
 	~WelcomeWindow();

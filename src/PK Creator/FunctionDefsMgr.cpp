@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QXmlStreamReader>
 #include <QTextStream>
+#include <QDebug>
 
 void FunctionDefsMgr::LoadDefs(const QString &path)
 {
@@ -19,18 +20,18 @@ void FunctionDefsMgr::LoadDefs(const QString &path)
 	
 	auto dirs = dir.entryList(QDir::Dirs | QDir::NoDotDot);
 
-	printf("Loading modules...");
+	qInfo() << "Loading modules...";
 
 	for (auto currentDirPath : dirs)
 	{
-		printf("%s\n", currentDirPath.toStdString().c_str());
+		qInfo() << "Category:" << currentDirPath;
 
 		QDir currentDir(path + "\\" + currentDirPath);
 		auto files = currentDir.entryList(QDir::Files);
 
 		for (auto currentFileName : files)
 		{
-			printf("\t%s\n", currentFileName.toStdString().c_str());
+			qInfo() << " -" << currentFileName;
 
 			QFile file(path + "\\" + currentDirPath + "\\" + currentFileName);
 
@@ -93,11 +94,9 @@ void FunctionDefsMgr::LoadDefs(const QString &path)
 					m_nodesDef.push_back(def);
 				}
 				else
-					printf("\tCannot read %s", currentFileName.toStdString().c_str());
+					qWarning() << "Cannot read " << currentFileName;
 			}
 
 		}
 	}
-
-	printf("\n");
 }

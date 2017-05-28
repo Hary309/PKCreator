@@ -8,6 +8,8 @@
 
 #include "Config.h"
 
+#include <QDebug>
+
 #include <ResourceView.h>
 #include <Item.h>
 
@@ -82,7 +84,7 @@ void Config::Load(QDataStream *const dataStream)
 
 	*dataStream >> title >> width >> height >> m_startingScene;
 
-	printf("\"%s\" %dx%d\n", title.toStdString().c_str(), width.toInt(), height.toInt());
+	qInfo() << QString("Window info: Title:'" + title + "' Size:"+QString::number(width.toInt())+"x"+ QString::number(height.toInt()) +"\n");
 
 	m_ui.titleEdit->setText(title);
 	m_ui.widthEdit->setText(width);
