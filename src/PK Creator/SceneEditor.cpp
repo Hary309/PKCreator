@@ -75,6 +75,9 @@ void SceneEditor::SetSource(SceneItem *sceneItem)
 
 		if (!obj->pObj)
 			continue;
+		
+		if (!obj->pObj->GetSprite())
+			continue;
 
 		m_pTexMgr->LoadTexture(obj->pObj->GetSprite());
 
@@ -153,7 +156,7 @@ void SceneEditor::Render()
 			}
 		}
 
-		if (m_multipleAdding)
+		if (m_multipleAdding && !m_pObjects->isEmpty())
 		{
 			auto lastObject = m_pObjects->last();
 
