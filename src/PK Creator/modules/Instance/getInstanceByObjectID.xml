@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetInstanceByObjectID</name>
+	<desc>Returns one instance by objectId</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>ObjectID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>4</type>
+	    <name>InstnaceID</name>
+	</returnValue>
+	<jsCode>
+		var instances = GetInstancesByObjectID(ObjectID);
+		
+		if (instances[0])
+		{
+			return instances[0].id;
+		}
+
+		return -1;
+	</jscode>
+</node>
+ 

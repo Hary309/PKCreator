@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>GetInstanceByObjectID</name>
+	<desc>Returns number of instances by objectIDu</desc>
+	<args>
+	    <arg>
+	        <type>4</type>
+	        <name>ObjectID</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>0</type>
+	    <name>Number of instances</name>
+	</returnValue>
+	<jsCode>
+		var instances = GetInstancesByObjectID(ObjectID);
+		
+		return instances.length;
+	</jscode>
+</node>
+ 
