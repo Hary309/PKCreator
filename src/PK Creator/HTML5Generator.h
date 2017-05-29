@@ -16,6 +16,8 @@ class EventObjectItem;
 class HTML5Generator : public CodeGenerator
 {
 private:
+	bool m_breakGenerating;
+
 	QSize m_windowSize;
 
 	// html
@@ -32,7 +34,7 @@ private:
 
 public:
 	explicit HTML5Generator(const QString &path);
-	~HTML5Generator();
+	~HTML5Generator() = default;
 
 	void GenerateCanvas(const QString &title, const QSize &windowSize) override;
 	void GenerateGlobalVars(const GlobalVariablesWindow *globalVarsWnd) override;
@@ -41,7 +43,7 @@ public:
 	void GenerateSprite(SpriteItem *sprite) override;
 	void GenerateScene(SceneItem *item) override;
 
-	void Save() override;
+	bool Save() override;
 
 };
 

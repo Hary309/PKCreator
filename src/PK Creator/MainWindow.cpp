@@ -148,7 +148,10 @@ void MainWindow::GenerateCode(bool showInformation)
 		m_pResView->GenerateCode(&codeGenerator);
 
 		qInfo() << "Saving...";
-		codeGenerator.Save();
+		bool result = codeGenerator.Save();
+
+		if (showInformation && result)
+			QMessageBox::information(this, "Code generator", "Code successfully generated!");
 	}
 	else
 	{
@@ -157,9 +160,6 @@ void MainWindow::GenerateCode(bool showInformation)
 	}
 
 	qInfo() << QString("Generated in: %1 ms").arg(timer.elapsed());
-
-	if (showInformation)
-		QMessageBox::information(this, "Code generator", "Code successfully generated!");
 }
 
 void MainWindow::ActionOpenProject_triggered()

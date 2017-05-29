@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <node>
-	<name>GetInstanceByObjectID</name>
+	<name>GetNumberOfInstances</name>
 	<desc>Returns number of instances by objectIDu</desc>
 	<args>
 	    <arg>
@@ -10,7 +10,7 @@
 	</args>
 	<returnValue>
 		<type>0</type>
-	    <name>Number of instances</name>
+	    <name>Number</name>
 	</returnValue>
 	<jsCode>
 		var instances = GetInstancesByObjectID(ObjectID);

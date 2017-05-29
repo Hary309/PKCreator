@@ -317,7 +317,15 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 					e->pos().y() <= int(pos.y + rect.height))
 				{
 					if (e->button() == Qt::MouseButton::LeftButton)
+					{
 						m_pCurrObj = obj.data();
+
+						QString text = m_pCurrObj->pObj->GetName() + " pos: (" + QString::number(spr->getPosition().x) + ", " + QString::number(spr->getPosition().y) + ")";
+						SceneItemWindow *sceneItemWindow = static_cast<SceneItemWindow*>(parent());
+
+						if (sceneItemWindow)
+							sceneItemWindow->SetLabelText(text);
+					}
 					else if (e->button() == Qt::MouseButton::RightButton)
 					{
 						m_pObjects->removeAt(i);
@@ -353,6 +361,12 @@ void SceneEditor::mousePressEvent(QMouseEvent *e)
 void SceneEditor::mouseReleaseEvent(QMouseEvent *e)
 {
 	m_pCurrObj = nullptr;
+
+	SceneItemWindow *sceneItemWindow = static_cast<SceneItemWindow*>(parent());
+
+	if (sceneItemWindow)
+		sceneItemWindow->SetLabelText("");
+
 }
 
 void SceneEditor::keyPressEvent(QKeyEvent *e)

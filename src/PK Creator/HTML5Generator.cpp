@@ -27,6 +27,7 @@
 #include <Config.h>
 
 #include <SFML/Graphics.hpp>
+#include <QMessageBox>
 
 HTML5Generator::HTML5Generator(const QString &path)
 	: CodeGenerator()
@@ -35,11 +36,8 @@ HTML5Generator::HTML5Generator(const QString &path)
 
 	QDir dir(m_path);
 	dir.mkpath(m_path);
-}
 
-
-HTML5Generator::~HTML5Generator()
-{
+	m_breakGenerating = false;
 }
 
 void HTML5Generator::GenerateCanvas(const QString &title, const QSize &windowSize)
@@ -252,6 +250,9 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 	if (!node)
 		return result;
 
+	if (m_breakGenerating)
+		return result;
+
 	if (node->m_type == Node::CONDITION)
 	{
 		if (node->m_outputs.size() == 2 && (node->m_inputs.size() == 1 || node->m_inputs.size() == 2))
@@ -267,8 +268,41 @@ QString HTML5Generator::GenerateFunction(EventObjectItem *e, Node *node, QString
 				else if (node->m_inputs.size() == 2)
 				{
 					result += "if (";
+
+					if (node->m_inputs[0]->m_connected.isEmpty())
+					{
+						QString eventName;
+
+						if (e->GetType() >= EventDefsMgr::COLLISION_EVENT)
+							eventName = "Collision";
+						else
+						{
+							eventName = EventDefsMgr::Get()->GetEvent(e->GetType())->name;
+						}
+
+						QMessageBox::warning(0, "Oh noo", QString("Object: '" + e->GetParent()->GetName() + "', Event: '" + eventName + "' node: '" + node->GetName() + "' Condition cannot be empty!"));
+						m_breakGenerating = true;
+						return code;
+					}
+
 					result += GetVar(e, node->m_inputs[0]->m_connected.first());
 					result += node->m_additionalData;
+
+					if (node->m_inputs[1]->m_connected.isEmpty())
+					{
+						QString eventName;
+
+						if (e->GetType() >= EventDefsMgr::COLLISION_EVENT)
+							eventName = "Collision";
+						else
+						{
+							eventName = EventDefsMgr::Get()->GetEvent(e->GetType())->name;
+						}
+
+						QMessageBox::warning(0, "Oh noo", QString("Object: '" + e->GetParent()->GetName() + "', Event: '" + eventName + "' node: '" + node->GetName() + "' Condition cannot be empty!"));
+						m_breakGenerating = true;
+						return code;
+					}
 					result += GetVar(e, node->m_inputs[1]->m_connected.first());
 					result += ")";
 				}
@@ -418,8 +452,11 @@ void HTML5Generator::GenerateScene(SceneItem *scene)
 	m_init += "AddScene(" + sceneName + ");\n";
 }
 
-void HTML5Generator::Save()
+bool HTML5Generator::Save()
 {
+	if (m_breakGenerating)
+		return false;
+
 	QFile htmlFile(m_path + "\\index.html");
 	htmlFile.open(QFile::WriteOnly);
 
@@ -512,4 +549,6 @@ void HTML5Generator::Save()
 	// copy lib
 	QFile lib("libs\\js\\lib.js");
 	lib.copy(m_path + "\\lib.js");
+
+	return true;
 }
