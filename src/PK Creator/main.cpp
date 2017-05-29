@@ -41,7 +41,7 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 int main(int argc, char **argv)
 {
 	for (int i = 0; i < argc; ++i)
-	{
+	{  
 		if (strcmp(argv[i], "-show-console") == 0)
 		{
 			AllocConsole();
