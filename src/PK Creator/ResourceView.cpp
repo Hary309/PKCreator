@@ -306,7 +306,32 @@ void ResourceView::ActionRemove_triggered()
 	if (!treeItem->parent())
 		return;
 
-	RemoveRow(treeItem);
+	auto currentItem = GetItem(treeItem);
+
+	if (currentItem && currentItem->GetType() == Item::OBJECT)
+	{
+		// delete object from scenes
+		auto scenes = GetItemsByType(Item::SCENE);
+
+		for (auto scene : scenes)
+		{
+			if (scene)
+				static_cast<SceneItem*>(scene)->RemoveSceneObject(static_cast<ObjectItem*>(currentItem));
+		}
+
+		// delete collision event from objects
+		auto objects = GetItemsByType(Item::OBJECT);
+
+		for (auto object : objects)
+		{
+			if (object)
+				static_cast<ObjectItem*>(object)->RemoveCollisionWith(currentItem->GetID());
+		}
+	}
+
+
+
+	m_pTreeModel->removeRow(treeItem->row(), treeItem->parent()->index());
 
 	for (int i = 0; i < m_items.size(); ++i)
 	{
@@ -326,14 +351,6 @@ QStandardItem *ResourceView::InsertRow(QStandardItem *parent, const QString & na
 	expand(index);
 
 	return child;
-}
-
-void ResourceView::RemoveRow(QStandardItem *item) const
-{
-	if (item->parent() == nullptr)
-		return;
-
-	m_pTreeModel->removeRow(item->row(), item->parent()->index());
 }
 
 void ResourceView::InsertItem(Item *item)

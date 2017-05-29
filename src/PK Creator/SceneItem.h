@@ -12,17 +12,18 @@
 
 #include <QPoint>
 
+namespace sf
+{
+	class Sprite;
+}
+
 class SceneEditor;
 class SceneItemWindow;
 
 class ObjectItem;
 
 class BackgroundItem;
-
-namespace sf
-{
-	class Sprite;
-}
+class ResourceView;
 
 struct SceneObject
 {
@@ -47,11 +48,15 @@ protected:
 
 	friend SceneItemWindow;
 	friend SceneEditor;
-	friend HTML5Generator;
+	friend HTML5Generator; 
+	friend ResourceView;
+
+protected:
+	void RemoveSceneObject(const ObjectItem *object);
 
 public:
 	SceneItem(QStandardItem *item, const QString &itemName);
-	~SceneItem();
+	~SceneItem() = default;
 
 	void SetName(const QString &name) override;
 

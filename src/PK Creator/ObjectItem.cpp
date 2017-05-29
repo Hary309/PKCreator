@@ -196,6 +196,21 @@ QString ObjectItem::GetInlineVarValue(qint64 widgetID, EventDefsMgr::Type eventT
 	return QString();
 }
 
+void ObjectItem::RemoveCollisionWith(qint64 objectId)
+{
+	for (auto e : m_events)
+	{
+		if (e->GetType() >= EventDefsMgr::COLLISION_EVENT)
+		{
+			if (e->m_idCollideWith == objectId)
+			{
+				m_events.removeOne(e);
+				return;
+			}
+		}
+	}
+}
+
 void ObjectItem::Load(QDataStream *const dataStream)
 {
 	Item::Load(dataStream);

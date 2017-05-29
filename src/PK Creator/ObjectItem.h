@@ -47,6 +47,8 @@ public:
 	Node *GetNodeByWidget(qint64 widgetID, EventDefsMgr::Type eventType) const;
 	QString GetInlineVarValue(qint64 widgetID, EventDefsMgr::Type eventType) const;
 
+	void RemoveCollisionWith(qint64 objectid);
+
 	auto GetVars() const { return &m_vars; }
 
 	SpriteItem *GetSprite() const { return m_pCurrSpr; }

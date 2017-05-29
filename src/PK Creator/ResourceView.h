@@ -72,7 +72,6 @@ public:
 
 	void Setup();
 	QStandardItem *InsertRow(QStandardItem *parent, const QString &name);
-	void RemoveRow(QStandardItem *item) const;
 
 	void InsertItem(Item *item);
 

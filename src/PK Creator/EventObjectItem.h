@@ -18,6 +18,7 @@ class EventObjectItemWindow;
 
 class BlueprintEditor;
 class Node;
+class ObjectItem;
 class ObjectItemWindow;
 class HTML5Generator;
 
@@ -42,6 +43,7 @@ protected:
 	friend BlueprintEditor;
 	friend ObjectItemWindow;
 	friend HTML5Generator;
+	friend ObjectItem;
 
 public:
 	EventObjectItem(ObjectItem *parent, EventDefsMgr::Type type, QStandardItem *item);

@@ -37,10 +37,6 @@ SceneItem::SceneItem(QStandardItem *item, const QString &itemName)
 	m_tileHor = false;
 }
 
-SceneItem::~SceneItem()
-{
-}
-
 void SceneItem::SetName(const QString &name)
 {
 	m_itemName = name;
@@ -111,4 +107,22 @@ void SceneItem::Close()
 	m_pItemWnd->close();
 
 	m_pItemWnd.reset();
+}
+
+void SceneItem::RemoveSceneObject(const ObjectItem *objectItem)
+{
+	for (int i = 0; i < m_objects.size();)
+	{
+		auto object = m_objects[i];
+
+		if (object && object->pObj == objectItem)
+		{
+			object->pObj = nullptr;
+
+			m_objects.removeOne(object);
+			// when element is deleting from array, array is decreasing 
+		}
+		else
+			i++;
+	}
 }
