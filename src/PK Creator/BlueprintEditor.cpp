@@ -41,6 +41,7 @@ BlueprintEditor::BlueprintEditor(QWidget *parent)
 	m_viewMoved = false;
 
 	m_waitingForNewNode = false;
+	setStyleSheet("background-color: #212121;");
 
 	setAttribute(Qt::WA_PaintOnScreen);
 	setAttribute(Qt::WA_NoSystemBackground);

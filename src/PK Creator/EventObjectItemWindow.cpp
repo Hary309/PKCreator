@@ -33,7 +33,7 @@ EventObjectItemWindow::EventObjectItemWindow(QWidget *parent)
 
 	auto gridLayout = new QGridLayout(centralWidget);
 	gridLayout->setMargin(0);
-
+	setStyleSheet("background-color: #212121;");
 	m_pBpEditor = new BlueprintEditor(this);
 	gridLayout->addWidget(m_pBpEditor);
 
