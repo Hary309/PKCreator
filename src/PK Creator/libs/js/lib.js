@@ -71,7 +71,7 @@ function CollisionEvent(objectID, func)
 }
 
 // Object
-function Object(id, sprite, solid)
+function Object(id, sprite, solid, visible)
 {
 	this.id = id;
 	this.sprite = sprite;
@@ -84,6 +84,7 @@ function Object(id, sprite, solid)
 	this.vspeed = 0;
 
 	this.solid = solid;
+	this.visible = visible;
 
 	// 0 - none
 	// 1 - left
@@ -101,13 +102,17 @@ function Object(id, sprite, solid)
 	}
 
 	this.draw = function() {
-		var rad = (this.angle) * Math.PI / 180;
 		
-		ctx.save();
-		ctx.translate(this.x, this.y);
-		ctx.rotate(rad);
-		ctx.drawImage(this.sprite.img, -this.sprite.centerX, -this.sprite.centerY, this.sprite.img.width, this.sprite.img.height);
-		ctx.restore();
+		if (visible)
+		{
+			var rad = (this.angle) * Math.PI / 180;
+			
+			ctx.save();
+			ctx.translate(this.x, this.y);
+			ctx.rotate(rad);
+			ctx.drawImage(this.sprite.img, -this.sprite.centerX, -this.sprite.centerY, this.sprite.img.width, this.sprite.img.height);
+			ctx.restore();
+		}
 
 		if (this.events.renderEvent)
 			this.events.renderEvent(this.id);
@@ -333,6 +338,7 @@ function Instance(object, x, y)
 	this.collisions = object.collisions;
 
 	this.solid = object.solid;
+	this.visible = object.visible;
 
 	this.y = y;
 	this.x = x;
