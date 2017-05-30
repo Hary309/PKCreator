@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node>
+	<name>NegateInteger</name>
+	<desc>Negate integer (1 = -1 or -1 = 1)</desc>
+	<args>
+	    <arg>
+	        <type>0</type>
+	        <name>integer</name>
+	    </arg>
+	</args>
+	<returnValue>
+		<type>0</type>
+	    <name>negated</name>
+	</returnValue>
+	<jsCode>return -integer;</jscode>
+</node>
+ 
